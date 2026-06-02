@@ -35,6 +35,14 @@ int intValue(const QVariantMap &map, const QString &key, int fallback = 0)
     return ok ? value : fallback;
 }
 
+
+long long hexValue(const QVariantMap &map, const QString &key, int fallback = 0)
+{
+    bool ok = false;
+    const int value = map.value(key).toString().toLongLong(&ok,16);
+    return ok ? value : fallback;
+}
+
 QStringList stringListValue(const QVariantMap &map, const QString &key)
 {
     QStringList result;
@@ -54,6 +62,7 @@ BleScanner::BleScanner(QObject *parent)
                                          QDBusConnection::systemBus(),
                                          this))
     , m_enabled(false)
+    , m_alertsenabled(false)
     , m_status(QStringLiteral("disabled"))
 {
     qDBusRegisterMetaType<InterfaceList>();
@@ -94,6 +103,21 @@ void BleScanner::setEnabled(bool enabled)
     }
     emit changed();
 }
+
+void BleScanner::setAlertsEnabled(bool enabled)
+{
+    if (!m_enabled) {
+        return;
+    }
+
+    if (m_alertsenabled == enabled) {
+        return;
+    }
+
+    m_alertsenabled = enabled;
+    emit alertsEnabledChanged();
+}
+
 
 QList<BleObservation> BleScanner::observations() const
 {
@@ -151,6 +175,9 @@ void BleScanner::poll()
         observation.beaconType = 0;
         observation.uuids = stringListValue(device, QStringLiteral("UUIDs"));
         observation.seenMs = now;
+        if (m_alertsenabled) {
+            checkForAlert(device);
+        }
         m_observations.insert(address, observation);
     }
 
@@ -215,4 +242,28 @@ bool BleScanner::clearDiscoveryFilter()
         return false;
     }
     return true;
+}
+
+void BleScanner::checkForAlert(const QVariantMap& device)
+{
+    // TODO: E.g. from https://raw.githubusercontent.com/alexh-scrt/glasses-radar/master/data/fingerprints.json
+    static const QMap<long long, QString> suspicious {
+        {0x0, "unknown"},
+        { 0x756,  "Ray-Ban Stories (Gen 1)"},
+        { 0x1177,  "Meta Ray-Ban Smart Glasses (Gen 2)"},
+        { 0x2291,  "Bose Frames"},
+        { 0x13875, "TCL NXTWEAR"},
+    };
+    static const int thresh = 50;
+
+    const int strength = intValue(device, "signalStrength");
+    if (strength < thresh) return;
+    const long long mfg = hexValue(device, "manufacturerData");
+    if (suspicious.contains(mfg))
+    {
+        QString message = QString("Saw manufacturer: %1, %2")
+                          .arg(suspicious.value(mfg))
+                          .arg(strength);
+        emit blealert(message);
+    }
 }
