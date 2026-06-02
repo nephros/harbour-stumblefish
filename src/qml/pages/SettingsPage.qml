@@ -167,6 +167,16 @@ Page {
             }
 
             SectionHeader {
+                text: "Glassfish Extension"
+            }
+
+            TextSwitch {
+                text: "Alert when evil devices are detected"
+                checked: stumblefish.settings.glassalerts
+                onClicked: stumblefish.setGlassAlerts(checked)
+            }
+
+            SectionHeader {
                 text: "Upload"
             }
 

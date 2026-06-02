@@ -164,6 +164,12 @@ void StumblefishClient::loadReport(int id)
     asyncCall(QStringLiteral("report"), QVariantList() << id, QStringLiteral("report"));
 }
 
+void StumblefishClient::setGlassAlerts(const bool enabled)
+{
+    setSetting(QStringLiteral("glassAlerts"), enabled);
+}
+
+
 void StumblefishClient::setMode(const QString &mode)
 {
     setSetting(QStringLiteral("mode"), mode);

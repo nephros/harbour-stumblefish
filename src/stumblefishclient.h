@@ -37,6 +37,7 @@ public:
     Q_INVOKABLE void refresh();
     Q_INVOKABLE void loadReport(int id);
     Q_INVOKABLE void setMode(const QString &mode);
+    Q_INVOKABLE void setGlassAlerts(const bool enabled);
     Q_INVOKABLE void setSourceEnabled(const QString &source, bool enabled);
     Q_INVOKABLE void setEndpoint(const QString &endpoint);
     Q_INVOKABLE void setMapTileUrlTemplate(const QString &mapTileUrlTemplate);
