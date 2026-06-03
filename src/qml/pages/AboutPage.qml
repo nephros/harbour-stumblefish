@@ -62,6 +62,24 @@ Page {
                 wrapMode: Text.Wrap
             }
 
+            Label {
+                x: Theme.horizontalPageMargin
+                width: parent.width - 2 * Theme.horizontalPageMargin
+                text: "Glassfish Smart Glass detection addition"
+                color: Theme.secondaryColor
+                horizontalAlignment: Text.AlignHCenter
+                wrapMode: Text.Wrap
+            }
+
+            Label {
+                x: Theme.horizontalPageMargin
+                width: parent.width - 2 * Theme.horizontalPageMargin
+                text: "by nephros"
+                color: Theme.secondaryColor
+                horizontalAlignment: Text.AlignHCenter
+                wrapMode: Text.Wrap
+            }
+
             Image {
                 anchors.horizontalCenter: parent.horizontalCenter
                 width: Math.min(parent.width - 2 * Theme.horizontalPageMargin,
