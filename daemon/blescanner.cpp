@@ -62,7 +62,7 @@ BleScanner::BleScanner(QObject *parent)
                                          QDBusConnection::systemBus(),
                                          this))
     , m_enabled(false)
-    , m_alertsenabled(APP_VERSION == NULL)
+    , m_alertsenabled(QString(APP_VERSION).isEmpty())
     , m_status(QStringLiteral("disabled"))
 {
     qDBusRegisterMetaType<InterfaceList>();
