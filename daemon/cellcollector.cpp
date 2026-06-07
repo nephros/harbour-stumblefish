@@ -47,6 +47,7 @@ const char OfonoService[] = "org.ofono";
 const char OfonoManagerPath[] = "/";
 const char OfonoManagerInterface[] = "org.ofono.Manager";
 const char OfonoSimManagerInterface[] = "org.ofono.SimManager";
+const int QOfonoExtCellNrType = 4;
 
 QVariant unwrap(const QVariant &value)
 {
@@ -99,6 +100,53 @@ bool simPresent(const QVariantMap &properties)
             || !stringProperty(properties, QStringLiteral("MobileNetworkCode")).isEmpty();
 }
 
+int knownCellValue(int value)
+{
+    return value == QOfonoExtCell::InvalidValue ? -1 : value;
+}
+
+int knownCellProperty(const QOfonoExtCell *cell, const char *name)
+{
+    bool ok = false;
+    const int value = cell->property(name).toInt(&ok);
+    return ok ? value : QOfonoExtCell::InvalidValue;
+}
+
+bool hasCellIdentity(int value)
+{
+    return value != QOfonoExtCell::InvalidValue && value > 0;
+}
+
+bool hasMobileCountryCode(int value)
+{
+    return value > 0;
+}
+
+bool hasMobileNetworkCode(int value)
+{
+    return value >= 0;
+}
+
+bool hasLocationAreaCode(int value)
+{
+    return value > 0;
+}
+
+bool hasPrimaryScramblingCode(int value)
+{
+    return value >= 0;
+}
+
+bool hasAsu(int value)
+{
+    return value >= 0 && value != 99;
+}
+
+bool isCellSignalLevelDbm(int value)
+{
+    return value != QOfonoExtCell::InvalidValue && value >= -150 && value <= -20;
+}
+
 QString radioType(int type)
 {
     switch (type) {
@@ -109,8 +157,45 @@ QString radioType(int type)
     case QOfonoExtCell::LTE:
         return QStringLiteral("lte");
     default:
+        if (type == QOfonoExtCellNrType) {
+            return QStringLiteral("nr");
+        }
         return QString();
     }
+}
+
+bool hasEnoughCellData(const CellObservation &cell)
+{
+    if (!hasMobileCountryCode(cell.mobileCountryCode)
+            || !hasMobileNetworkCode(cell.mobileNetworkCode)) {
+        return false;
+    }
+
+    if (cell.radioType == QStringLiteral("gsm")) {
+        return hasCellIdentity(cell.cellId)
+                || hasLocationAreaCode(cell.locationAreaCode);
+    }
+
+    if (cell.radioType == QStringLiteral("wcdma")
+            || cell.radioType == QStringLiteral("lte")
+            || cell.radioType == QStringLiteral("nr")) {
+        return hasCellIdentity(cell.cellId)
+                || hasLocationAreaCode(cell.locationAreaCode)
+                || hasPrimaryScramblingCode(cell.primaryScramblingCode);
+    }
+
+    return false;
+}
+
+QString cellKey(const CellObservation &cell)
+{
+    return cell.radioType + QStringLiteral(":")
+            + QString::number(cell.mobileCountryCode) + QStringLiteral(":")
+            + QString::number(cell.mobileNetworkCode) + QStringLiteral(":")
+            + QString::number(cell.locationAreaCode) + QStringLiteral(":")
+            + QString::number(cell.cellId) + QStringLiteral(":")
+            + QString::number(cell.primaryScramblingCode) + QStringLiteral(":")
+            + QString::number(cell.arfcn);
 }
 
 }
@@ -156,7 +241,9 @@ QList<CellObservation> CellCollector::observations() const
     }
 
     const qint64 now = QDateTime::currentMSecsSinceEpoch();
-    QSet<QString> seen;
+    QList<CellObservation> observations;
+    QSet<int> mobileCountryCodes;
+    QSet<int> mobileNetworkCodes;
     foreach (const QSharedPointer<QOfonoExtCell> &cell, m_watcher->cells()) {
         const QString type = radioType(cell->type());
         if (type.isEmpty()) {
@@ -165,35 +252,71 @@ QList<CellObservation> CellCollector::observations() const
 
         CellObservation observation;
         observation.radioType = type;
-        observation.mobileCountryCode = cell->mcc();
-        observation.mobileNetworkCode = cell->mnc();
-        observation.signalStrength = cell->signalStrength();
-        observation.serving = false;
+        observation.mobileCountryCode = knownCellValue(cell->mcc());
+        observation.mobileNetworkCode = knownCellValue(cell->mnc());
+        const int signalLevelDbm = cell->signalLevelDbm();
+        observation.signalStrength = isCellSignalLevelDbm(signalLevelDbm) ? signalLevelDbm : 0;
+        observation.serving = cell->registered();
         observation.seenMs = now;
+        observation.locationAreaCode = -1;
+        observation.cellId = -1;
         observation.primaryScramblingCode = -1;
+        const int asu = knownCellValue(cell->signalStrength());
+        observation.asu = hasAsu(asu) ? asu : -1;
+        observation.timingAdvance = -1;
+        observation.arfcn = -1;
 
-        if (cell->cid() != QOfonoExtCell::InvalidValue && cell->cid() != 0) {
-            observation.locationAreaCode = cell->lac();
-            observation.cellId = cell->cid();
-            observation.primaryScramblingCode = cell->psc();
-        } else if (cell->ci() != QOfonoExtCell::InvalidValue && cell->ci() != 0) {
-            observation.locationAreaCode = cell->tac();
-            observation.cellId = cell->ci();
-            observation.primaryScramblingCode = cell->pci();
+        if (type == QStringLiteral("lte")) {
+            observation.locationAreaCode = knownCellValue(cell->tac());
+            if (hasCellIdentity(cell->ci())) {
+                observation.cellId = cell->ci();
+            }
+            observation.primaryScramblingCode = knownCellValue(cell->pci());
+            observation.timingAdvance = knownCellValue(cell->timingAdvance());
+            observation.arfcn = knownCellValue(cell->earfcn());
+        } else if (type == QStringLiteral("nr")) {
+            observation.locationAreaCode = knownCellValue(cell->tac());
+            observation.primaryScramblingCode = knownCellValue(cell->pci());
+            observation.arfcn = knownCellValue(knownCellProperty(cell.data(), "nrarfcn"));
         } else {
+            observation.locationAreaCode = knownCellValue(cell->lac());
+            if (hasCellIdentity(cell->cid())) {
+                observation.cellId = cell->cid();
+            }
+            if (type == QStringLiteral("wcdma")) {
+                observation.primaryScramblingCode = knownCellValue(cell->psc());
+                observation.arfcn = knownCellValue(cell->uarfcn());
+            } else if (type == QStringLiteral("gsm")) {
+                observation.arfcn = knownCellValue(cell->arfcn());
+            }
+        }
+
+        if (hasMobileCountryCode(observation.mobileCountryCode)) {
+            mobileCountryCodes.insert(observation.mobileCountryCode);
+        }
+        if (hasMobileNetworkCode(observation.mobileNetworkCode)) {
+            mobileNetworkCodes.insert(observation.mobileNetworkCode);
+        }
+        observations.append(observation);
+    }
+
+    const bool canFillMobileCountryCode = mobileCountryCodes.count() == 1;
+    const bool canFillMobileNetworkCode = mobileNetworkCodes.count() == 1;
+    const int mobileCountryCode = canFillMobileCountryCode ? *mobileCountryCodes.constBegin() : -1;
+    const int mobileNetworkCode = canFillMobileNetworkCode ? *mobileNetworkCodes.constBegin() : -1;
+    QSet<QString> seen;
+    foreach (CellObservation observation, observations) {
+        if (!hasMobileCountryCode(observation.mobileCountryCode) && canFillMobileCountryCode) {
+            observation.mobileCountryCode = mobileCountryCode;
+        }
+        if (!hasMobileNetworkCode(observation.mobileNetworkCode) && canFillMobileNetworkCode) {
+            observation.mobileNetworkCode = mobileNetworkCode;
+        }
+        if (!hasEnoughCellData(observation)) {
             continue;
         }
 
-        if (observation.mobileCountryCode <= 0 || observation.mobileNetworkCode < 0
-                || observation.locationAreaCode <= 0 || observation.cellId <= 0) {
-            continue;
-        }
-
-        const QString key = observation.radioType + QStringLiteral(":")
-                + QString::number(observation.mobileCountryCode) + QStringLiteral(":")
-                + QString::number(observation.mobileNetworkCode) + QStringLiteral(":")
-                + QString::number(observation.locationAreaCode) + QStringLiteral(":")
-                + QString::number(observation.cellId);
+        const QString key = cellKey(observation);
         if (seen.contains(key)) {
             continue;
         }

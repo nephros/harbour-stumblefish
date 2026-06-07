@@ -216,6 +216,11 @@ void StumblefishClient::setAllowBackgroundDaemon(bool enabled)
     setSetting(QStringLiteral("allowBackgroundDaemon"), enabled);
 }
 
+void StumblefishClient::setStatusNotificationsEnabled(bool enabled)
+{
+    setSetting(QStringLiteral("statusNotificationsEnabled"), enabled);
+}
+
 void StumblefishClient::collectNow()
 {
     asyncCall(QStringLiteral("collectNow"), QVariantList(), QStringLiteral("void"));

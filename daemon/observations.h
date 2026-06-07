@@ -31,6 +31,7 @@ struct PositionFix
 struct WifiObservation
 {
     QString macAddress;
+    QString ssid;
     int frequency;
     int signalStrength;
     qint64 seenMs;
@@ -44,6 +45,9 @@ struct CellObservation
     int locationAreaCode;
     int cellId;
     int primaryScramblingCode;
+    int asu;
+    int timingAdvance;
+    int arfcn;
     int signalStrength;
     bool serving;
     qint64 seenMs;

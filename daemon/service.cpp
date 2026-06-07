@@ -6,13 +6,13 @@
 #include <QCoreApplication>
 #include <QDateTime>
 #include <QDBusConnection>
-#include <QDBusError>
-#include <QDBusMessage>
 #include <QDebug>
 #include <QGeoCoordinate>
 #include <QProcess>
 #include <QSet>
+#include <QStringList>
 #include <QTimer>
+#include <notification.h>
 #include <networkmanager.h>
 #include <networkservice.h>
 
@@ -28,6 +28,18 @@ const qint64 PruneIntervalMs = 24 * 60 * 60 * 1000;
 const int AppLifecycleQuitDelayMs = 3000;
 const double MinimumDuplicateDistanceMeters = 30.0;
 const char ServiceUnitName[] = "harbour-stumblefishd.service";
+const char NotificationTurnOffAction[] = "turn-off";
+const char StatusNotificationCategory[] = "org.stumblefish.status";
+const char StatusNotificationOrigin[] = "org.stumblefish.status";
+
+bool isStatusNotification(Notification *notification)
+{
+    return notification
+            && (notification->origin() == QString::fromLatin1(StatusNotificationOrigin)
+                || (notification->appName() == QStringLiteral("Stumblefish")
+                    && notification->summary() == QStringLiteral("Stumblefish")
+                    && notification->appIcon() == QString::fromLatin1(Stumblefish::ApplicationName)));
+}
 
 QSet<QString> wifiFingerprint(const Report &report)
 {
@@ -48,7 +60,9 @@ QSet<QString> cellFingerprint(const Report &report)
                     + QString::number(cell.mobileCountryCode) + QStringLiteral(":")
                     + QString::number(cell.mobileNetworkCode) + QStringLiteral(":")
                     + QString::number(cell.locationAreaCode) + QStringLiteral(":")
-                    + QString::number(cell.cellId));
+                    + QString::number(cell.cellId) + QStringLiteral(":")
+                    + QString::number(cell.primaryScramblingCode) + QStringLiteral(":")
+                    + QString::number(cell.arfcn));
     }
     return keys;
 }
@@ -91,6 +105,9 @@ Service::Service(QObject *parent)
     , m_networkManager(new NetworkManager(this))
     , m_uploader(&m_storage, &m_settings, this)
     , m_clientWatcher(this)
+    , m_statusNotification(0)
+    , m_lastStatusNotificationHasTurnOffAction(false)
+    , m_statusNotificationVisible(false)
     , m_quitWhenIdle(false)
 {
     qRegisterMetaType<PositionFix>("PositionFix");
@@ -129,9 +146,15 @@ Service::Service(QObject *parent)
         qWarning() << "Failed to register D-Bus object" << bus.lastError().message();
     }
 
+    closeStoredStatusNotifications();
     applySettings();
     m_pruneTimer.start(60 * 60 * 1000);
     QTimer::singleShot(0, this, SLOT(pruneDueReports()));
+}
+
+Service::~Service()
+{
+    closeStatusNotification();
 }
 
 QVariantMap Service::status() const
@@ -232,6 +255,15 @@ void Service::appOpened()
 void Service::appClosed()
 {
     removeAppClient(calledFromDBus() ? message().service() : QString());
+}
+
+void Service::turnOffBackgroundActiveMode()
+{
+    if (!m_appClients.isEmpty() || m_settings.mode() == QStringLiteral("passive")) {
+        return;
+    }
+
+    m_settings.setValue(QStringLiteral("mode"), QStringLiteral("passive"));
 }
 
 void Service::retryReport(int reportId)
@@ -581,7 +613,6 @@ bool Service::collectReport(const PositionFix &fix, const QString &reason)
     }
 
     Report report;
-    report.timestampMs = QDateTime::currentMSecsSinceEpoch();
     report.position = fix;
     report.mode = effectiveMode();
     report.wifiEnabled = m_settings.wifiEnabled();
@@ -598,6 +629,7 @@ bool Service::collectReport(const PositionFix &fix, const QString &reason)
     if (report.bleEnabled) {
         report.ble = m_ble.observations();
     }
+    report.timestampMs = QDateTime::currentMSecsSinceEpoch();
 
     if (report.cells.isEmpty() && report.ble.isEmpty() && report.wifi.count() < 2) {
         m_lastMessage = QStringLiteral("Not enough radio observations for a report");
@@ -694,7 +726,108 @@ int Service::pruneReportsWithRetention(bool manual)
 
 void Service::emitStatus()
 {
-    emit statusChanged(status());
+    const QVariantMap currentStatus = status();
+    updateStatusNotification(currentStatus.value(QStringLiteral("collectionStateMessage")).toString());
+    emit statusChanged(currentStatus);
+}
+
+bool Service::statusNotificationShouldBeVisible() const
+{
+    if (!m_settings.statusNotificationsEnabled() || !collectionAllowed()) {
+        return false;
+    }
+
+    if (!m_appClients.isEmpty()) {
+        return false;
+    }
+
+    return m_settings.mode() == QStringLiteral("active")
+            || m_position.lastFix().valid;
+}
+
+bool Service::statusNotificationHasTurnOffAction() const
+{
+    return m_appClients.isEmpty() && m_settings.mode() != QStringLiteral("passive");
+}
+
+void Service::updateStatusNotification(const QString &body)
+{
+    if (!statusNotificationShouldBeVisible()) {
+        closeStatusNotification();
+        return;
+    }
+
+    const QString notificationBody = body.isEmpty()
+            ? QStringLiteral("Collector status unavailable")
+            : body;
+    const bool hasTurnOffAction = statusNotificationHasTurnOffAction();
+    if (m_statusNotificationVisible
+            && m_lastStatusNotificationBody == notificationBody
+            && m_lastStatusNotificationHasTurnOffAction == hasTurnOffAction) {
+        return;
+    }
+
+    m_statusNotificationVisible = true;
+    m_lastStatusNotificationBody = notificationBody;
+    m_lastStatusNotificationHasTurnOffAction = hasTurnOffAction;
+
+    if (!m_statusNotification) {
+        m_statusNotification = new Notification(this);
+    }
+
+    QVariantList remoteActions;
+    if (hasTurnOffAction) {
+        remoteActions << Notification::remoteAction(
+                    QString::fromLatin1(NotificationTurnOffAction),
+                    QStringLiteral("Turn off"),
+                    QString::fromLatin1(Stumblefish::ServiceName),
+                    QString::fromLatin1(Stumblefish::ObjectPath),
+                    QString::fromLatin1(Stumblefish::InterfaceName),
+                    QStringLiteral("turnOffBackgroundActiveMode"));
+    }
+
+    m_statusNotification->setAppName(QStringLiteral("Stumblefish"));
+    m_statusNotification->setAppIcon(QString::fromLatin1(Stumblefish::ApplicationName));
+    m_statusNotification->setCategory(QString::fromLatin1(StatusNotificationCategory));
+    m_statusNotification->setOrigin(QString::fromLatin1(StatusNotificationOrigin));
+    m_statusNotification->setSummary(QStringLiteral("Stumblefish"));
+    m_statusNotification->setBody(notificationBody);
+    m_statusNotification->setPreviewSummary(QStringLiteral("Stumblefish"));
+    m_statusNotification->setPreviewBody(notificationBody);
+    m_statusNotification->setExpireTimeout(0);
+    m_statusNotification->setRemoteActions(remoteActions);
+    m_statusNotification->setHintValue(QStringLiteral("resident"), true);
+    m_statusNotification->setHintValue(QStringLiteral("desktop-entry"),
+                                       QString::fromLatin1(Stumblefish::ApplicationName));
+    m_statusNotification->publish();
+}
+
+void Service::closeStatusNotification()
+{
+    if (!m_statusNotificationVisible
+            && (!m_statusNotification || m_statusNotification->replacesId() == 0)) {
+        return;
+    }
+
+    m_statusNotificationVisible = false;
+    m_lastStatusNotificationBody.clear();
+    m_lastStatusNotificationHasTurnOffAction = false;
+    if (m_statusNotification) {
+        m_statusNotification->close();
+    }
+    closeStoredStatusNotifications();
+}
+
+void Service::closeStoredStatusNotifications()
+{
+    const QList<QObject *> notifications = Notification::notifications(QString::fromLatin1(Stumblefish::ApplicationName));
+    foreach (QObject *object, notifications) {
+        Notification *notification = qobject_cast<Notification *>(object);
+        if (isStatusNotification(notification)) {
+            notification->close();
+        }
+        delete object;
+    }
 }
 
 void Service::clientServiceUnregistered(const QString &serviceName)

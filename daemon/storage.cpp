@@ -57,6 +57,42 @@ QString databasePath()
     return dir + QStringLiteral("/reports.sqlite");
 }
 
+bool tableHasColumn(const QSqlDatabase &database, const QString &table, const QString &column,
+                    QString *error)
+{
+    QSqlQuery query(database);
+    if (!query.exec(QStringLiteral("pragma table_info(%1)").arg(table))) {
+        if (error) {
+            *error = query.lastError().text();
+        }
+        return false;
+    }
+    while (query.next()) {
+        if (query.value(1).toString() == column) {
+            return true;
+        }
+    }
+    return false;
+}
+
+bool ensureColumn(const QSqlDatabase &database, const QString &table, const QString &column,
+                  const QString &type, QString *error)
+{
+    if (tableHasColumn(database, table, column, error)) {
+        return true;
+    }
+
+    QSqlQuery query(database);
+    if (!query.exec(QStringLiteral("alter table %1 add column %2 %3")
+                    .arg(table, column, type))) {
+        if (error) {
+            *error = query.lastError().text();
+        }
+        return false;
+    }
+    return true;
+}
+
 QVariantList wifiToList(const QList<WifiObservation> &observations)
 {
     QVariantList list;
@@ -82,6 +118,9 @@ QVariantList cellsToList(const QList<CellObservation> &observations)
         map.insert(QStringLiteral("locationAreaCode"), cell.locationAreaCode);
         map.insert(QStringLiteral("cellId"), cell.cellId);
         map.insert(QStringLiteral("primaryScramblingCode"), cell.primaryScramblingCode);
+        map.insert(QStringLiteral("asu"), cell.asu);
+        map.insert(QStringLiteral("timingAdvance"), cell.timingAdvance);
+        map.insert(QStringLiteral("arfcn"), cell.arfcn);
         map.insert(QStringLiteral("signalStrength"), cell.signalStrength);
         map.insert(QStringLiteral("serving"), cell.serving);
         map.insert(QStringLiteral("seenMs"), cell.seenMs);
@@ -696,6 +735,9 @@ bool Storage::migrate()
                                "lac integer,"
                                "cell_id integer,"
                                "psc integer,"
+                               "asu integer,"
+                               "timing_advance integer,"
+                               "arfcn integer,"
                                "signal_strength integer,"
                                "serving integer,"
                                "seen_ms integer not null"
@@ -745,8 +787,12 @@ bool Storage::migrate()
                                "on map_report_cells (zoom, q, r)"))
         && exec(QStringLiteral("create index if not exists map_cells_center_idx "
                                "on map_cells (zoom, center_latitude, center_longitude)"))
-        && exec(QStringLiteral("update wifi_observations set ssid = '' "
-                               "where ssid is not null and ssid != ''"))
+        && ensureColumn(m_db, QStringLiteral("cell_observations"),
+                        QStringLiteral("asu"), QStringLiteral("integer"), &m_lastError)
+        && ensureColumn(m_db, QStringLiteral("cell_observations"),
+                        QStringLiteral("timing_advance"), QStringLiteral("integer"), &m_lastError)
+        && ensureColumn(m_db, QStringLiteral("cell_observations"),
+                        QStringLiteral("arfcn"), QStringLiteral("integer"), &m_lastError)
         && [this]() {
             bool uploadsRecovered = false;
             if (!recoverInterruptedUploads(m_db, &uploadsRecovered, &m_lastError)) {
@@ -801,10 +847,11 @@ int Storage::addReport(const Report &report)
     foreach (const WifiObservation &wifi, report.wifi) {
         QSqlQuery insert(m_db);
         insert.prepare(QStringLiteral("insert into wifi_observations "
-                                      "(report_id, mac_address, frequency, signal_strength, seen_ms) "
-                                      "values (?, ?, ?, ?, ?)"));
+                                      "(report_id, mac_address, ssid, frequency, signal_strength, seen_ms) "
+                                      "values (?, ?, ?, ?, ?, ?)"));
         insert.addBindValue(reportId);
         insert.addBindValue(wifi.macAddress);
+        insert.addBindValue(wifi.ssid);
         insert.addBindValue(wifi.frequency);
         insert.addBindValue(wifi.signalStrength);
         insert.addBindValue(wifi.seenMs);
@@ -818,8 +865,9 @@ int Storage::addReport(const Report &report)
     foreach (const CellObservation &cell, report.cells) {
         QSqlQuery insert(m_db);
         insert.prepare(QStringLiteral("insert into cell_observations "
-                                      "(report_id, radio_type, mcc, mnc, lac, cell_id, psc, signal_strength, serving, seen_ms) "
-                                      "values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)"));
+                                      "(report_id, radio_type, mcc, mnc, lac, cell_id, psc, asu, "
+                                      "timing_advance, arfcn, signal_strength, serving, seen_ms) "
+                                      "values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)"));
         insert.addBindValue(reportId);
         insert.addBindValue(cell.radioType);
         insert.addBindValue(cell.mobileCountryCode);
@@ -827,6 +875,9 @@ int Storage::addReport(const Report &report)
         insert.addBindValue(cell.locationAreaCode);
         insert.addBindValue(cell.cellId);
         insert.addBindValue(cell.primaryScramblingCode);
+        insert.addBindValue(cell.asu);
+        insert.addBindValue(cell.timingAdvance);
+        insert.addBindValue(cell.arfcn);
         insert.addBindValue(cell.signalStrength);
         insert.addBindValue(cell.serving ? 1 : 0);
         insert.addBindValue(cell.seenMs);
@@ -1399,7 +1450,7 @@ QList<WifiObservation> Storage::wifiForReport(int reportId) const
 {
     QList<WifiObservation> observations;
     QSqlQuery query(m_db);
-    query.prepare(QStringLiteral("select mac_address, frequency, signal_strength, seen_ms "
+    query.prepare(QStringLiteral("select mac_address, ssid, frequency, signal_strength, seen_ms "
                                  "from wifi_observations where report_id = ? order by id"));
     query.addBindValue(reportId);
     if (!query.exec()) {
@@ -1409,9 +1460,10 @@ QList<WifiObservation> Storage::wifiForReport(int reportId) const
     while (query.next()) {
         WifiObservation wifi;
         wifi.macAddress = query.value(0).toString();
-        wifi.frequency = query.value(1).toInt();
-        wifi.signalStrength = query.value(2).toInt();
-        wifi.seenMs = query.value(3).toLongLong();
+        wifi.ssid = query.value(1).toString();
+        wifi.frequency = query.value(2).toInt();
+        wifi.signalStrength = query.value(3).toInt();
+        wifi.seenMs = query.value(4).toLongLong();
         observations.append(wifi);
     }
     return observations;
@@ -1421,7 +1473,8 @@ QList<CellObservation> Storage::cellsForReport(int reportId) const
 {
     QList<CellObservation> observations;
     QSqlQuery query(m_db);
-    query.prepare(QStringLiteral("select radio_type, mcc, mnc, lac, cell_id, psc, signal_strength, serving, seen_ms "
+    query.prepare(QStringLiteral("select radio_type, mcc, mnc, lac, cell_id, psc, asu, "
+                                 "timing_advance, arfcn, signal_strength, serving, seen_ms "
                                  "from cell_observations where report_id = ? order by id"));
     query.addBindValue(reportId);
     if (!query.exec()) {
@@ -1436,9 +1489,12 @@ QList<CellObservation> Storage::cellsForReport(int reportId) const
         cell.locationAreaCode = query.value(3).toInt();
         cell.cellId = query.value(4).toInt();
         cell.primaryScramblingCode = query.value(5).toInt();
-        cell.signalStrength = query.value(6).toInt();
-        cell.serving = query.value(7).toInt() != 0;
-        cell.seenMs = query.value(8).toLongLong();
+        cell.asu = query.value(6).isNull() ? -1 : query.value(6).toInt();
+        cell.timingAdvance = query.value(7).isNull() ? -1 : query.value(7).toInt();
+        cell.arfcn = query.value(8).isNull() ? -1 : query.value(8).toInt();
+        cell.signalStrength = query.value(9).toInt();
+        cell.serving = query.value(10).toInt() != 0;
+        cell.seenMs = query.value(11).toLongLong();
         observations.append(cell);
     }
     return observations;
