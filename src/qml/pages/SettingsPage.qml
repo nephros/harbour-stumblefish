@@ -192,6 +192,7 @@ Page {
 
             TextSwitch {
                 text: "Alert when evil devices are detected"
+                description: "Requires BLE scanning to be enabled"
                 checked: stumblefish.settings.glassalerts
                 onClicked: stumblefish.setGlassAlerts(checked)
             }
