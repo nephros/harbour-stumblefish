@@ -58,7 +58,7 @@ bool intValue(const QVariantMap &map, const QString &key, int *value)
 bool hexValue(const QVariantMap &map, const QString &key, long long *value)
 {
     bool ok = false;
-    const int result = dbusVariantValue(map.value(key)).toLongLong(&ok, 16);
+    long long result = dbusVariantValue(map.value(key)).toLongLong(&ok);
     if (!ok) {
         return false;
     }
@@ -566,13 +566,15 @@ void BleScanner::checkForAlert(const QVariantMap& properties)
         { 0x2291,  "Bose Frames"},
         { 0x13875, "TCL NXTWEAR"},
     };
+    // TODO: configurable
     static const int thresh = 50;
 
-    const int strength = intValue(properties, "signalStrength");
+   int strength;
+    intValue(properties, "signalStrength", &strength);
     if (strength < thresh) return;
 
     long long mfg;
-    if (!hexValue(properties, "manufacturerData", mfg)) return;
+    if (!hexValue(properties, "manufacturerData", &mfg)) return;
 
     if (suspicious.contains(mfg))
     {
