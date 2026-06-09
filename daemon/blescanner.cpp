@@ -55,12 +55,16 @@ bool intValue(const QVariantMap &map, const QString &key, int *value)
     return true;
 }
 
-
-long long hexValue(const QVariantMap &map, const QString &key, int fallback = 0)
+bool hexValue(const QVariantMap &map, const QString &key, long long *value)
 {
     bool ok = false;
-    const int value = map.value(key).toString().toLongLong(&ok,16);
-    return ok ? value : fallback;
+    const int result = dbusVariantValue(map.value(key)).toLongLong(&ok, 16);
+    if (!ok) {
+        return false;
+    }
+
+    *value = result;
+    return true;
 }
 
 QStringList stringListValue(const QVariantMap &map, const QString &key)
@@ -552,21 +556,24 @@ bool BleScanner::clearDiscoveryFilter()
     return true;
 }
 
-void BleScanner::checkForAlert(const QVariantMap& device)
+void BleScanner::checkForAlert(const QVariantMap& properties)
 {
     // TODO: E.g. from https://raw.githubusercontent.com/alexh-scrt/glasses-radar/master/data/fingerprints.json
     static const QMap<long long, QString> suspicious {
-        {0x0, "unknown"},
-        { 0x756,  "Ray-Ban Stories (Gen 1)"},
+        { 0x0, "unknown"},
+        { 0x756,   "Ray-Ban Stories (Gen 1)"},
         { 0x1177,  "Meta Ray-Ban Smart Glasses (Gen 2)"},
         { 0x2291,  "Bose Frames"},
         { 0x13875, "TCL NXTWEAR"},
     };
     static const int thresh = 50;
 
-    const int strength = intValue(device, "signalStrength");
+    const int strength = intValue(properties, "signalStrength");
     if (strength < thresh) return;
-    const long long mfg = hexValue(device, "manufacturerData");
+
+    long long mfg;
+    if (!hexValue(properties, "manufacturerData", mfg)) return;
+
     if (suspicious.contains(mfg))
     {
         QString message = QString("Saw manufacturer: %1, %2")
@@ -781,8 +788,9 @@ void BleScanner::updateDevice(const QString &path, const QVariantMap &properties
     }
 
     if (m_alertsenabled) {
-        checkForAlert(device);
+        checkForAlert(properties);
     }
+
     observation.seenMs = seenMs;
     m_observations.insert(address, observation);
 }
