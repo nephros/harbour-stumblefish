@@ -1,0 +1,21 @@
+[Unit]
+Description=Glassfish companion for stumblefish
+BindsTo=harbour-stumblefishd
+
+[Service]
+# Fail after three critical messages
+Environment=QT_FATAL_CRITICALS=3
+
+ExecStart=/usr/bin/harbour-glassfishd
+
+# Resources
+Nice=15
+CPUSchedulingPolicy=idle
+IOSchedulingClass=idle
+OOMScoreAdjust=500
+
+# Sandbox
+PrivateTmp=yes
+ProtectHome=yes
+ProtectSystem=full
+
