@@ -7,6 +7,7 @@
 #include <QDBusMessage>
 #include <QDBusReply>
 #include <QDBusError>
+#include <QDateTime>
 #include <QDebug>
 
 #include <QFile>
@@ -50,6 +51,7 @@ bool Glassfish::checkBleEnabled() const
 
 QVariantMap Glassfish::callReport() const
 {
+    QVariantMap result;
     QDBusMessage message = QDBusMessage::createMethodCall(
                                 Stumblefish::ServiceName,
                                 Stumblefish::ObjectPath,
@@ -67,12 +69,11 @@ QVariantMap Glassfish::callReport() const
      * tampMs" x 0 "uploadStatus" s "" "uploadedAtMs" x 0 "wifi" av 0 "wifiCount" i 0 "wifiEnabled" b false
      */
     if (reply.isValid()) {
-        qDebug() << "reply was valid" << reply.value().value("bleEnabled");
-        return reply.value();
+        result = reply.value();
     } else {
-        qDebug() <<  reply.error();
+        qDebug() << Q_FUNC_INFO << "DBus Error:" << reply.error().message();
     }
-    return QVariantMap();
+    return result;
 }
 
 QList<QVariantMap> Glassfish::getReports(int limit) const
@@ -99,7 +100,7 @@ QList<QVariantMap> Glassfish::getReports(int limit) const
             }
         }
     } else {
-        qDebug() <<  reply.error();
+        qDebug() << Q_FUNC_INFO << "DBus Error:" << reply.error().message();
     }
     return result;
 }
