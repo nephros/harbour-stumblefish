@@ -9,11 +9,44 @@
 #include <QDBusError>
 #include <QDebug>
 
+#include <QFile>
+
+static QJsonDocument readBeaconData()
+{
+    Q_INIT_RESOURCE(fingerprints);
+    QString val;
+    QFile file(QStringLiteral(":data/fingerprints.json"));
+    file.open(QIODevice::ReadOnly | QIODevice::Text);
+    val = file.readAll();
+    file.close();
+    const QJsonDocument d = QJsonDocument::fromJson(val.toUtf8());
+    return d;
+}
+
+
 bool Glassfish::collectingEnabled()
 {
-    auto report = callReport();
-    return report.value("bleEnabled").toBool();
+    return checkBleEnabled();
 }
+
+bool Glassfish::checkBleEnabled() const
+{
+    QVariantMap result;
+    QDBusMessage message = QDBusMessage::createMethodCall(
+                                Stumblefish::ServiceName,
+                                Stumblefish::ObjectPath,
+                                Stumblefish::InterfaceName,
+                                QStringLiteral("settings")
+    );
+    QDBusReply<QVariantMap> reply = QDBusConnection::sessionBus().call(message);
+    if (reply.isValid()) {
+        result = reply.value();
+    } else {
+        qDebug() << Q_FUNC_INFO << "DBus Error:" << reply.error().message();
+    }
+    return result.value("bleEnabled").toBool();
+}
+
 
 QVariantMap Glassfish::callReport() const
 {
@@ -42,7 +75,7 @@ QVariantMap Glassfish::callReport() const
     return QVariantMap();
 }
 
-QList<QVariantMap> Glassfish::getReports()
+QList<QVariantMap> Glassfish::getReports(int limit) const
 {
     QList<QVariantMap> result;
 
@@ -53,9 +86,10 @@ QList<QVariantMap> Glassfish::getReports()
                                 QStringLiteral("reports")
     );
     QList<QVariant> args;
-    args << QVariant(0);
+    args << QVariant(limit); // limit
     message.setArguments(args);
     QDBusReply<QVariantList> reply = QDBusConnection::sessionBus().call(message);
+    //if ((reply.isValid()) && (reply.value().count() > 0)) {
     if (reply.isValid()) {
         //return reply.value();
         for ( const QVariant &entry : reply.value() ) {
@@ -70,4 +104,26 @@ QList<QVariantMap> Glassfish::getReports()
     return result;
 }
 
+void Glassfish::analyzeReports()
+{
+    if (beaconData.isEmpty()) {
+        beaconData = readBeaconData();
+    }
+
+    const qint64 cutoffms = 60*1000;
+    const int min_rssi = 50;
+    qint64 now = QDateTime::currentMSecsSinceEpoch();
+    QList<QVariantMap> list = getReports(12);
+    for (const auto &report : list) {
+        if (report.value("bleReports").toInt() == 0) continue;
+        QVariantList beacons = report.value("ble").toList();
+        for ( const QVariant& entry : beacons) {
+            QVariantMap beacon = entry.toMap();
+            if ((now - beacon.value("seenMs").toInt()) > cutoffms) continue;
+            if (beacon.value("signalStrength").toInt() == 0) continue;
+            if (beacon.value("signalStrength").toInt() > min_rssi) continue;
+            QString mfgData = beacon.value("manufacturerData").toString();
+        }
+    }
+}
 // vim: expandtab ts=4 sw=4 st=4
