@@ -1,4 +1,6 @@
 #include <QCoreApplication>
+#include <QDBusConnection>
+#include <QDebug>
 
 #include "../common/constants.h"
 #include "glassfish.h"
@@ -22,7 +24,13 @@ int main(int argc, char* argv[])
     }
     qInfo() << qPrintable(app.applicationName()) << "started";
 
-    QList<QVariantMap> reports = fish->getReports();
+    QDBusConnection::sessionBus().connect(Stumblefish::ServiceName,
+                                          Stumblefish::ObjectPath,
+                                          Stumblefish::InterfaceName,
+                                          QStringLiteral("reportsChanged"),
+                                          fish,
+                                          SLOT(analyzeReports())
+    );
 
     return app.exec();
 }
