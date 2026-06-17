@@ -7,6 +7,6 @@ int main(int argc, char* argv[])
 {
     QCoreApplication app(argc, argv);
     Glassfish* fish = new Glassfish();
-    if (!fish->bleCollectionEnabled()) return 1;
+    if (!fish->enabled()) return 1;
     return app.exec();
 }
