@@ -6,9 +6,11 @@ SUBDIRS += daemon
 SUBDIRS += src
 SUBDIRS += tests
 
-if(GLASSFISH) {
+if(glassfish) {
+  message("Building with Glassfish companion")
   SUBDIRS += glassfish
 }
+
 OTHER_FILES += \
     rpm/harbour-stumblefish.spec \
     rpm/harbour-stumblefish.changes

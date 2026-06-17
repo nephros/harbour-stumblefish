@@ -1,13 +1,25 @@
+# SPDX-License-Identifier: MIT
 TARGET = harbour-glassfishd
+
+CONFIG += cmdline
+QMAKE_CFLAGS += -fPIE
+QMAKE_CXXFLAGS += -fPIE
+QMAKE_LFLAGS += -pie
 
 QT -= gui
 QT += dbus
-CONFIG += cmdline
 
-SOURCES += src/main.cpp \
-           src/glassfish.cpp
-HEADERS += src/glassfish.h
+INCLUDEPATH += . ../common
 
-unit.files += systemd/$$TARGET.service
-unit.path = /usr/lib/systemd/user
-INSTALLS += unit
+SOURCES += \
+    main.cpp \
+    glassfish.cpp
+HEADERS += \
+    glassfish.h
+
+INSTALLS += target service
+
+target.path = /usr/bin
+
+service.files = harbour-glassfishd.service
+service.path = /usr/lib/systemd/user
