@@ -43,6 +43,29 @@ Links:
   Bugtracker: https://github.com/abranson/harbour-stumblefish/issues
 %endif
 
+%package -n harbour-glassfish
+Summary: Detect presence of Smart Glasses
+Requires: %{name} = %{version}
+
+%description -n harbour-glassfish
+Stumblefish collects opt-in Wi-Fi, cell tower, and Bluetooth beacon
+observations with a position fix, stores the reports locally, and can submit
+them to a configurable Geosubmit endpoint. BeaconDB is the default endpoint.
+%if 0%{?_chum}
+Title: Glassfish
+Type: desktop-application
+DeveloperName: Andrew Branson, nephros
+Categories:
+ - Utility
+Custom:
+  Repo: https://github.com/nephros/harbour-stumblefish
+PackageIcon: https://github.com/abranson/harbour-stumblefish/raw/master/src/icons/172x172/apps/harbour-stumblefish.png
+Links:
+  Homepage: https://github.com/abranson/harbour-stumblefish
+  Bugtracker: https://github.com/nephros/harbour-stumblefish/issues
+%endif
+
+
 %prep
 %autosetup
 
@@ -96,3 +119,7 @@ systemctl-user daemon-reload || true
 %{_datadir}/icons/hicolor/172x172/apps/%{name}.png
 %{_sysconfdir}/sailjail/permissions/Stumblefish.permission
 %{_userunitdir}/%{name}d.service
+
+%files -n harbour-glassfish
+%{_bindir}/harbour-glassfishd
+%{_userunitdir}/harbour-glassfishd.service
