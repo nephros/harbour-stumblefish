@@ -18,7 +18,7 @@
 /tests/*.moc
 /tests/target_wrapper.sh
 /glassfish/Makefile
-/glassfish/harbour-stumblefishd
+/glassfish/harbour-glassfishd
 /glassfish/*.o
 /glassfish/moc_*.cpp
 
