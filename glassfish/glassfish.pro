@@ -17,6 +17,9 @@ SOURCES += \
 HEADERS += \
     glassfish.h
 
+RESOURCES += \
+    fingerprints.qrc
+
 INSTALLS += target service
 
 target.path = /usr/bin

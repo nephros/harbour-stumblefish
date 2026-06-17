@@ -21,4 +21,5 @@
 /glassfish/harbour-glassfishd
 /glassfish/*.o
 /glassfish/moc_*.cpp
+/glassfish/qrc_*.cpp
 
