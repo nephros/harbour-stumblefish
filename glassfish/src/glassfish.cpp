@@ -9,7 +9,13 @@
 #include <QDBusError>
 #include <QDebug>
 
-bool Glassfish::bleCollectionEnabled()
+bool Glassfish::collectingEnabled()
+{
+    auto report = callReport();
+    return report.value("bleEnabled").toBool();
+}
+
+QVariantMap Glassfish::callReport() const
 {
     QDBusMessage message = QDBusMessage::createMethodCall(
                                 Stumblefish::ServiceName,
@@ -29,10 +35,39 @@ bool Glassfish::bleCollectionEnabled()
      */
     if (reply.isValid()) {
         qDebug() << "reply was valid" << reply.value().value("bleEnabled");
-        return reply.value().value("bleEnabled").toBool();
+        return reply.value();
     } else {
-        qDebug() <<  QDBusConnection::sessionBus().lastError().message();
         qDebug() <<  reply.error();
     }
-    return false;
+    return QVariantMap();
 }
+
+QList<QVariantMap> Glassfish::getReports()
+{
+    QList<QVariantMap> result;
+
+    QDBusMessage message = QDBusMessage::createMethodCall(
+                                Stumblefish::ServiceName,
+                                Stumblefish::ObjectPath,
+                                Stumblefish::InterfaceName,
+                                QStringLiteral("reports")
+    );
+    QList<QVariant> args;
+    args << QVariant(0);
+    message.setArguments(args);
+    QDBusReply<QVariantList> reply = QDBusConnection::sessionBus().call(message);
+    if (reply.isValid()) {
+        //return reply.value();
+        for ( const QVariant &entry : reply.value() ) {
+            QVariantMap map = entry.toMap();
+            if (map.value("bleCount", 0).toInt() != 0) {
+                result.append(map);
+            }
+        }
+    } else {
+        qDebug() <<  reply.error();
+    }
+    return result;
+}
+
+// vim: expandtab ts=4 sw=4 st=4
