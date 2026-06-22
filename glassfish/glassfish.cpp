@@ -11,6 +11,8 @@
 #include <QDebug>
 
 #include <QFile>
+#include <QJsonObject>
+#include <QJsonArray>
 
 static const QList<int> manufacturerIds = {
     1177,
@@ -138,4 +140,20 @@ void Glassfish::analyzeReports()
         }
     }
 }
+
+QJsonObject Glassfish::manufacturerForId(int id)
+{
+    if (beaconData.isEmpty()) {
+        beaconData = readBeaconData();
+        if (beaconData.isEmpty()) { qCritical() << "could not load beacon info!"; }
+    }
+    QJsonArray prints = beaconData.object().value("fingerprints").toArray();
+    for (int i = 0; i < prints.size(); ++i) {
+        QJsonValue value = prints.at(i);
+        if (value.toArray().contains(id)) return value.toObject();
+    }
+    return QJsonObject();
+}
+
+
 // vim: expandtab ts=4 sw=4 st=4
