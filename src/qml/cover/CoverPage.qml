@@ -22,6 +22,19 @@ CoverBackground {
         smooth: true
     }
 
+    Label {
+         anchors {
+            top: parent.top
+            horizontalCenter: parent.horizontalCenter
+            topMargin: Theme.paddingLarge
+        }
+        width: parent.width
+        text: stumblefish.status.collectionStateMessage
+        horizontalAlignment: Text.AlignHCenter
+        color: Theme.secondaryHighlightColor
+        font.pixelSize: Theme.fontSizeSmall
+    }
+
     Column {
         anchors {
             left: parent.left
