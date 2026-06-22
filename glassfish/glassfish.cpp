@@ -141,7 +141,7 @@ void Glassfish::analyzeReports()
     }
 }
 
-QJsonObject Glassfish::manufacturerForId(int id)
+QVariantMap Glassfish::manufacturerForId(int id)
 {
     if (beaconData.isEmpty()) {
         beaconData = readBeaconData();
@@ -149,10 +149,10 @@ QJsonObject Glassfish::manufacturerForId(int id)
     }
     QJsonArray prints = beaconData.object().value("fingerprints").toArray();
     for (int i = 0; i < prints.size(); ++i) {
-        QJsonValue value = prints.at(i);
-        if (value.toArray().contains(id)) return value.toObject();
+        QVariantMap value = prints.at(i).toObject().toVariantMap();
+        if (value["manufacturer_ids"].toList().contains(id)) return value;
     }
-    return QJsonObject();
+    return QVariantMap();
 }
 
 
