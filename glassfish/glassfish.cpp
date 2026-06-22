@@ -12,6 +12,16 @@
 
 #include <QFile>
 
+static const QList<int> manufacturerIds = {
+    1177,
+    1371,
+    13875,
+    2291,
+    2362,
+    2400,
+    756
+};
+
 static QJsonDocument readBeaconData()
 {
     Q_INIT_RESOURCE(fingerprints);
@@ -20,10 +30,10 @@ static QJsonDocument readBeaconData()
     file.open(QIODevice::ReadOnly | QIODevice::Text);
     val = file.readAll();
     file.close();
+    qDebug() << qPrintable(val);
     const QJsonDocument d = QJsonDocument::fromJson(val.toUtf8());
     return d;
 }
-
 
 bool Glassfish::collectingEnabled()
 {
@@ -107,23 +117,24 @@ QList<QVariantMap> Glassfish::getReports(int limit) const
 
 void Glassfish::analyzeReports()
 {
-    if (beaconData.isEmpty()) {
-        beaconData = readBeaconData();
-    }
-
+    const int maxreports = 12;
     const qint64 cutoffms = 60*1000;
-    const int min_rssi = 50;
-    qint64 now = QDateTime::currentMSecsSinceEpoch();
-    QList<QVariantMap> list = getReports(12);
+    // rssi -60 ≈ 3 m.
+    const int min_rssi = 60;
+    const qint64 now = QDateTime::currentMSecsSinceEpoch();
+
+    const QList<QVariantMap> list = getReports(maxreports);
     for (const auto &report : list) {
         if (report.value("bleReports").toInt() == 0) continue;
-        QVariantList beacons = report.value("ble").toList();
+        const QVariantList beacons = report.value("ble").toList();
         for ( const QVariant& entry : beacons) {
-            QVariantMap beacon = entry.toMap();
+            const QVariantMap beacon = entry.toMap();
             if ((now - beacon.value("seenMs").toInt()) > cutoffms) continue;
-            if (beacon.value("signalStrength").toInt() == 0) continue;
-            if (beacon.value("signalStrength").toInt() > min_rssi) continue;
-            QString mfgData = beacon.value("manufacturerData").toString();
+            if (beacon.value("signalStrength").toInt() < min_rssi) continue;
+            const int mfgId = beacon.value("manufacturerData").toString().toInt();
+            if(manufacturerIds.contains(mfgId)) {
+                emit alert();
+            }
         }
     }
 }
