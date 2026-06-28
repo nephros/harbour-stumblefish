@@ -1,7 +1,7 @@
 # SPDX-License-Identifier: MIT
 Name:       harbour-stumblefish
 Summary:    Location report collector for Sailfish OS
-Version:    0.1.5.9
+Version:    0.1.7.1
 Release:    1
 License:    MIT
 Group:      Qt/Qt
@@ -37,7 +37,12 @@ Categories:
  - Utility
 Custom:
   Repo: https://github.com/abranson/harbour-stumblefish
-PackageIcon: https://github.com/abranson/harbour-stumblefish/raw/master/src/icons/172x172/apps/harbour-stumblefish.png
+Icon: https://github.com/abranson/harbour-stumblefish/raw/master/src/icons/172x172/apps/harbour-stumblefish.png
+Screenshots:
+ - https://github.com/abranson/harbour-stumblefish/raw/master/Screenshot1.png
+ - https://github.com/abranson/harbour-stumblefish/raw/master/Screenshot2.png
+ - https://github.com/abranson/harbour-stumblefish/raw/master/Screenshot3.png
+ - https://github.com/abranson/harbour-stumblefish/raw/master/Screenshot4.png
 Links:
   Homepage: https://github.com/abranson/harbour-stumblefish
   Bugtracker: https://github.com/abranson/harbour-stumblefish/issues
