@@ -45,17 +45,38 @@ bool Glassfish::collectingEnabled()
 bool Glassfish::checkBleEnabled() const
 {
     QVariantMap result;
-    QDBusMessage message = QDBusMessage::createMethodCall(
+    QDBusReply<QVariantMap> reply;
+    QDBusMessage message;
+    message = QDBusMessage::createMethodCall(
+                                Stumblefish::ServiceName,
+                                Stumblefish::ObjectPath,
+                                Stumblefish::InterfaceName,
+                                QStringLiteral("status")
+    );
+    if (!result.value("bleAvailable").toBool()) {
+        qWarning() << "BLE not available";
+        return false;
+    }
+    reply = QDBusConnection::sessionBus().call(message);
+    if (reply.isValid()) {
+        result = reply.value();
+    } else {
+        qDebug() << Q_FUNC_INFO << "DBus Error:" << reply.error().message();
+    }
+    message = QDBusMessage::createMethodCall(
                                 Stumblefish::ServiceName,
                                 Stumblefish::ObjectPath,
                                 Stumblefish::InterfaceName,
                                 QStringLiteral("settings")
     );
-    QDBusReply<QVariantMap> reply = QDBusConnection::sessionBus().call(message);
+    reply = QDBusConnection::sessionBus().call(message);
     if (reply.isValid()) {
         result = reply.value();
     } else {
         qDebug() << Q_FUNC_INFO << "DBus Error:" << reply.error().message();
+    }
+    if (!result.value("bleEnabled").toBool()) {
+        qWarning() << "BLE not enabled";
     }
     return result.value("bleEnabled").toBool();
 }
