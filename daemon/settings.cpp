@@ -120,6 +120,16 @@ void Settings::setLastAutoUploadMs(qint64 timestampMs)
     m_settings.sync();
 }
 
+bool Settings::phonetrackEnabled() const
+{
+    return false;
+}
+
+bool Settings::traccarEnabled() const
+{
+    return false;
+}
+
 QVariantMap Settings::toMap() const
 {
     QVariantMap map;
@@ -136,6 +146,8 @@ QVariantMap Settings::toMap() const
     map.insert(QStringLiteral("endpoint"), endpoint());
     map.insert(QStringLiteral("mapTileUrlTemplate"), mapTileUrlTemplate());
     map.insert(QStringLiteral("reportRetentionDays"), reportRetentionDays());
+    map.insert(QStringLiteral("phonetrackEnabled"), phonetrackEnabled());
+    map.insert(QStringLiteral("traccarEnabled"), traccarEnabled());
     return map;
 }
 

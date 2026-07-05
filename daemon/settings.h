@@ -30,6 +30,9 @@ public:
     qint64 lastAutoUploadMs() const;
     void setLastAutoUploadMs(qint64 timestampMs);
 
+    bool phonetrackEnabled() const;
+    bool traccarEnabled() const;
+
     QVariantMap toMap() const;
 
 public Q_SLOTS:
