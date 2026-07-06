@@ -32,6 +32,8 @@ public:
 
     bool phonetrackEnabled() const;
     bool traccarEnabled() const;
+    QString trackEndpoint() const;
+    QString userAgent() const;
 
     QVariantMap toMap() const;
 

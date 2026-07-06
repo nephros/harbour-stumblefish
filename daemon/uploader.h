@@ -32,12 +32,14 @@ Q_SIGNALS:
 private Q_SLOTS:
     void replyFinished();
 
+protected:
+    Settings *m_settings;
+
 private:
     void uploadPending(int maxRetryCount);
     QByteArray buildPayload(const QList<Report> &reports, QList<int> *includedIds) const;
 
     Storage *m_storage;
-    Settings *m_settings;
     QNetworkAccessManager *m_network;
     QNetworkReply *m_reply;
     QList<int> m_uploadingIds;

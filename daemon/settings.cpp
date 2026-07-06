@@ -130,6 +130,16 @@ bool Settings::traccarEnabled() const
     return false;
 }
 
+QString Settings::trackEndpoint() const
+{
+    return QString();
+}
+
+QString Settings::userAgent() const
+{
+    return QString(); //qApp->applicationName() + "/" + qApp->applicationVersion;
+}
+
 QVariantMap Settings::toMap() const
 {
     QVariantMap map;
