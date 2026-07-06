@@ -25,6 +25,7 @@ SOURCES += \
     storage.cpp \
     uploaduseragent.cpp \
     uploader.cpp \
+    phonetrackuploader.cpp \
     wificollector.cpp
 
 HEADERS += \
@@ -38,6 +39,7 @@ HEADERS += \
     storage.h \
     uploaduseragent.h \
     uploader.h \
+    phonetrackuploader.h \
     wificollector.h
 
 INSTALLS += target service dbusservice
