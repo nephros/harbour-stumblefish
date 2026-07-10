@@ -47,7 +47,7 @@
     <message>
         <location filename="../qml/pages/MainPage.qml" line="40"/>
         <source>Settings</source>
-        <translation type="unfinished"></translation>
+        <translation>Einstellungen</translation>
     </message>
     <message>
         <location filename="../qml/pages/MainPage.qml" line="44"/>
@@ -67,7 +67,7 @@
     <message>
         <location filename="../qml/pages/MainPage.qml" line="67"/>
         <source>Status</source>
-        <translation type="unfinished"></translation>
+        <translation>Status</translation>
     </message>
     <message>
         <location filename="../qml/pages/MainPage.qml" line="72"/>
@@ -78,7 +78,7 @@
         <location filename="../qml/pages/MainPage.qml" line="77"/>
         <location filename="../qml/pages/MainPage.qml" line="151"/>
         <source>Cell</source>
-        <translation type="unfinished"></translation>
+        <translation>Zellen</translation>
     </message>
     <message>
         <location filename="../qml/pages/MainPage.qml" line="79"/>
@@ -93,12 +93,12 @@
     <message>
         <location filename="../qml/pages/MainPage.qml" line="84"/>
         <source>Position</source>
-        <translation type="unfinished"></translation>
+        <translation>Position</translation>
     </message>
     <message>
         <location filename="../qml/pages/MainPage.qml" line="85"/>
         <source>unknown</source>
-        <translation type="unfinished"></translation>
+        <translation>unbekannt</translation>
     </message>
     <message>
         <location filename="../qml/pages/MainPage.qml" line="89"/>
@@ -108,7 +108,7 @@
     <message>
         <location filename="../qml/pages/MainPage.qml" line="128"/>
         <source>Wi-Fi</source>
-        <translation type="unfinished"></translation>
+        <translation>Wi-Fi</translation>
     </message>
     <message>
         <location filename="../qml/pages/MainPage.qml" line="185"/>
@@ -123,12 +123,12 @@
     <message>
         <location filename="../qml/pages/MainPage.qml" line="193"/>
         <source>Uploaded</source>
-        <translation type="unfinished"></translation>
+        <translation>Hochgeladen</translation>
     </message>
     <message>
         <location filename="../qml/pages/MainPage.qml" line="197"/>
         <source>Failed</source>
-        <translation type="unfinished"></translation>
+        <translation>Fehlgeschlagen</translation>
     </message>
     <message>
         <location filename="../qml/pages/MainPage.qml" line="201"/>
@@ -143,7 +143,7 @@
     <message>
         <location filename="../qml/pages/MainPage.qml" line="213"/>
         <source>View map</source>
-        <translation type="unfinished"></translation>
+        <translation>Karte ansehen</translation>
     </message>
 </context>
 <context>
@@ -164,7 +164,7 @@
     <message>
         <location filename="../qml/pages/ReportDetailPage.qml" line="190"/>
         <source>Status</source>
-        <translation type="unfinished"></translation>
+        <translation>Status</translation>
     </message>
     <message>
         <location filename="../qml/pages/ReportDetailPage.qml" line="194"/>
@@ -174,7 +174,7 @@
     <message>
         <location filename="../qml/pages/ReportDetailPage.qml" line="198"/>
         <source>Position</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Position</translation>
     </message>
     <message>
         <location filename="../qml/pages/ReportDetailPage.qml" line="202"/>
@@ -194,7 +194,7 @@
     <message>
         <location filename="../qml/pages/ReportDetailPage.qml" line="214"/>
         <source>Uploaded</source>
-        <translation type="unfinished"></translation>
+        <translation>Hochgeladen</translation>
     </message>
 </context>
 <context>
@@ -202,7 +202,7 @@
     <message>
         <location filename="../qml/pages/ReportsPage.qml" line="36"/>
         <source>View map</source>
-        <translation type="unfinished"></translation>
+        <translation>Karte ansehen</translation>
     </message>
     <message>
         <location filename="../qml/pages/ReportsPage.qml" line="41"/>
@@ -212,7 +212,7 @@
     <message>
         <location filename="../qml/pages/ReportsPage.qml" line="86"/>
         <source>#%1 %2</source>
-        <translation type="unfinished"></translation>
+        <translation>Nr. %1 %2</translation>
     </message>
     <message>
         <location filename="../qml/pages/ReportsPage.qml" line="106"/>
@@ -230,12 +230,12 @@
     <message>
         <location filename="../qml/pages/SettingsPage.qml" line="135"/>
         <source>Settings</source>
-        <translation type="unfinished"></translation>
+        <translation>Einstellungen</translation>
     </message>
     <message>
         <location filename="../qml/pages/SettingsPage.qml" line="139"/>
         <source>Daemon</source>
-        <translation type="unfinished"></translation>
+        <translation>Daemon</translation>
     </message>
     <message>
         <location filename="../qml/pages/SettingsPage.qml" line="143"/>
@@ -255,7 +255,7 @@
     <message>
         <location filename="../qml/pages/SettingsPage.qml" line="152"/>
         <source>Status notifications</source>
-        <translation type="unfinished"></translation>
+        <translation>Benachrichtigungen</translation>
     </message>
     <message>
         <location filename="../qml/pages/SettingsPage.qml" line="154"/>
@@ -305,17 +305,17 @@
     <message>
         <location filename="../qml/pages/SettingsPage.qml" line="190"/>
         <source>Upload</source>
-        <translation type="unfinished"></translation>
+        <translation>Hochladen</translation>
     </message>
     <message>
         <location filename="../qml/pages/SettingsPage.qml" line="194"/>
         <source>Automatic upload</source>
-        <translation type="unfinished"></translation>
+        <translation>Automatisch hochladen</translation>
     </message>
     <message>
         <location filename="../qml/pages/SettingsPage.qml" line="195"/>
         <source>Every 8 hours</source>
-        <translation type="unfinished"></translation>
+        <translation >Alle 8 Stunden</translation>
     </message>
     <message>
         <location filename="../qml/pages/SettingsPage.qml" line="201"/>
@@ -330,7 +330,7 @@
     <message>
         <location filename="../qml/pages/SettingsPage.qml" line="230"/>
         <source>Map</source>
-        <translation type="unfinished"></translation>
+        <translation>Karte</translation>
     </message>
     <message>
         <location filename="../qml/pages/SettingsPage.qml" line="236"/>
@@ -355,7 +355,7 @@
     <message>
         <location filename="../qml/pages/SettingsPage.qml" line="283"/>
         <source>Storage</source>
-        <translation type="unfinished"></translation>
+        <translation >Speicher</translation>
     </message>
     <message>
         <location filename="../qml/pages/SettingsPage.qml" line="288"/>
@@ -365,22 +365,22 @@
     <message>
         <location filename="../qml/pages/SettingsPage.qml" line="294"/>
         <source>30 days</source>
-        <translation type="unfinished"></translation>
+        <translation>30 Tage</translation>
     </message>
     <message>
         <location filename="../qml/pages/SettingsPage.qml" line="298"/>
         <source>60 days</source>
-        <translation type="unfinished"></translation>
+        <translation>60 Tage</translation>
     </message>
     <message>
         <location filename="../qml/pages/SettingsPage.qml" line="302"/>
         <source>180 days</source>
-        <translation type="unfinished"></translation>
+        <translation>180 Tage</translation>
     </message>
     <message>
         <location filename="../qml/pages/SettingsPage.qml" line="306"/>
         <source>Never</source>
-        <translation type="unfinished"></translation>
+        <translation>Nie</translation>
     </message>
     <message>
         <location filename="../qml/pages/SettingsPage.qml" line="314"/>
