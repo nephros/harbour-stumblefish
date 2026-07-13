@@ -15,6 +15,9 @@
 #include <QMap>
 #include <QVariantMap>
 
+#ifdef FIND_JOLLA_BUDDIES
+const QString BT_VENDOR_JOLLA = "50:56:A8"; // since 2013 ;)
+#endif
 typedef QMap<QDBusObjectPath, InterfaceList> ManagedObjectList;
 typedef QMap<quint16, QByteArray> ManufacturerDataMap;
 typedef QMap<QString, QByteArray> ServiceDataMap;
@@ -687,6 +690,11 @@ void BleScanner::updateDeviceProperties(const QString &path, const QVariantMap &
     const QString address = stringValue(merged, QStringLiteral("Address")).toLower();
     if (!address.isEmpty()) {
         m_deviceAddresses.insert(path, address);
+#ifdef FIND_JOLLA_BUDDIES
+        if (address.startsWith(BT_VENDOR_JOLLA, Qt::CaseInsensitive)) {
+            emit ahoiSailor();
+        }
+#endif
     }
 
     if (fresh) {

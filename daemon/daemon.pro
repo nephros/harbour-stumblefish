@@ -14,6 +14,8 @@ PKGCONFIG += connman-qt5 nemonotifications-qt5 qofonoext systemsettings
 INCLUDEPATH += . ../common
 DEFINES += APP_VERSION=\\\"$$VERSION\\\"
 
+DEFINES += FIND_JOLLA_BUDDIES
+
 SOURCES += \
     main.cpp \
     batterymonitor.cpp \

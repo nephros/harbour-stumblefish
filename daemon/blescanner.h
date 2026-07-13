@@ -47,6 +47,10 @@ public:
 
 Q_SIGNALS:
     void changed();
+#ifdef FIND_JOLLA_BUDDIES
+    void ahoiSailor();
+#endif
+
 
 private Q_SLOTS:
     void interfacesAdded(const QDBusObjectPath &path, const InterfaceList &interfaces);
