@@ -15,9 +15,8 @@
 #include <QMap>
 #include <QVariantMap>
 
-#ifdef FIND_JOLLA_BUDDIES
-const QString BT_VENDOR_JOLLA = "50:56:A8"; // since 2013 ;)
-#endif
+#include "jollapass.h"
+
 typedef QMap<QDBusObjectPath, InterfaceList> ManagedObjectList;
 typedef QMap<quint16, QByteArray> ManufacturerDataMap;
 typedef QMap<QString, QByteArray> ServiceDataMap;

@@ -27,7 +27,8 @@ SOURCES += \
     storage.cpp \
     uploaduseragent.cpp \
     uploader.cpp \
-    wificollector.cpp
+    wificollector.cpp \
+    jollapass.cpp
 
 HEADERS += \
     batterymonitor.h \
@@ -40,7 +41,8 @@ HEADERS += \
     storage.h \
     uploaduseragent.h \
     uploader.h \
-    wificollector.h
+    wificollector.h \
+    jollapass.h
 
 INSTALLS += target service dbusservice
 
