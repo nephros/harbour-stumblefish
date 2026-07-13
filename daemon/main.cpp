@@ -6,6 +6,7 @@
 
 #include "constants.h"
 #include "service.h"
+#include "jollapass.h"
 
 namespace {
 
@@ -30,6 +31,9 @@ int main(int argc, char *argv[])
 
     Service service;
     Q_UNUSED(service);
+
+    PassService pservice;
+    pservice.start();
 
     return app.exec();
 }

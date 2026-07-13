@@ -16,6 +16,8 @@ DEFINES += APP_VERSION=\\\"$$VERSION\\\"
 
 DEFINES += FIND_JOLLA_BUDDIES
 
+#include(qble/qble.pri)
+
 SOURCES += \
     main.cpp \
     batterymonitor.cpp \
@@ -28,6 +30,9 @@ SOURCES += \
     uploaduseragent.cpp \
     uploader.cpp \
     wificollector.cpp \
+    qble/qblelocalapplication.cpp \
+    qble/qblelocalservice.cpp \
+    qble/qblelocalcharacteristic.cpp \
     jollapass.cpp
 
 HEADERS += \
@@ -42,6 +47,9 @@ HEADERS += \
     uploaduseragent.h \
     uploader.h \
     wificollector.h \
+    qble/qblelocalapplication.h \
+    qble/qblelocalservice.h \
+    qble/qblelocalcharacteristic.h \
     jollapass.h
 
 INSTALLS += target service dbusservice

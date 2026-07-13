@@ -1,18 +1,26 @@
 #ifndef JOLLAPASS_H
 #define JOLLAPASS_H
 #include <QString>
+#include "qble/qblelocalcharacteristic.h"
 
 #ifdef FIND_JOLLA_BUDDIES
 const QString BT_VENDOR_JOLLA = "50:56:A8"; // since 2013 ;)
-const QString BTLE_JOLLAPASS_SERVICE_ID        = "ebd18207-aaf7-406b-806f-1732f37ab8ca";
-const QString BTLE_JOLLAPASS_CHARACTERISTIC_ID = "0433924c-0927-4076-bb77-9359ac3994e0";
+const QString BTLE_JOLLAPASS_SERVICE_ID        = "056AB00-AAF7-406B-806F-1732F37AB8CA";
+const QString BTLE_JOLLAPASS_CHARACTERISTIC1_ID = "056AB01-AAF7-406B-806F-1732F37AB8CA";
+const QString BTLE_JOLLAPASS_CHARACTERISTIC2_ID = "056AB02-AAF7-406B-806F-1732F37AB8CA";
+const QString BTLE_JOLLAPASS_APP_PATH = "/org/sailfishos/JollaPass1";
+const QString BTLE_JOLLAPASS_SERVICE_PATH = "/org/sailfishos/JollaPass1/service";
 
-namespace {
-class BLEService
+class PassService
 {
 public:
-    void start();
+    void start(const QString& adapter = "/org/bluez/hci0");
 };
-} // ns
+
+class PassCharacteristic : public QBLELocalCharacteristic
+{
+public:
+    QByteArray ReadValue(const QVariantMap &options) override;
+};
 #endif
 #endif // JOLLAPASS_H
