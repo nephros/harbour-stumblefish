@@ -551,6 +551,11 @@ bool BleScanner::updateAdapterPath()
     }
 
     m_adapterPath = path;
+#ifdef FIND_JOLLA_BUDDIES
+    PassService pservice;
+    pservice.update(path);
+#endif
+
     for (ManagedObjectList::ConstIterator it = objects.constBegin(); it != objects.constEnd(); ++it) {
         const QString objectPath = it.key().path();
         const InterfaceList interfaces = it.value();
