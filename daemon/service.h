@@ -71,6 +71,9 @@ private Q_SLOTS:
     void quitForAppLifecycle();
     void statusNotificationClicked();
     void statusNotificationClosed(uint reason);
+#ifdef FIND_JOLLA_BUDDIES
+    void sailorDetected();
+#endif
 
 private:
     bool anySourceEnabled() const;

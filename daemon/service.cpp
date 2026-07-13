@@ -125,6 +125,9 @@ Service::Service(QObject *parent)
     connect(&m_wifi, SIGNAL(changed()), this, SLOT(emitStatus()));
     connect(&m_cell, SIGNAL(changed()), this, SLOT(sourceStateChanged()));
     connect(&m_ble, SIGNAL(changed()), this, SLOT(emitStatus()));
+#ifdef FIND_JOLLA_BUDDIES
+    connect(&m_ble, SIGNAL(ahoiSailor()), this, SLOT(sailorDetected()));
+#endif
     connect(&m_battery, &BatteryMonitor::changed,
             this, &Service::sourceStateChanged);
     connect(&m_storage, SIGNAL(changed()), this, SLOT(storageChanged()));
@@ -343,6 +346,22 @@ int Service::pruneReports()
     emitStatus();
     return count;
 }
+
+#ifdef FIND_JOLLA_BUDDIES
+void Service::sailorDetected() {
+    Notification *n = new Notification();
+    n->setAppName(QStringLiteral("Stumblefish"));
+    n->setAppIcon(QString::fromLatin1(Stumblefish::ApplicationName));
+
+    n->setIcon(   QStringLiteral("icon-m-jolla"));
+    n->setSummary(QStringLiteral("Stumblefish saw a Jolla device!"));
+    n->setBody(   QStringLiteral("There might be a Sailfish OS user nearby..."));
+
+    n->setUrgency(Notification::Critical);
+    n->setExpireTimeout(1000 * 60 * 5); // 5 min
+    n->publish();
+}
+#endif
 
 void Service::applySettings()
 {
