@@ -28,9 +28,10 @@ CoverBackground {
             horizontalCenter: parent.horizontalCenter
             topMargin: Theme.paddingLarge
         }
-        width: parent.width
+        width: parent.width - Theme.paddingLarge
         text: stumblefish.status.collectionStateMessage
         horizontalAlignment: Text.AlignHCenter
+        wrapMode: Text.Wrap
         color: Theme.secondaryHighlightColor
         font.pixelSize: Theme.fontSizeSmall
     }
