@@ -7,7 +7,9 @@
 class PassService
 {
 public:
-    void start(const QString& adapter = "/org/bluez/hci0");
+    void update(const QString& adapter = "/org/bluez/hci0");
+private:
+    QString m_adapterPath;
 };
 
 
