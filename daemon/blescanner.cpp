@@ -690,7 +690,7 @@ void BleScanner::updateDeviceProperties(const QString &path, const QVariantMap &
     if (!address.isEmpty()) {
         m_deviceAddresses.insert(path, address);
 #ifdef FIND_JOLLA_BUDDIES
-        if (address.startsWith(BT_VENDOR_JOLLA, Qt::CaseInsensitive)) {
+        if (address.startsWith(Stumblefish::JollaPass::BT_VENDOR_JOLLA, Qt::CaseInsensitive)) {
             emit ahoiSailor();
         }
 #endif
