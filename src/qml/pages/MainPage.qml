@@ -183,16 +183,23 @@ Page {
 
             SectionHeader { id: jpheader
                 text: "JollaPass™"
-                visible: stumblefish.settings.jollaPassAvailable() || false
+                visible: stumblefish.settings.jollaPassAvailable() && stumblefish.settings.bleEnabled && bleAvailable()
             }
 
             DetailItem {
                 label: "Seen"
                 value: count("jollapassed")
+                visible: jpheader.visible
             }
             DetailItem {
                 label: "Current"
                 value: count("jollapasing")
+                visible: jpheader.visible
+            }
+            DetailItem {
+                label: "Last passed"
+                value: timeText(stumblefish.status.lastJollaPass)
+                visible: jpheader.visible
             }
 
             SectionHeader {
