@@ -191,6 +191,7 @@ QVariantMap Service::status() const
                : stateMessage);
     map.insert(QStringLiteral("message"), m_lastMessage);
     map.insert(QStringLiteral("lastCollectedMs"), m_storage.lastReportTimestamp());
+    map.insert(QStringLiteral("lastJollaPass"), m_storage.lastPassReportTimestamp());
     map.insert(QStringLiteral("counts"), m_storage.counts());
     QString autoUploadNetworkReason;
     map.insert(QStringLiteral("autoUploadNetworkAllowed"),
@@ -360,6 +361,10 @@ void Service::sailorDetected() {
     n->setUrgency(Notification::Critical);
     n->setExpireTimeout(1000 * 60 * 5); // 5 min
     n->publish();
+    PassReport report;
+    report.timestampMs = QDateTime::currentMSecsSinceEpoch();
+    m_storage.addPassReport(report);
+
 }
 #endif
 

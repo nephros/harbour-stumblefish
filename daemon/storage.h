@@ -9,6 +9,20 @@
 
 #include "observations.h"
 
+#ifdef FIND_JOLLA_BUDDIES
+struct PassReport
+{
+    int id;
+    qint64 timestampMs;
+
+    PassReport()
+        : id(0)
+        , timestampMs(0)
+    {
+    }
+};
+#endif
+
 class Storage : public QObject
 {
     Q_OBJECT
@@ -42,6 +56,11 @@ public:
     static QVariantMap reportSummaryToMap(const Report &report);
     static QVariantMap reportToMap(const Report &report);
 
+#ifdef FIND_JOLLA_BUDDIES
+    int addPassReport(const PassReport &report) { m_passReports.append(report); return m_passReports.count(); };
+    qint64 lastPassReportTimestamp() const { return m_passReports.last().timestampMs; };
+#endif
+
 Q_SIGNALS:
     void changed();
 
@@ -56,6 +75,9 @@ private:
 
     QSqlDatabase m_db;
     QString m_lastError;
+#ifdef FIND_JOLLA_BUDDIES
+    QList<PassReport> m_passReports;
+#endif
 };
 
 #endif
