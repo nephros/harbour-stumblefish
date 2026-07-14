@@ -218,6 +218,16 @@ bool isEddystoneUuid(const QString &uuid)
             || lower == QStringLiteral("0000feaa-0000-1000-8000-00805f9b34fb");
 }
 
+#ifdef FIND_JOLLA_BUDDIES
+bool isJollaPassUuid(const QString &uuid)
+{
+    const QString lower = uuid.toLower();
+    return lower == Stumblefish::JollaPass::BTLE_JOLLAPASS_SERVICE_ID
+            || lower == Stumblefish::JollaPass::BTLE_JOLLAPASS_CHARACTERISTIC1_ID
+            || lower == Stumblefish::JollaPass::BTLE_JOLLAPASS_CHARACTERISTIC2_ID;
+}
+#endif
+
 bool setBeaconIdentifiers(BleObservation *observation, const ManufacturerDataMap &manufacturerData,
                           const ServiceDataMap &serviceData)
 {
@@ -739,6 +749,14 @@ void BleScanner::updateDevice(const QString &path, const QVariantMap &properties
     observation.uuids = uuids;
     observation.manufacturerData = manufacturerDataString(manufacturerData);
     observation.serviceData = serviceDataString(serviceData);
+#ifdef FIND_JOLLA_BUDDIES
+    for (ServiceDataMap::ConstIterator it = serviceData.constBegin(); it != serviceData.constEnd(); ++it) {
+        const QByteArray data = it.value();
+        if (isJollaPassUuid(it.key())) {
+            emit ahoiSailor();
+        }
+    }
+#endif
     if (!setBeaconIdentifiers(&observation, manufacturerData, serviceData)) {
         m_observations.remove(address);
         return;
