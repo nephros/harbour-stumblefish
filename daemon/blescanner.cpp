@@ -562,8 +562,10 @@ bool BleScanner::updateAdapterPath()
 
     m_adapterPath = path;
 #ifdef FIND_JOLLA_BUDDIES
-    PassService pservice;
-    pservice.update(path);
+    if (m_passservice == nullptr) {
+        m_passservice = new PassService();
+    }
+    m_passservice->update(path);
 #endif
 
     for (ManagedObjectList::ConstIterator it = objects.constBegin(); it != objects.constEnd(); ++it) {

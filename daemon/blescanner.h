@@ -13,6 +13,10 @@ class BleScanner;
 class QDBusInterface;
 class QDBusObjectPath;
 
+#ifdef FIND_JOLLA_BUDDIES
+class PassService;
+#endif
+
 typedef QMap<QString, QVariantMap> InterfaceList;
 
 class BluezPropertiesWatcher : public QObject
@@ -84,6 +88,9 @@ private:
     QString m_adapterPath;
     bool m_enabled;
     QString m_status;
+#ifdef FIND_JOLLA_BUDDIES
+    PassService *m_passservice = nullptr;
+#endif
 };
 
 #endif
