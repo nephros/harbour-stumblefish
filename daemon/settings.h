@@ -29,6 +29,11 @@ public:
     void setLastPruneMs(qint64 timestampMs);
     qint64 lastAutoUploadMs() const;
     void setLastAutoUploadMs(qint64 timestampMs);
+#ifdef FIND_JOLLA_BUDDIES
+    bool jollaPassSendEnabled() const;
+    bool jollaPassScanEnabled() const;
+    bool jollaPassSaveEnabled() const;
+#endif
 
     QVariantMap toMap() const;
 

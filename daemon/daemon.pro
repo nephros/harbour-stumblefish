@@ -1,7 +1,7 @@
 # SPDX-License-Identifier: MIT
 TARGET = harbour-stumblefishd
 
-CONFIG += console c++11 link_pkgconfig
+CONFIG += console c++11 link_pkgconfig warn_on
 QMAKE_CFLAGS += -fPIE
 QMAKE_CXXFLAGS += -fPIE
 QMAKE_LFLAGS += -pie

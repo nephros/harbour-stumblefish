@@ -20,6 +20,11 @@ const char MapTileUrlTemplateKey[] = "map/tileUrlTemplate";
 const char ReportRetentionDaysKey[] = "storage/reportRetentionDays";
 const char LastPruneMsKey[] = "storage/lastPruneMs";
 const char DefaultMapTileUrlTemplate[] = "https://tile.openstreetmap.org/{z}/{x}/{y}.png";
+#ifdef FIND_JOLLA_BUDDIES
+const char JollaPassSendKey[] = "jollapass/send";
+const char JollaPassScanKey[] = "jollapass/scan";
+const char JollaPassSaveKey[] = "jollapass/save";
+#endif
 
 int normalizedRetentionDays(const QVariant &value)
 {
@@ -59,6 +64,20 @@ bool Settings::autoUploadEnabled() const
 {
     return value(QString::fromLatin1(AutoUploadKey), false).toBool();
 }
+#ifdef FIND_JOLLA_BUDDIES
+bool Settings::jollaPassSendEnabled() const
+{
+    return value(QString::fromLatin1(JollaPassSendKey), false).toBool();
+}
+bool Settings::jollaPassScanEnabled() const
+{
+    return value(QString::fromLatin1(JollaPassScanKey), false).toBool();
+}
+bool Settings::jollaPassSaveEnabled() const
+{
+    return value(QString::fromLatin1(JollaPassSaveKey), false).toBool();
+}
+#endif
 
 bool Settings::uploadOnNonWifi() const
 {
@@ -250,5 +269,16 @@ void Settings::ensureDefaults()
     if (!m_settings.contains(QString::fromLatin1(LastPruneMsKey))) {
         m_settings.setValue(QString::fromLatin1(LastPruneMsKey), 0);
     }
+#ifdef FIND_JOLLA_BUDDIES
+    if (!m_settings.contains(QString::fromLatin1(JollaPassSendKey))) {
+        m_settings.setValue(QString::fromLatin1(JollaPassSendKey), false);
+    }
+    if (!m_settings.contains(QString::fromLatin1(JollaPassScanKey))) {
+        m_settings.setValue(QString::fromLatin1(JollaPassScanKey), false);
+    }
+    if (!m_settings.contains(QString::fromLatin1(JollaPassSaveKey))) {
+        m_settings.setValue(QString::fromLatin1(JollaPassSaveKey), false);
+    }
+#endif
     m_settings.sync();
 }
