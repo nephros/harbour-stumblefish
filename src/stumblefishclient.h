@@ -56,6 +56,11 @@ public:
     Q_INVOKABLE void requestMapCells(double minLatitude, double minLongitude,
                                      double maxLatitude, double maxLongitude, int zoom);
 
+#ifdef FIND_JOLLA_BUDDIES
+    Q_INVOKABLE void setJollaPassSendEnabled(bool enabled);
+    Q_INVOKABLE void setJollaPassScanEnabled(bool enabled);
+    Q_INVOKABLE void setJollaPassSaveEnabled(bool enabled);
+#endif
 Q_SIGNALS:
     void statusChanged();
     void settingsChanged();
