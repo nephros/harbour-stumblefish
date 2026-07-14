@@ -186,6 +186,37 @@ Page {
                 wrapMode: Text.Wrap
             }
 
+            SectionHeader { id: jpheader
+                text: "JollaPass™"
+                visible: stumblefish.settings.jollaPassAvailable() || false
+            }
+
+            TextSwitch {
+                visible: jpheader.visible
+                text: "Send JollaPass Beacon"
+                description: "Allow the device to be identified as a Sailfish OS device"
+                checked: !!stumblefish.settings.jollaPassSendEnabled
+                onClicked: stumblefish.setValue("jollapass/send", checked)
+            }
+
+            TextSwitch {
+                visible: jpheader.visible
+                text: "Scan for JollaPass Beacons"
+                description: "Scan for Sailfish OS device beacons"
+                checked: !!stumblefish.settings.jollaPassScanEnabled
+                onClicked: stumblefish.setValue("jollapass/scan", checked)
+            }
+
+            TextSwitch {
+                visible: jpheader.visible
+                enabled: false
+                text: "Save JollaPass Beacon locations"
+                description: "Store the location of found for Sailfish OS device beacons"
+                checked: !!stumblefish.settings.jollaPassSaveEnabled
+                onClicked: stumblefish.setValue("jollapass/save", checked)
+            }
+
+
             SectionHeader {
                 text: "Upload"
             }
