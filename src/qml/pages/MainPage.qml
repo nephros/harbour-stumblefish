@@ -181,6 +181,20 @@ Page {
                 }
             }
 
+            SectionHeader { id: jpheader
+                text: "JollaPass™"
+                visible: stumblefish.settings.jollaPassAvailable() || false
+            }
+
+            DetailItem {
+                label: "Seen"
+                value: count("jollapassed")
+            }
+            DetailItem {
+                label: "Current"
+                value: count("jollapasing")
+            }
+
             SectionHeader {
                 text: "Reports"
             }
