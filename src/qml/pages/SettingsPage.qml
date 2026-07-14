@@ -196,7 +196,7 @@ Page {
                 text: "Send JollaPass Beacon"
                 description: "Allow the device to be identified as a Sailfish OS device"
                 checked: !!stumblefish.settings.jollaPassSendEnabled
-                onClicked: stumblefish.setJollaPassSendEnabled("jollapass/send", checked)
+                onClicked: stumblefish.setJollaPassSendEnabled(checked)
             }
 
             TextSwitch {
@@ -204,7 +204,7 @@ Page {
                 text: "Scan for JollaPass Beacons"
                 description: "Scan for Sailfish OS device beacons"
                 checked: !!stumblefish.settings.jollaPassScanEnabled
-                onClicked: stumblefish.JollaPassScanEnabled("jollapass/scan", checked)
+                onClicked: stumblefish.JollaPassScanEnabled(checked)
             }
 
             TextSwitch {
@@ -213,7 +213,7 @@ Page {
                 text: "Save JollaPass Beacon locations"
                 description: "Store the location of found for Sailfish OS device beacons"
                 checked: !!stumblefish.settings.jollaPassSaveEnabled
-                onClicked: stumblefish.JollaPassSaveEnabled("jollapass/save", checked)
+                onClicked: stumblefish.JollaPassSaveEnabled(checked)
             }
 
 
