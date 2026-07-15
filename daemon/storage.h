@@ -58,7 +58,7 @@ public:
 
 #ifdef FIND_JOLLA_BUDDIES
     int addPassReport(const PassReport &report) { m_passReports.append(report); return m_passReports.count(); };
-    qint64 lastPassReportTimestamp() const { return m_passReports.last().timestampMs; };
+    qint64 lastPassReportTimestamp() const { return m_passReports.isEmpty() ? 0 : m_passReports.last().timestampMs; };
 #endif
 
 Q_SIGNALS:
