@@ -30,7 +30,6 @@ public:
     qint64 lastAutoUploadMs() const;
     void setLastAutoUploadMs(qint64 timestampMs);
 #ifdef FIND_JOLLA_BUDDIES
-    bool jollaPassAvailable() const { return true; };
     bool jollaPassSendEnabled() const;
     bool jollaPassScanEnabled() const;
     bool jollaPassSaveEnabled() const;
