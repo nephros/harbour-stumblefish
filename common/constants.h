@@ -11,7 +11,8 @@ const char ObjectPath[] = "/org/stumblefish/Collector";
 const char InterfaceName[] = "org.stumblefish.Collector";
 const char DefaultEndpoint[] = "https://api.beacondb.net/v2/geosubmit";
 const char OrganizationName[] = "org.stumblefish";
-const char ApplicationName[] = "harbour-stumblefish";
+const char ApplicationName[] = "Stumblefish";
+const char BinaryName[] = "harbour-stumblefish";
 
 #ifdef FIND_JOLLA_BUDDIES
 namespace JollaPass {

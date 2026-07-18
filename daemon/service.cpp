@@ -40,7 +40,7 @@ bool isStatusNotification(Notification *notification)
             && (notification->origin() == QString::fromLatin1(StatusNotificationOrigin)
                 || (notification->appName() == QStringLiteral("Stumblefish")
                     && notification->summary() == QStringLiteral("Stumblefish")
-                    && notification->appIcon() == QString::fromLatin1(Stumblefish::ApplicationName)));
+                    && notification->appIcon() == QString::fromLatin1(Stumblefish::BinaryName)));
 }
 
 QSet<QString> wifiFingerprint(const Report &report)
@@ -872,7 +872,7 @@ void Service::updateStatusNotification(const QString &body)
     }
 
     m_statusNotification->setAppName(QStringLiteral("Stumblefish"));
-    m_statusNotification->setAppIcon(QString::fromLatin1(Stumblefish::ApplicationName));
+    m_statusNotification->setAppIcon(QString::fromLatin1(Stumblefish::BinaryName));
     m_statusNotification->setCategory(QString::fromLatin1(StatusNotificationCategory));
     m_statusNotification->setOrigin(QString::fromLatin1(StatusNotificationOrigin));
     m_statusNotification->setSummary(QStringLiteral("Stumblefish"));
@@ -883,7 +883,7 @@ void Service::updateStatusNotification(const QString &body)
     m_statusNotification->setRemoteActions(remoteActions);
     m_statusNotification->setHintValue(QStringLiteral("resident"), true);
     m_statusNotification->setHintValue(QStringLiteral("desktop-entry"),
-                                       QString::fromLatin1(Stumblefish::ApplicationName));
+                                       QString::fromLatin1(Stumblefish::BinaryName));
     m_statusNotification->publish();
 }
 
@@ -906,7 +906,7 @@ void Service::closeStatusNotification()
 
 void Service::closeStoredStatusNotifications()
 {
-    const QList<QObject *> notifications = Notification::notifications(QString::fromLatin1(Stumblefish::ApplicationName));
+    const QList<QObject *> notifications = Notification::notifications(QString::fromLatin1(Stumblefish::BinaryName));
     foreach (QObject *object, notifications) {
         Notification *notification = qobject_cast<Notification *>(object);
         if (isStatusNotification(notification)) {
@@ -918,7 +918,7 @@ void Service::closeStoredStatusNotifications()
 
 void Service::openApplication() const
 {
-    const QString applicationName = QString::fromLatin1(Stumblefish::ApplicationName);
+    const QString applicationName = QString::fromLatin1(Stumblefish::BinaryName);
     const QString applicationPath = QStringLiteral("/usr/bin/") + applicationName;
 
     QStringList arguments;
