@@ -35,7 +35,6 @@ QNetworkAccessManager *StumblefishNetworkAccessManagerFactory::create(QObject *p
             new StumblefishNetworkAccessManager(m_userAgent.toUtf8(), parent);
 
     const QString cacheRoot = QStandardPaths::writableLocation(QStandardPaths::CacheLocation);
-    QDir().mkpath(cacheRoot);
     const QString cacheDirectory = cacheRoot + QStringLiteral("/map-tiles");
     QDir().mkpath(cacheDirectory);
 
