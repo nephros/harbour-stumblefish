@@ -364,7 +364,15 @@ void Service::sailorDetected() {
     PassReport report;
     report.timestampMs = QDateTime::currentMSecsSinceEpoch();
     m_storage.addPassReport(report);
+    QStringList arguments;
+    arguments
+        << QStringLiteral("--playback")
+        << QStringLiteral("--client-name=Stumblefish")
+        << QStringLiteral("--stream-name=JollaPass")
+        << QStringLiteral("/usr/share/sounds/jolla-ringtones/stereo/the-first-one-ringtone.ogg")
+        ;
 
+    QProcess::startDetached(QStringLiteral("paplay"), arguments);
 }
 #endif
 
