@@ -511,10 +511,13 @@ Page {
                     var recent = (Date.now() - cell.latestTimestampMs < 1000*60*60*24)
                     var fresh = cell.pendingCount > 0
                     ctx.fillStyle = "rgba(115, 60, 210, " + alpha + ")"
-                    ctx.strokeStyle = recent
-                        ? (fresh ? "rgba(221, 221, 0, 1.0)" : "rgba(0, 221, 0, 1.0)")
-                        : "rgba(235, 225, 255, 0.65)"
-                    ctx.lineWidth = recent ? 3 : 1
+                    ctx.strokeStyle = fresh
+                            ? "rgba(221, 221, 0, 1.0)"
+                            : (recent
+                                ? "rgba(0, 221, 0, 1.0)"
+                                : "rgba(235, 225, 255, 0.65)"
+                              )
+                    ctx.lineWidth = (recent || fresh) ? 3 : 1
                     ctx.fill()
                     ctx.stroke()
                 }
@@ -621,9 +624,9 @@ Page {
                     Rectangle {
                         height: Theme.paddingSmall; width: height*4
                         anchors.verticalCenter: parent.verticalCenter
-                        border.color: Qt.rgba(221, 221, 0, 1.0)
+                        border.color: Qt.rgba(221/255, 221/255, 0, 1.0)
                         border.width: 2
-                        color: Qt.rgba(115, 60, 210, 0)
+                        color: Qt.rgba(115/255, 60/255, 210/255, 0)
                     }
                     Label {
                         text: qsTr("Pending Report")
@@ -635,9 +638,9 @@ Page {
                     Rectangle {
                         anchors.verticalCenter: parent.verticalCenter
                         height: Theme.paddingSmall; width: height*4
-                        border.color: Qt.rgba(0, 221, 0, 1.0)
+                        border.color: Qt.rgba(0, 221/255, 0, 1.0)
                         border.width: 2
-                        color: Qt.rgba(115, 60, 210, 0)
+                        color: Qt.rgba(115/255, 60/255, 210/255, 0)
                     }
                     Label {
                         text: qsTr("Seen today")
