@@ -508,9 +508,12 @@ Page {
 
                     var heat = Math.max(0, Math.min(1, Number(cell.heat)))
                     var alpha = Math.min(0.78, 0.22 + heat * 0.48)
+                    var recent = (Date.now() - cell.latestTimestampMs < 1000*60*60*24)
                     ctx.fillStyle = "rgba(115, 60, 210, " + alpha + ")"
-                    ctx.strokeStyle = "rgba(235, 225, 255, 0.65)"
-                    ctx.lineWidth = 1
+                    ctx.strokeStyle = recent
+                            ? "rgba(0, 221, 0, 1.0)"
+                            : "rgba(235, 225, 255, 0.65)"
+                    ctx.lineWidth = recent ? 3 : 1
                     ctx.fill()
                     ctx.stroke()
                 }
@@ -519,10 +522,10 @@ Page {
                     var fix = screenPoint(Number(stumblefish.status.latitude),
                                           Number(stumblefish.status.longitude))
                     ctx.beginPath()
-                    ctx.arc(fix.x, fix.y, 6, 0, Math.PI * 2)
-                    ctx.fillStyle = "rgba(30, 160, 255, 0.95)"
-                    ctx.strokeStyle = "rgba(255, 255, 255, 0.9)"
-                    ctx.lineWidth = 2
+                    ctx.arc(fix.x, fix.y, 14, 0, Math.PI * 2)
+                    ctx.fillStyle = "rgba(30, 160, 255, 0.5)"
+                    ctx.strokeStyle = "rgba(198, 198, 255, 0.9)"
+                    ctx.lineWidth = 4
                     ctx.fill()
                     ctx.stroke()
                 }
