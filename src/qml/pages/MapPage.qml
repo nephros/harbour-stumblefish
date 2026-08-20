@@ -599,6 +599,54 @@ Page {
                 }
             }
         }
+        Rectangle {
+            radius: 4
+            z: 4
+            color: Theme.rgba(Theme.highlightBackgroundColor, 0.88)
+            anchors {
+                top: parent.top
+                left: parent.left
+                margins: Theme.paddingMedium
+            }
+            width: legend.width + 2 * Theme.paddingSmall
+            height: legend.height + 2 * Theme.paddingSmall
+
+            Column {
+                id: legend
+                spacing: Theme.paddingSmall
+                anchors.margins: Theme.paddingSmall
+                anchors.centerIn: parent
+                Row {
+                    spacing: Theme.paddingSmall
+                    Rectangle {
+                        height: Theme.paddingSmall; width: height*4
+                        anchors.verticalCenter: parent.verticalCenter
+                        border.color: Qt.rgba(221, 221, 0, 1.0)
+                        border.width: 2
+                        color: Qt.rgba(115, 60, 210, 0)
+                    }
+                    Label {
+                        text: qsTr("Pending Report")
+                        font.pixelSize: Theme.fontSizeTiny
+                    }
+                }
+                Row {
+                    spacing: Theme.paddingSmall
+                    Rectangle {
+                        anchors.verticalCenter: parent.verticalCenter
+                        height: Theme.paddingSmall; width: height*4
+                        border.color: Qt.rgba(0, 221, 0, 1.0)
+                        border.width: 2
+                        color: Qt.rgba(115, 60, 210, 0)
+                    }
+                    Label {
+                        text: qsTr("Seen today")
+                        font.pixelSize: Theme.fontSizeTiny
+                    }
+                }
+            }
+        }
+
 
         Column {
             id: mapControls
