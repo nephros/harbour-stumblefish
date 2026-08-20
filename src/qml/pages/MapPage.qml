@@ -509,10 +509,11 @@ Page {
                     var heat = Math.max(0, Math.min(1, Number(cell.heat)))
                     var alpha = Math.min(0.78, 0.22 + heat * 0.48)
                     var recent = (Date.now() - cell.latestTimestampMs < 1000*60*60*24)
+                    var fresh = cell.pendingCount > 0
                     ctx.fillStyle = "rgba(115, 60, 210, " + alpha + ")"
                     ctx.strokeStyle = recent
-                            ? "rgba(0, 221, 0, 1.0)"
-                            : "rgba(235, 225, 255, 0.65)"
+                        ? (fresh ? "rgba(221, 221, 0, 1.0)" : "rgba(0, 221, 0, 1.0)")
+                        : "rgba(235, 225, 255, 0.65)"
                     ctx.lineWidth = recent ? 3 : 1
                     ctx.fill()
                     ctx.stroke()
