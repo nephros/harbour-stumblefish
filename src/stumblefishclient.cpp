@@ -385,3 +385,39 @@ void StumblefishClient::setSetting(const QString &key, const QVariant &value)
     arguments << key << QVariant::fromValue(QDBusVariant(value));
     asyncCall(QStringLiteral("setSetting"), arguments, QStringLiteral("void"));
 }
+#ifdef TRACK_MY_PHONE
+void StumblefishClient::setPhoneTrackMode(const QString &mode)
+{
+    setSetting(QStringLiteral("phoneTrackMode"), mode);
+}
+void StumblefishClient::setPhoneTrackUrlTemplate(const QString &url)
+{
+    setSetting(QStringLiteral("phoneTrackUrlTemplate"), url);
+}
+void StumblefishClient::setPhoneTrackEnabled(bool &enabled)
+{
+    setSetting(QStringLiteral("phoneTrackEnabled"), enabled);
+}
+void StumblefishClient::setPhoneTrackServer(const QString &server)
+{
+    setSetting(QStringLiteral("phoneTrackServer"), server);
+}
+void StumblefishClient::setPhoneTrackUser(const QString &user)
+{
+    setSetting(QStringLiteral("phoneTrackUser"), user);
+}
+void StumblefishClient::setPhoneTrackPass(const QString &pass)
+{
+    setSetting(QStringLiteral("phoneTrackPass"), pass);
+}
+void StumblefishClient::setPhoneTrackSession(const QString &session)
+{
+    setSetting(QStringLiteral("phoneTrackSession"), session);
+}
+void StumblefishClient::setPhoneTrackName(const QString &name)
+{
+    setSetting(QStringLiteral("phoneTrackName"), name);
+}
+#endif
+
+

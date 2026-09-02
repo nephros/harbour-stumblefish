@@ -8,6 +8,8 @@ PKGCONFIG += sailfishapp
 INCLUDEPATH += . ../common
 DEFINES += APP_VERSION=\\\"$$VERSION\\\"
 
+DEFINES += TRACK_MY_PHONE
+
 SOURCES += \
     main.cpp \
     mapnetworkaccessmanagerfactory.cpp \

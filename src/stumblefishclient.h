@@ -55,6 +55,17 @@ public:
     Q_INVOKABLE void refreshMapSummary();
     Q_INVOKABLE void requestMapCells(double minLatitude, double minLongitude,
                                      double maxLatitude, double maxLongitude, int zoom);
+#ifdef TRACK_MY_PHONE
+    Q_INVOKABLE void setPhoneTrackMode(const QString &mode);
+    Q_INVOKABLE void setPhoneTrackUrlTemplate(const QString &url);
+    Q_INVOKABLE void setPhoneTrackEnabled(bool &enabled);
+
+    Q_INVOKABLE void setPhoneTrackServer(const QString &server);
+    Q_INVOKABLE void setPhoneTrackUser(const QString &user);
+    Q_INVOKABLE void setPhoneTrackPass(const QString &pass);
+    Q_INVOKABLE void setPhoneTrackSession(const QString &session);
+    Q_INVOKABLE void setPhoneTrackName(const QString &name);
+#endif
 
 Q_SIGNALS:
     void statusChanged();

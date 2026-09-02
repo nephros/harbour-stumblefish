@@ -280,6 +280,81 @@ Page {
             }
 
             SectionHeader {
+                text: "Phone tracking"
+            }
+            Label { id: phoneTrackLabel // TODO: explain
+            }
+            TextSwitch { id: phoneTrackEnable
+                text: "Enable phone tracking"
+                //description: checked
+                //             ? "Keeps the collector daemon running after Stumblefish closes"
+                //             : "Stops the collector daemon when Stumblefish closes"
+                checked: !!stumblefish.settings.phoneTrackEnabled
+                onClicked: stumblefish.setPhoneTrackEnabled(checked)
+            }
+
+            Column { id: phoneTrackCol
+                width: parent.width
+                enabled: phoneTrackEnable.checked
+                ComboBox { id: phoneTrackBox
+                    width: parent.width
+                    label: "Service"
+
+                    menu: ContextMenu {
+                        MenuItem {
+                            text: "NextCloud PhoneTrack"
+                            //onClicked: stumblefish.setReportRetentionDays(30)
+                        }
+                        MenuItem {
+                            text: "Traccar"
+                            //onClicked: stumblefish.setReportRetentionDays(30)
+                        }
+                        MenuItem { // activates URL field
+                            text: "Other (Custom URL)"
+                            //onClicked: stumblefish.setReportRetentionDays(30)
+                        }
+                    }
+                }
+                TextField { id: phoneTrackUrlTemplate
+                    enabled: phoneTrackBox.currentIndex == 2
+                    label: "Submission URL"
+                    placeholderText: "https://submit.example.org/{id}/{lat}/{lon}/"
+                    inputMethodHints: Qt.ImhUrlCharactersOnly | Qt.ImhNoPredictiveText
+                    EnterKey.iconSource: "image://theme/icon-m-enter-accept"
+                    EnterKey.onClicked: stumblefish.setPhoneTrackUrlTemplate(text);
+                }
+                TextField { id: phoneTrackServer
+                    enabled: !phoneTrackUrlTemplate.enabled
+                    label: "Server Name"
+                    EnterKey.iconSource: "image://theme/icon-m-enter-next"
+                    EnterKey.onClicked: phoneTrackUser.focus=true
+                }
+                TextField { id: phoneTrackUser
+                    enabled: !phoneTrackUrlTemplate.enabled
+                    label: "Username"
+                    EnterKey.iconSource: "image://theme/icon-m-enter-next"
+                    EnterKey.onClicked: phoneTrackPass.focus=true
+                }
+                PasswordField { id: phoneTrackPass
+                    enabled: !phoneTrackUrlTemplate.enabled
+                    label: "Password"
+                    EnterKey.iconSource: "image://theme/icon-m-enter-next"
+                    EnterKey.onClicked: phoneTrackSession.focus=true
+                }
+                TextField { id: phoneTrackSession
+                    enabled: !phoneTrackUrlTemplate.enabled
+                    label: "Session ID"
+                    EnterKey.iconSource: "image://theme/icon-m-enter-next"
+                    EnterKey.onClicked: phoneTrackName.focus=true
+                }
+                TextField { id: phoneTrackName
+                    enabled: !phoneTrackUrlTemplate.enabled
+                    label: "Device ID"
+                    EnterKey.iconSource: "image://theme/icon-m-enter-accept"
+                }
+                }
+
+            SectionHeader {
                 text: "Storage"
             }
 
