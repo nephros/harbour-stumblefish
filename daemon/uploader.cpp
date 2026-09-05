@@ -192,19 +192,11 @@ void Uploader::uploadPending(int maxRetryCount)
     m_reply = m_network->post(request, payload);
 
 #ifdef TRACK_MY_PHONE
-    if (m_settings->phoneTrackEnabled()) {
+    // TODO: do we want to check for live here? even in live mode we may want
+    // to upload peding ones...
+    if (m_settings->phoneTrackEnabled() && !m_settings->phoneTrackLive()) {
         foreach (const Report &report, reports) {
-            QUrl url = formatTrackingUrl(m_settings->phoneTrackType(), m_settings->phoneTrackUrlTemplate(),
-                                 m_settings->phoneTrackSessionID(),
-                                 m_settings->phoneTrackDeviceID(),
-                                 report,
-                                 Stumblefish::uploadUserAgent()
-                            );
-            if (!url.isValid() || url.scheme().isEmpty() || url.host().isEmpty()) {
-                //emit trackingFinished(false, QStringLiteral("Phone track endpoint is invalid"));
-                //return;
-                continue;
-            }
+            uploadTracked(report);
         }
     }
 #endif
@@ -400,3 +392,39 @@ QByteArray Uploader::buildPayload(const QList<Report> &reports, QList<int> *incl
     root.insert(QStringLiteral("items"), items);
     return QJsonDocument(root).toJson(QJsonDocument::Compact);
 }
+#ifdef TRACK_MY_PHONE
+void Uploader::uploadTracked(const Report& report)
+{
+    QUrl url = formatTrackingUrl(m_settings->phoneTrackType(), m_settings->phoneTrackUrlTemplate(),
+                                 m_settings->phoneTrackSessionID(),
+                                 m_settings->phoneTrackDeviceID(),
+                                 report,
+                                 Stumblefish::uploadUserAgent()
+                            );
+     if (!url.isValid() || url.scheme().isEmpty() || url.host().isEmpty()) {
+         emit trackingFinished(false, QStringLiteral("Phone track endpoint is invalid"));
+         return;
+    }
+    QNetworkRequest request(url);
+    request.setRawHeader("User-Agent", Stumblefish::uploadUserAgent());
+    m_network->get(request);
+
+}
+
+void Uploader::uploadTrackPosition(const QGeoPositionInfo &info)
+{
+    if (info.isValid())
+            return;
+    Report report;
+    report.timestampMs = QDateTime::currentMSecsSinceEpoch();
+    report.position.latitude = info.coordinate().latitude();
+    report.position.longitude = info.coordinate().longitude();
+    report.position.altitude = info.coordinate().altitude();
+    if (info.hasAttribute(QGeoPositionInfo::GroundSpeed))
+        report.position.speed = info.attribute(QGeoPositionInfo::GroundSpeed);
+    if (info.hasAttribute(QGeoPositionInfo::HorizontalAccuracy))
+        report.position.accuracy = info.attribute(QGeoPositionInfo::HorizontalAccuracy);
+
+    uploadTracked(report);
+}
+#endif

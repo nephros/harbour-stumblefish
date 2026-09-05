@@ -8,6 +8,9 @@
 #include <QDBusConnection>
 #include <QDebug>
 #include <QGeoCoordinate>
+#ifdef TRACK_MY_PHONE
+#include <QGeoPositionInfo>
+#endif
 #include <QProcess>
 #include <QSet>
 #include <QStringList>
@@ -138,6 +141,13 @@ Service::Service(QObject *parent)
     connect(&m_clientWatcher, SIGNAL(serviceUnregistered(QString)),
             this, SLOT(clientServiceUnregistered(QString)));
     m_lifecycleQuitTimer.setSingleShot(true);
+
+#ifdef TRACK_MY_PHONE
+    if (m_settings.phoneTrackEnabled() && m_settings.phoneTrackLive()) {
+        connect(&m_position, SIGNAL(positionUpdated(QGeoPositionInfo)),
+                        this, SLOT(&Uploader::uploadTrackPosition(QGeoPositionInfo)));
+    }
+#endif
 
     QDBusConnection bus = QDBusConnection::sessionBus();
     m_clientWatcher.setConnection(bus);

@@ -40,6 +40,7 @@ public:
     Q_ENUM(PhoneTrackType);
 
     bool phoneTrackEnabled();
+    bool phoneTrackLive();
     PhoneTrackType phoneTrackType();
     QString phoneTrackUrlTemplate();
     QString phoneTrackSessionID();

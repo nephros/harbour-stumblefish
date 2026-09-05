@@ -390,11 +390,15 @@ void StumblefishClient::setPhoneTrackMode(const QString &mode)
 {
     setSetting(QStringLiteral("phoneTrackMode"), mode);
 }
+void StumblefishClient::setPhoneTrackLive(bool enabled)
+{
+    setSetting(QStringLiteral("phoneTrackLive"), enabled);
+}
 void StumblefishClient::setPhoneTrackUrlTemplate(const QString &url)
 {
     setSetting(QStringLiteral("phoneTrackUrlTemplate"), url);
 }
-void StumblefishClient::setPhoneTrackEnabled(bool &enabled)
+void StumblefishClient::setPhoneTrackEnabled(bool enabled)
 {
     setSetting(QStringLiteral("phoneTrackEnabled"), enabled);
 }

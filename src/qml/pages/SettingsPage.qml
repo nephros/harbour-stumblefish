@@ -296,6 +296,16 @@ Page {
             Column { id: phoneTrackCol
                 width: parent.width
                 enabled: phoneTrackEnable.checked
+
+                TextSwitch { id: phoneTrackLive
+                    text: "Enable live tracking"
+                    description: checked
+                                 ? "Locations will be submitted as they are discovered"
+                                 : "Location uploads will happen together with Stumbe uploads"
+                    checked: !!stumblefish.settings.phoneTrackLive
+                    onClicked: stumblefish.setPhoneTrackLive(checked)
+                }
+
                 ComboBox { id: phoneTrackBox
                     width: parent.width
                     label: "Service"
@@ -303,51 +313,56 @@ Page {
                     menu: ContextMenu {
                         MenuItem {
                             text: "NextCloud PhoneTrack"
-                            //onClicked: stumblefish.setReportRetentionDays(30)
+                            onClicked: stumblefish.setPhoneTrackType(StumbleFish.PhoneTrackType.NextCloudPhoneTrack)
                         }
                         MenuItem {
-                            text: "Traccar"
-                            //onClicked: stumblefish.setReportRetentionDays(30)
+                            text: "OsmAnd/Traccar"
+                            onClicked: stumblefish.setPhoneTrackType(StumbleFish.PhoneTrackType.Traccar)
                         }
                         MenuItem { // activates URL field
-                            text: "Other (Custom URL)"
-                            //onClicked: stumblefish.setReportRetentionDays(30)
+                            text: "Other (Custom GET URL)"
+                            onClicked: stumblefish.setPhoneTrackType(StumbleFish.PhoneTrackType.Traccar)
                         }
                     }
                 }
                 TextField { id: phoneTrackUrlTemplate
                     enabled: phoneTrackBox.currentIndex == 2
                     label: "Submission URL"
-                    placeholderText: "https://submit.example.org/{id}/{lat}/{lon}/"
+                    placeholderText: "https://submit.example.org/{id}?lat={lat}&lon={lon}&acc={acc}&alt={}&speed={speed}&timestamp={ts}"
                     inputMethodHints: Qt.ImhUrlCharactersOnly | Qt.ImhNoPredictiveText
                     EnterKey.iconSource: "image://theme/icon-m-enter-accept"
                     EnterKey.onClicked: stumblefish.setPhoneTrackUrlTemplate(text);
                 }
                 TextField { id: phoneTrackServer
+                    visible: !phoneTrackUrlTemplate.enabled
                     enabled: !phoneTrackUrlTemplate.enabled
                     label: "Server Name"
                     EnterKey.iconSource: "image://theme/icon-m-enter-next"
                     EnterKey.onClicked: phoneTrackUser.focus=true
                 }
                 TextField { id: phoneTrackUser
+                    visible: !phoneTrackUrlTemplate.enabled
                     enabled: !phoneTrackUrlTemplate.enabled
                     label: "Username"
                     EnterKey.iconSource: "image://theme/icon-m-enter-next"
                     EnterKey.onClicked: phoneTrackPass.focus=true
                 }
                 PasswordField { id: phoneTrackPass
+                    visible: !phoneTrackUrlTemplate.enabled
                     enabled: !phoneTrackUrlTemplate.enabled
                     label: "Password"
                     EnterKey.iconSource: "image://theme/icon-m-enter-next"
                     EnterKey.onClicked: phoneTrackSession.focus=true
                 }
                 TextField { id: phoneTrackSession
+                    visible: !phoneTrackUrlTemplate.enabled
                     enabled: !phoneTrackUrlTemplate.enabled
                     label: "Session ID"
                     EnterKey.iconSource: "image://theme/icon-m-enter-next"
                     EnterKey.onClicked: phoneTrackName.focus=true
                 }
                 TextField { id: phoneTrackName
+                    visible: !phoneTrackUrlTemplate.enabled
                     enabled: !phoneTrackUrlTemplate.enabled
                     label: "Device ID"
                     EnterKey.iconSource: "image://theme/icon-m-enter-accept"

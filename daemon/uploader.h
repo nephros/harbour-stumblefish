@@ -8,6 +8,7 @@
 #include "observations.h"
 #ifdef TRACK_MY_PHONE
 #include "settings.h"
+#include <QGeoPositionInfo>
 #endif
 
 class QNetworkAccessManager;
@@ -28,6 +29,10 @@ public Q_SLOTS:
     void uploadPending();
     void uploadAutomatically();
     void retryReport(int reportId);
+#ifdef TRACK_MY_PHONE
+    void uploadTracked(const Report& report);
+    void uploadTrackPosition(const QGeoPositionInfo &info);
+#endif
 
 Q_SIGNALS:
     void uploadFinished(bool success, const QString &message);

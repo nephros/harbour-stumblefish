@@ -21,11 +21,12 @@ const char ReportRetentionDaysKey[] = "storage/reportRetentionDays";
 const char LastPruneMsKey[] = "storage/lastPruneMs";
 const char DefaultMapTileUrlTemplate[] = "https://tile.openstreetmap.org/{z}/{x}/{y}.png";
 #ifdef TRACK_MY_PHONE
-const char PhoneTrackEnableKey[] = "phoneTrack/enable";
-const char PhoneTrackTypeKey[] = "phoneTrack/type";
-const char PhoneTrackUrlKey[] = "phoneTrack/url";
-const char PhoneTrackSessionKey[] = "phoneTrack/session";
-const char PhoneTrackNameKey[] = "phoneTrack/name";
+const char PhoneTrackEnableKey[] = "phonetrack/enable";
+const char PhoneTrackLiveKey[] = "phonetrack/live";
+const char PhoneTrackTypeKey[] = "phonetrack/type";
+const char PhoneTrackUrlKey[] = "phonetrack/url";
+const char PhoneTrackSessionKey[] = "phonetrack/session";
+const char PhoneTrackNameKey[] = "phonetrack/name";
 #endif
 
 int normalizedRetentionDays(const QVariant &value)
@@ -264,6 +265,10 @@ void Settings::ensureDefaults()
 bool Settings::phoneTrackEnabled()
 {
     return value(QString::fromLatin1(PhoneTrackEnableKey), false).toBool();
+}
+bool Settings::phoneTrackLive()
+{
+    return value(QString::fromLatin1(PhoneTrackLiveKey), false).toBool();
 }
 Settings::PhoneTrackType Settings::phoneTrackType()
 {
