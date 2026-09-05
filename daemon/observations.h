@@ -16,6 +16,7 @@ struct PositionFix
     double longitude;
     double altitude;
     double accuracy;
+    double speed;
 
     PositionFix()
         : valid(false)
@@ -24,6 +25,7 @@ struct PositionFix
         , longitude(0.0)
         , altitude(0.0)
         , accuracy(-1.0)
+        , speed(-1.0)
     {
     }
 };
