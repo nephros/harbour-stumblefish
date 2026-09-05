@@ -12,6 +12,9 @@
 #include <QNetworkReply>
 #include <QNetworkRequest>
 #include <QUrl>
+#ifdef TRACK_MY_PHONE
+#include <QUrlQuery>
+#endif
 
 #include <climits>
 
@@ -187,7 +190,25 @@ void Uploader::uploadPending(int maxRetryCount)
     request.setRawHeader("User-Agent", Stumblefish::uploadUserAgent());
 
     m_reply = m_network->post(request, payload);
-    connect(m_reply, SIGNAL(finished()), this, SLOT(replyFinished()));
+
+#ifdef TRACK_MY_PHONE
+    if (m_settings->phoneTrackEnabled()) {
+        foreach (const Report &report, reports) {
+            QUrl url = formatTrackingUrl(m_settings->phoneTrackType(), m_settings->phoneTrackUrlTemplate(),
+                                 m_settings->phoneTrackSessionID(),
+                                 m_settings->phoneTrackDeviceID(),
+                                 report,
+                                 Stumblefish::uploadUserAgent()
+                            );
+            if (!url.isValid() || url.scheme().isEmpty() || url.host().isEmpty()) {
+                //emit trackingFinished(false, QStringLiteral("Phone track endpoint is invalid"));
+                //return;
+                continue;
+            }
+        }
+    }
+#endif
+   connect(m_reply, SIGNAL(finished()), this, SLOT(replyFinished()));
 }
 
 void Uploader::retryReport(int reportId)
@@ -225,6 +246,33 @@ void Uploader::replyFinished()
     m_uploadingIds.clear();
     emit uploadFinished(success, message);
 }
+
+#ifdef TRACK_MY_PHONE
+QUrl Uploader::formatTrackingUrl(const Settings::PhoneTrackType t, const QUrl& tpl,
+                            const QString& session,
+                            const QString& device,
+                            const Report& report,
+                            const QString& ua) const
+{
+    QUrl url(tpl);
+    QUrlQuery q(url.query());
+    if(t == Settings::PhoneTrackType::NextCloudPhoneTrack) {
+        url.path().append("/id/" + session);
+        q.addQueryItem(QStringLiteral("name"), device);
+    } else if(t == Settings::PhoneTrackType::Traccar)
+        q.addQueryItem(QStringLiteral("id"), session);
+    q.addQueryItem(QStringLiteral("lat"), QString::number(report.position.latitude));
+    q.addQueryItem(QStringLiteral("lon"), QString::number(report.position.longitude));
+    q.addQueryItem(QStringLiteral("alt"), QString::number(report.position.altitude));
+    q.addQueryItem(QStringLiteral("speed"), QString::number(report.position.speed));
+    q.addQueryItem(QStringLiteral("acc"), QString::number(report.position.accuracy));
+    q.addQueryItem(QStringLiteral("timestamp"), QString::number(static_cast<double>(report.timestampMs/1000)));
+    q.addQueryItem(QStringLiteral("useragent"), ua);
+    url.setQuery(q);
+    return url;
+}
+#endif
+
 
 QByteArray Uploader::buildPayload(const QList<Report> &reports, QList<int> *includedIds) const
 {

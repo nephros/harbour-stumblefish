@@ -30,6 +30,22 @@ public:
     qint64 lastAutoUploadMs() const;
     void setLastAutoUploadMs(qint64 timestampMs);
 
+#ifdef TRACK_MY_PHONE
+    enum PhoneTrackType {
+        NextCloudPhoneTrack,
+        SailfishFindMyDevice, // https://sailfishos-chum.github.io/apps/harbour-find-my-device/
+        Traccar,
+        Custom
+    };
+    Q_ENUM(PhoneTrackType);
+
+    bool phoneTrackEnabled();
+    PhoneTrackType phoneTrackType();
+    QString phoneTrackUrlTemplate();
+    QString phoneTrackSessionID();
+    QString phoneTrackDeviceID();
+#endif
+
     QVariantMap toMap() const;
 
 public Q_SLOTS:

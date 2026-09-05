@@ -20,6 +20,13 @@ const char MapTileUrlTemplateKey[] = "map/tileUrlTemplate";
 const char ReportRetentionDaysKey[] = "storage/reportRetentionDays";
 const char LastPruneMsKey[] = "storage/lastPruneMs";
 const char DefaultMapTileUrlTemplate[] = "https://tile.openstreetmap.org/{z}/{x}/{y}.png";
+#ifdef TRACK_MY_PHONE
+const char PhoneTrackEnableKey[] = "phoneTrack/enable";
+const char PhoneTrackTypeKey[] = "phoneTrack/type";
+const char PhoneTrackUrlKey[] = "phoneTrack/url";
+const char PhoneTrackSessionKey[] = "phoneTrack/session";
+const char PhoneTrackNameKey[] = "phoneTrack/name";
+#endif
 
 int normalizedRetentionDays(const QVariant &value)
 {
@@ -252,3 +259,28 @@ void Settings::ensureDefaults()
     }
     m_settings.sync();
 }
+
+#ifdef TRACK_MY_PHONE
+bool Settings::phoneTrackEnabled()
+{
+    return value(QString::fromLatin1(PhoneTrackEnableKey), false).toBool();
+}
+Settings::PhoneTrackType Settings::phoneTrackType()
+{
+    return (Settings::PhoneTrackType) value(QString::fromLatin1(PhoneTrackTypeKey), 0).toInt();
+}
+QString Settings::phoneTrackUrlTemplate()
+{
+    return value(QString::fromLatin1(PhoneTrackUrlKey), QString()).toString();
+}
+QString Settings::phoneTrackSessionID()
+{
+    return value(QString::fromLatin1(PhoneTrackSessionKey), "unknown").toString();
+}
+QString Settings::phoneTrackDeviceID()
+{
+    return value(QString::fromLatin1(PhoneTrackNameKey), "").toString();
+}
+#endif
+
+

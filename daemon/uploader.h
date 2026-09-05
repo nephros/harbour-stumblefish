@@ -6,6 +6,9 @@
 #include <QList>
 
 #include "observations.h"
+#ifdef TRACK_MY_PHONE
+#include "settings.h"
+#endif
 
 class QNetworkAccessManager;
 class QNetworkReply;
@@ -28,6 +31,9 @@ public Q_SLOTS:
 
 Q_SIGNALS:
     void uploadFinished(bool success, const QString &message);
+#ifdef TRACK_MY_PHONE
+    void trackingFinished(bool success, const QString &message);
+#endif
 
 private Q_SLOTS:
     void replyFinished();
@@ -35,6 +41,14 @@ private Q_SLOTS:
 private:
     void uploadPending(int maxRetryCount);
     QByteArray buildPayload(const QList<Report> &reports, QList<int> *includedIds) const;
+#ifdef TRACK_MY_PHONE
+    QUrl buildTrackingUrl(Report &report, int includedId) const;
+    QUrl formatTrackingUrl(const Settings::PhoneTrackType t, const QUrl& tpl,
+                            const QString& session,
+                            const QString& device,
+                            const Report& report,
+                            const QString& ua) const;
+#endif
 
     Storage *m_storage;
     Settings *m_settings;
