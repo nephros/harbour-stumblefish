@@ -282,8 +282,10 @@ Page {
             SectionHeader {
                 text: "Phone tracking"
             }
+            /* TODO: explain
             Label { id: phoneTrackLabel // TODO: explain
             }
+            */
             TextSwitch { id: phoneTrackEnable
                 text: "Enable phone tracking"
                 //description: checked
@@ -297,13 +299,30 @@ Page {
                 width: parent.width
                 enabled: phoneTrackEnable.checked
 
-                TextSwitch { id: phoneTrackLive
-                    text: "Enable live tracking"
-                    description: checked
-                                 ? "Locations will be submitted as they are discovered"
-                                 : "Location uploads will happen together with Stumbe uploads"
-                    checked: !!stumblefish.settings.phoneTrackLive
-                    onClicked: stumblefish.setPhoneTrackLive(checked)
+                ListModel { id: phoneTrackModel
+                    ListElement {
+                        text: "NextCloud PhoneTrack"
+                        //type: StumbleFish.PhoneTrackType.NextCloudPhoneTrack
+                        post: false // default: GET
+                        urlTemplate: "https://nextcloud.example.org/apps/phonetrack/logGet/"
+                        hasSession: true
+                        hasName: true
+                        hasAuth: false
+                    }
+                    /* TODO
+                    ListElement {
+                        text: "OsmAnd/Traccar"
+                        hasSession: true
+                        hasName: true
+                        hasAuth: false
+                    }
+                    ListElement {
+                        text: "Other (Custom GET URL)"
+                        hasSession: true
+                        hasName: true
+                        hasAuth: false
+                    }
+                    */
                 }
 
                 ComboBox { id: phoneTrackBox
@@ -311,63 +330,73 @@ Page {
                     label: "Service"
 
                     menu: ContextMenu {
-                        MenuItem {
-                            text: "NextCloud PhoneTrack"
-                            onClicked: stumblefish.setPhoneTrackType(StumbleFish.PhoneTrackType.NextCloudPhoneTrack)
-                        }
-                        MenuItem {
-                            text: "OsmAnd/Traccar"
-                            onClicked: stumblefish.setPhoneTrackType(StumbleFish.PhoneTrackType.Traccar)
-                        }
-                        MenuItem { // activates URL field
-                            text: "Other (Custom GET URL)"
-                            onClicked: stumblefish.setPhoneTrackType(StumbleFish.PhoneTrackType.Traccar)
+                        Repeater {
+                            model: phoneTrackModel
+                            delegate: MenuItem {
+                                text: model.text
+                                //onClicked: stumblefish.setPhoneTrackType(model.type)
+                            }
                         }
                     }
                 }
+
+                TextSwitch { id: phoneTrackLive
+                    text: "Enable live tracking"
+                    description: checked
+                                 ? "Locations will be submitted as they are discovered"
+                                 : "Location uploads will happen together with Stumble uploads"
+                    checked: !!stumblefish.settings.phoneTrackLive
+                    onClicked: stumblefish.setPhoneTrackLive(checked)
+                }
+
                 TextField { id: phoneTrackUrlTemplate
-                    enabled: phoneTrackBox.currentIndex == 2
+                    //enabled: phoneTrackBox.currentIndex == 2
                     label: "Submission URL"
-                    placeholderText: "https://submit.example.org/{id}?lat={lat}&lon={lon}&acc={acc}&alt={}&speed={speed}&timestamp={ts}"
+                    placeholderText: phoneTrackModel.get(phoneTrackBox.currentIndex).urlTemplate
                     inputMethodHints: Qt.ImhUrlCharactersOnly | Qt.ImhNoPredictiveText
                     EnterKey.iconSource: "image://theme/icon-m-enter-accept"
-                    EnterKey.onClicked: stumblefish.setPhoneTrackUrlTemplate(text);
-                }
-                TextField { id: phoneTrackServer
-                    visible: !phoneTrackUrlTemplate.enabled
-                    enabled: !phoneTrackUrlTemplate.enabled
-                    label: "Server Name"
-                    EnterKey.iconSource: "image://theme/icon-m-enter-next"
-                    EnterKey.onClicked: phoneTrackUser.focus=true
+                    EnterKey.onClicked: {
+                        stumblefish.setPhoneTrackUrlTemplate(text);
+                        phoneTrackUser.enabled
+                            ? phoneTrackUser.focus = true
+                            : phoneTrackSession.focus = true
+                    }
                 }
                 TextField { id: phoneTrackUser
-                    visible: !phoneTrackUrlTemplate.enabled
-                    enabled: !phoneTrackUrlTemplate.enabled
+                    enabled: phoneTrackBox.currentItem.hasAuth
+                    placeholderText: enabled ? label : "not required"
                     label: "Username"
                     EnterKey.iconSource: "image://theme/icon-m-enter-next"
-                    EnterKey.onClicked: phoneTrackPass.focus=true
+                    EnterKey.onClicked: {
+                        stumblefish.setPhoneTrackUser(text);
+                        phoneTrackPass.focus=true
+                    }
                 }
                 PasswordField { id: phoneTrackPass
-                    visible: !phoneTrackUrlTemplate.enabled
-                    enabled: !phoneTrackUrlTemplate.enabled
+                    enabled: phoneTrackBox.currentItem.hasAuth
+                    placeholderText: enabled ? label : "not required"
                     label: "Password"
                     EnterKey.iconSource: "image://theme/icon-m-enter-next"
-                    EnterKey.onClicked: phoneTrackSession.focus=true
+                    EnterKey.onClicked: {
+                        stumblefish.setPhoneTrackPass(text);
+                        phoneTrackSession.focus=true
+                    }
                 }
                 TextField { id: phoneTrackSession
-                    visible: !phoneTrackUrlTemplate.enabled
-                    enabled: !phoneTrackUrlTemplate.enabled
+                    enabled: phoneTrackBox.currentItem.hasSession
                     label: "Session ID"
                     EnterKey.iconSource: "image://theme/icon-m-enter-next"
-                    EnterKey.onClicked: phoneTrackName.focus=true
+                    EnterKey.onClicked: {
+                        stumblefish.setPhoneTrackSession(text);
+                        phoneTrackName.focus = true
+                    }
                 }
                 TextField { id: phoneTrackName
-                    visible: !phoneTrackUrlTemplate.enabled
-                    enabled: !phoneTrackUrlTemplate.enabled
-                    label: "Device ID"
-                    EnterKey.iconSource: "image://theme/icon-m-enter-accept"
+                    enabled: phoneTrackBox.currentItem.hasName
+                    label: "Device Name"
+                    EnterKey.onClicked: { stumblefish.setPhoneTrackName(text); focus = false }
                 }
-                }
+            }
 
             SectionHeader {
                 text: "Storage"
