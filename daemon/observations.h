@@ -8,6 +8,10 @@
 #include <QStringList>
 #include <QVariantMap>
 
+#ifdef TRACK_MY_PHONE
+#include <cfloat>
+#endif
+
 struct PositionFix
 {
     bool valid;
@@ -29,8 +33,8 @@ struct PositionFix
         , altitude(0.0)
         , accuracy(-1.0)
 #ifdef TRACK_MY_PHONE
-        , speed(-1.0)
-        , direction(-1.0)
+        , speed(DBL_MAX)
+        , direction(DBL_MAX)
 #endif
     {
     }

@@ -276,9 +276,11 @@ QUrl Uploader::formatTrackingUrl(const Settings::PhoneTrackType t, const QUrl& t
     q.addQueryItem(QStringLiteral("lat"), QString::number(report.position.latitude));
     q.addQueryItem(QStringLiteral("lon"), QString::number(report.position.longitude));
     q.addQueryItem(QStringLiteral("alt"), QString::number(report.position.altitude));
-    q.addQueryItem(QStringLiteral("speed"), QString::number(report.position.speed));
     q.addQueryItem(QStringLiteral("acc"), QString::number(report.position.accuracy));
-    q.addQueryItem(QStringLiteral("bearing"), QString::number(report.position.direction));
+    if (report.position.speed != DBL_MAX)
+        q.addQueryItem(QStringLiteral("speed"), QString::number(report.position.speed));
+    if (report.position.direction != DBL_MAX)
+        q.addQueryItem(QStringLiteral("bearing"), QString::number(report.position.direction));
     // TODO: get this info from service to here...
     //q.addQueryItem(QStringLiteral("bat"), QString::number());
     //q.addQueryItem(QStringLiteral("sat"), QString::number(report.position.satellitesInUse);
