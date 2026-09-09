@@ -278,15 +278,13 @@ Page {
                 font.pixelSize: Theme.fontSizeSmall
                 wrapMode: Text.Wrap
             }
-
+/* **** PhoneTrack section **** */
             SectionHeader {
                 text: "Phone tracking"
+                visible: phoneTrackingAvailable
             }
-            /* TODO: explain
-            Label { id: phoneTrackLabel // TODO: explain
-            }
-            */
             TextSwitch { id: phoneTrackEnable
+                visible: phoneTrackingAvailable
                 text: "Enable phone tracking"
                 //description: checked
                 //             ? "Keeps the collector daemon running after Stumblefish closes"
@@ -296,6 +294,7 @@ Page {
             }
 
             Column { id: phoneTrackCol
+                visible: phoneTrackingAvailable
                 width: parent.width
                 enabled: phoneTrackEnable.checked
 
@@ -397,6 +396,7 @@ Page {
                     EnterKey.onClicked: { stumblefish.setPhoneTrackName(text); focus = false }
                 }
             }
+/* **** PhoneTrack section  ends **** */
 
             SectionHeader {
                 text: "Storage"

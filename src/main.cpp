@@ -26,6 +26,11 @@ int main(int argc, char *argv[])
                     .arg(application->applicationVersion())));
     view->rootContext()->setContextProperty(QStringLiteral("stumblefish"), &client);
     view->rootContext()->setContextProperty(QStringLiteral("appVersion"), application->applicationVersion());
+#ifdef TRACK_MY_PHONE
+    view->rootContext()->setContextProperty(QStringLiteral("phoneTrackingAvailable"), true);
+#else
+    view->rootContext()->setContextProperty(QStringLiteral("phoneTrackingAvailable"), false);
+#endif
     view->setSource(SailfishApp::pathTo(QStringLiteral("qml/harbour-stumblefish.qml")));
     view->show();
 
