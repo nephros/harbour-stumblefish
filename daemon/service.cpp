@@ -8,9 +8,6 @@
 #include <QDBusConnection>
 #include <QDebug>
 #include <QGeoCoordinate>
-#ifdef TRACK_MY_PHONE
-#include <QGeoPositionInfo>
-#endif
 #include <QProcess>
 #include <QSet>
 #include <QStringList>
@@ -141,13 +138,6 @@ Service::Service(QObject *parent)
     connect(&m_clientWatcher, SIGNAL(serviceUnregistered(QString)),
             this, SLOT(clientServiceUnregistered(QString)));
     m_lifecycleQuitTimer.setSingleShot(true);
-
-#ifdef TRACK_MY_PHONE
-    if (m_settings.phoneTrackEnabled() && m_settings.phoneTrackLive()) {
-        connect(&m_position, SIGNAL(positionUpdated(QGeoPositionInfo)),
-                        this, SLOT(&Uploader::uploadTrackPosition(QGeoPositionInfo)));
-    }
-#endif
 
     QDBusConnection bus = QDBusConnection::sessionBus();
     m_clientWatcher.setConnection(bus);
@@ -685,6 +675,25 @@ bool Service::collectReport(const PositionFix &fix, const QString &reason)
         report.ble = m_ble.observations();
     }
     report.timestampMs = QDateTime::currentMSecsSinceEpoch();
+
+#ifdef TRACK_MY_PHONE
+    if (m_settings.phoneTrackEnabled() && m_settings.phoneTrackLive()) {
+
+    /*
+        if (info.hasAttribute(QGeoPositionInfo::HorizontalAccuracy) && info.hasAttribute(QGeoPositionInfo::VerticalAccuracy)) {
+            double acc = pow(info.attribute(QGeoPositionInfo::HorizontalAccuracy), 2)
+                     + pow(info.attribute(QGeoPositionInfo::VerticalAccuracy), 2);
+            report.position.accuracy = sqrt(acc);
+        }
+        if (info.hasAttribute(QGeoPositionInfo::GroundSpeed))
+            report.position.speed = info.attribute(QGeoPositionInfo::GroundSpeed);
+        if (info.hasAttribute(QGeoPositionInfo::HorizontalAccuracy))
+            report.position.direction = info.attribute(QGeoPositionInfo::Direction);
+     */
+
+        m_uploader.uploadTracked(report);
+    }
+#endif
 
     if (report.cells.isEmpty() && report.ble.isEmpty() && report.wifi.count() < 2) {
         m_lastMessage = QStringLiteral("Not enough radio observations for a report");

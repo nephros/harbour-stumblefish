@@ -194,7 +194,7 @@ void Uploader::uploadPending(int maxRetryCount)
 
 #ifdef TRACK_MY_PHONE
     // TODO: do we want to check for live here? even in live mode we may want
-    // to upload peding ones...
+    // to upload pending ones...
     if (m_settings->phoneTrackEnabled() && !m_settings->phoneTrackLive()) {
         foreach (const Report &report, reports) {
             uploadTracked(report);
@@ -266,9 +266,11 @@ QUrl Uploader::formatTrackingUrl(const Settings::PhoneTrackType t, const QUrl& t
     QUrl url(tpl);
     QUrlQuery q(url.query());
     if(t == Settings::PhoneTrackType::NextCloudPhoneTrack) {
-        url.path().append("/" + session);
+        auto path = url.path();
+        path.append("/" + session);
         if (!device.isEmpty())
-            url.path().append("/" + device);
+            path.append("/" + device);
+        url.setPath(path);
     } else if(t == Settings::PhoneTrackType::Traccar)
         q.addQueryItem(QStringLiteral("id"), session);
     q.addQueryItem(QStringLiteral("lat"), QString::number(report.position.latitude));
@@ -431,33 +433,5 @@ void Uploader::uploadTracked(const Report& report)
     request.setRawHeader("User-Agent", Stumblefish::uploadUserAgent());
     m_network->get(request);
 
-}
-
-void Uploader::uploadTrackPosition(const QGeoPositionInfo &info)
-{
-    if (info.isValid())
-            return;
-    Report report;
-
-    report.position.latitude = info.coordinate().latitude();
-    report.position.longitude = info.coordinate().longitude();
-    report.position.altitude = info.coordinate().altitude();
-
-    if (info.timestamp().isValid())
-        report.timestampMs = info.timestamp().currentMSecsSinceEpoch();
-    else
-        report.timestampMs = QDateTime::currentMSecsSinceEpoch();
-
-    if (info.hasAttribute(QGeoPositionInfo::HorizontalAccuracy) && info.hasAttribute(QGeoPositionInfo::VerticalAccuracy)) {
-        double acc = pow(info.attribute(QGeoPositionInfo::HorizontalAccuracy), 2)
-                 + pow(info.attribute(QGeoPositionInfo::VerticalAccuracy), 2);
-        report.position.accuracy = sqrt(acc);
-    }
-    if (info.hasAttribute(QGeoPositionInfo::GroundSpeed))
-        report.position.speed = info.attribute(QGeoPositionInfo::GroundSpeed);
-    if (info.hasAttribute(QGeoPositionInfo::HorizontalAccuracy))
-        report.position.direction = info.attribute(QGeoPositionInfo::Direction);
-
-    uploadTracked(report);
 }
 #endif
