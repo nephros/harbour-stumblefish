@@ -392,7 +392,7 @@ void StumblefishClient::setPhoneTrackEnabled(bool enabled)
 }
 void StumblefishClient::setPhoneTrackLive(bool enabled)
 {
-    setSetting(QStringLiteral("phoneTrackLive"), enabled);
+    setSetting(QStringLiteral("phoneTrackLiveMode"), enabled);
 }
 void StumblefishClient::setPhoneTrackType(const QString &type)
 {

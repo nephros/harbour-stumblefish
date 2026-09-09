@@ -40,7 +40,7 @@ public:
     Q_ENUM(PhoneTrackType);
 
     bool phoneTrackEnabled() const;
-    bool phoneTrackLive() const;
+    bool phoneTrackLiveMode() const;
     PhoneTrackType phoneTrackType() const;
     QString phoneTrackUrlTemplate() const;
     QString phoneTrackSessionID() const;

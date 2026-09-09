@@ -339,12 +339,12 @@ Page {
                     }
                 }
 
-                TextSwitch { id: phoneTrackLive
+                TextSwitch { id: phoneTrackLiveMode
                     text: "Enable live tracking"
                     description: checked
                                  ? "Locations will be submitted as they are discovered"
                                  : "Location uploads will happen together with Stumble uploads"
-                    checked: !!stumblefish.settings.phoneTrackLive
+                    checked: !!stumblefish.settings.phoneTrackLiveMode
                     onClicked: stumblefish.setPhoneTrackLive(checked)
                 }
 

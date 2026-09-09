@@ -22,7 +22,7 @@ const char LastPruneMsKey[] = "storage/lastPruneMs";
 const char DefaultMapTileUrlTemplate[] = "https://tile.openstreetmap.org/{z}/{x}/{y}.png";
 #ifdef TRACK_MY_PHONE
 const char PhoneTrackEnableKey[] = "phonetrack/enable";
-const char PhoneTrackLiveKey[] = "phonetrack/live";
+const char PhoneTrackLiveKey[] = "phonetrack/liveMode";
 const char PhoneTrackTypeKey[] = "phonetrack/type";
 const char PhoneTrackUrlKey[] = "phonetrack/url";
 const char PhoneTrackSessionKey[] = "phonetrack/session";
@@ -146,7 +146,7 @@ QVariantMap Settings::toMap() const
     map.insert(QStringLiteral("reportRetentionDays"), reportRetentionDays());
 #ifdef TRACK_MY_PHONE
     map.insert(QStringLiteral("phoneTrackEnabled"),  phoneTrackEnabled());
-    map.insert(QStringLiteral("phoneTrackLive"),     phoneTrackLive());
+    map.insert(QStringLiteral("phoneTrackLiveMode"),     phoneTrackLiveMode());
     map.insert(QStringLiteral("phoneTrackType"),     phoneTrackType());
     map.insert(QStringLiteral("phoneTrackUrlTemplate"),phoneTrackUrlTemplate());
     map.insert(QStringLiteral("phoneTrackSessionID"),phoneTrackSessionID());
@@ -204,7 +204,7 @@ void Settings::setValue(const QString &key, const QVariant &newValue)
     } else if (key == QStringLiteral("phoneTrackEnabled")) {
         storageKey = QString::fromLatin1(PhoneTrackEnableKey);
         value = newValue.toBool();
-    } else if (key == QStringLiteral("phoneTrackLive")) {
+    } else if (key == QStringLiteral("phoneTrackLiveMode")) {
         storageKey = QString::fromLatin1(PhoneTrackLiveKey);
         value = newValue.toBool();
     } else if (key == QStringLiteral("phoneTrackUrlTemplate")) {
@@ -306,7 +306,7 @@ bool Settings::phoneTrackEnabled() const
 {
     return value(QString::fromLatin1(PhoneTrackEnableKey), false).toBool();
 }
-bool Settings::phoneTrackLive() const
+bool Settings::phoneTrackLiveMode() const
 {
     return value(QString::fromLatin1(PhoneTrackLiveKey), false).toBool();
 }

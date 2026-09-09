@@ -677,7 +677,7 @@ bool Service::collectReport(const PositionFix &fix, const QString &reason)
     report.timestampMs = QDateTime::currentMSecsSinceEpoch();
 
 #ifdef TRACK_MY_PHONE
-    if (m_settings.phoneTrackEnabled() && m_settings.phoneTrackLive()) {
+    if (m_settings.phoneTrackEnabled() && m_settings.phoneTrackLiveMode()) {
 
     /*
         if (info.hasAttribute(QGeoPositionInfo::HorizontalAccuracy) && info.hasAttribute(QGeoPositionInfo::VerticalAccuracy)) {

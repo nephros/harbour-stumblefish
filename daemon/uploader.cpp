@@ -195,7 +195,8 @@ void Uploader::uploadPending(int maxRetryCount)
 #ifdef TRACK_MY_PHONE
     // TODO: do we want to check for live here? even in live mode we may want
     // to upload pending ones...
-    if (m_settings->phoneTrackEnabled() && !m_settings->phoneTrackLive()) {
+    // FIXME: dedup already uploaded ones (thu live mode)
+    if (m_settings->phoneTrackEnabled() && !m_settings->phoneTrackLiveMode()) {
         foreach (const Report &report, reports) {
             uploadTracked(report);
         }
