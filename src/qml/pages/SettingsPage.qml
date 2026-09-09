@@ -365,6 +365,7 @@ Page {
                     visible: phoneTrackModel.get(phoneTrackBox.currentIndex).hasAuth
                     placeholderText: enabled ? label : "not required"
                     label: "Username"
+                    inputMethodHints: Qt.ImhNoAutoUppercase
                     EnterKey.iconSource: "image://theme/icon-m-enter-next"
                     EnterKey.onClicked: {
                         stumblefish.setPhoneTrackUser(text);
@@ -375,15 +376,17 @@ Page {
                     visible: phoneTrackModel.get(phoneTrackBox.currentIndex).hasAuth
                     placeholderText: enabled ? label : "not required"
                     label: "Password"
+                    inputMethodHints: Qt.ImhNoPredictiveText | Qt.ImhNoAutoUppercase
                     EnterKey.iconSource: "image://theme/icon-m-enter-next"
                     EnterKey.onClicked: {
                         stumblefish.setPhoneTrackPass(text);
                         phoneTrackSession.focus=true
                     }
                 }
-                TextField { id: phoneTrackSession
+                PasswordField { id: phoneTrackSession
                     enabled:  phoneTrackModel.get(phoneTrackBox.currentIndex).hasSession
                     label: "Session ID"
+                    inputMethodHints: Qt.ImhNoPredictiveText | Qt.ImhNoAutoUppercase
                     EnterKey.iconSource: "image://theme/icon-m-enter-next"
                     EnterKey.onClicked: {
                         stumblefish.setPhoneTrackSession(text);
@@ -392,7 +395,7 @@ Page {
                 }
                 TextField { id: phoneTrackName
                     enabled:  phoneTrackModel.get(phoneTrackBox.currentIndex).hasName
-                    placeholderText: enabled ? "Jolla Phone" : "not required"
+                    placeholderText: enabled ? label : "not required"
                     label: "Device Name (optional)"
                     EnterKey.onClicked: { stumblefish.setPhoneTrackName(text); focus = false }
                 }
