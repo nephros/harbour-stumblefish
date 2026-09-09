@@ -351,6 +351,7 @@ Page {
                 TextField { id: phoneTrackUrlTemplate
                     //enabled: phoneTrackBox.currentIndex == 2
                     label: "Submission URL"
+                    text: stumblefish.settings.phoneTrackUrlTemplate
                     placeholderText: phoneTrackModel.get(phoneTrackBox.currentIndex).urlTemplate
                     inputMethodHints: Qt.ImhUrlCharactersOnly | Qt.ImhNoPredictiveText
                     EnterKey.iconSource: "image://theme/icon-m-enter-accept"
@@ -385,6 +386,7 @@ Page {
                 }
                 PasswordField { id: phoneTrackSession
                     enabled:  phoneTrackModel.get(phoneTrackBox.currentIndex).hasSession
+                    text: stumblefish.settings.phoneTrackSessionID
                     label: "Session ID"
                     inputMethodHints: Qt.ImhNoPredictiveText | Qt.ImhNoAutoUppercase
                     EnterKey.iconSource: "image://theme/icon-m-enter-next"
@@ -395,6 +397,7 @@ Page {
                 }
                 TextField { id: phoneTrackName
                     enabled:  phoneTrackModel.get(phoneTrackBox.currentIndex).hasName
+                    text: stumblefish.settings.phoneTrackDeviceID
                     placeholderText: enabled ? label : "not required"
                     label: "Device Name (optional)"
                     EnterKey.onClicked: { stumblefish.setPhoneTrackName(text); focus = false }

@@ -148,9 +148,9 @@ QVariantMap Settings::toMap() const
     map.insert(QStringLiteral("phoneTrackEnabled"),  phoneTrackEnabled());
     map.insert(QStringLiteral("phoneTrackLive"),     phoneTrackLive());
     map.insert(QStringLiteral("phoneTrackType"),     phoneTrackType());
-//    map.insert(QStringLiteral("phoneTrackUrlTemplate"),phoneTrackUrlTemplate());
-//    map.insert(QStringLiteral("phoneTrackSessionID"),phoneTrackSessionID());
-//    map.insert(QStringLiteral("phoneTrackDeviceID"), phoneTrackDeviceID());
+    map.insert(QStringLiteral("phoneTrackUrlTemplate"),phoneTrackUrlTemplate());
+    map.insert(QStringLiteral("phoneTrackSessionID"),phoneTrackSessionID());
+    map.insert(QStringLiteral("phoneTrackDeviceID"), phoneTrackDeviceID());
 #endif
     return map;
 }
