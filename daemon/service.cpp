@@ -695,6 +695,8 @@ bool Service::collectReport(const PositionFix &fix, const QString &reason)
             report.position.direction = info.attribute(QGeoPositionInfo::Direction);
      */
 
+        report.position.satellites = m_position.satellitesInUse();
+        report.battery =  m_battery.chargePercentage();
         m_uploader.uploadTracked(report);
     }
 #endif
