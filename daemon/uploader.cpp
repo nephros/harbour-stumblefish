@@ -265,12 +265,11 @@ QUrl Uploader::formatTrackingUrl(const Settings::PhoneTrackType t, const QUrl& t
 {
     QUrl url(tpl);
     QUrlQuery q(url.query());
+    QString path = url.path();
     if(t == Settings::PhoneTrackType::NextCloudPhoneTrack) {
-        auto path = url.path();
         path.append("/" + session);
         if (!device.isEmpty())
             path.append("/" + device);
-        url.setPath(path);
     } else if(t == Settings::PhoneTrackType::Traccar)
         q.addQueryItem(QStringLiteral("id"), session);
     q.addQueryItem(QStringLiteral("lat"), QString::number(report.position.latitude));
@@ -286,6 +285,8 @@ QUrl Uploader::formatTrackingUrl(const Settings::PhoneTrackType t, const QUrl& t
     //q.addQueryItem(QStringLiteral("sat"), QString::number(report.position.satellitesInUse);
     q.addQueryItem(QStringLiteral("timestamp"), QString::number(static_cast<double>(report.timestampMs/1000)));
     q.addQueryItem(QStringLiteral("useragent"), ua);
+
+    url.setPath(path);
     url.setQuery(q);
     return url;
 }
