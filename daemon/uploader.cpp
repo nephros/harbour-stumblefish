@@ -279,7 +279,7 @@ QUrl Uploader::formatTrackingUrl(const Settings::PhoneTrackType t, const QUrl& t
     q.addQueryItem(QStringLiteral("bearing"), QString::number(report.position.direction));
     // TODO: get this info from service to here...
     //q.addQueryItem(QStringLiteral("bat"), QString::number());
-    //q.addQueryItem(QStringLiteral("sat"), QString::number());
+    //q.addQueryItem(QStringLiteral("sat"), QString::number(report.position.satellitesInUse);
     q.addQueryItem(QStringLiteral("timestamp"), QString::number(static_cast<double>(report.timestampMs/1000)));
     q.addQueryItem(QStringLiteral("useragent"), ua);
     url.setQuery(q);
