@@ -285,7 +285,7 @@ QUrl Uploader::formatTrackingUrl(const Settings::PhoneTrackType t, const QUrl& t
 
     q.addQueryItem(QStringLiteral("bat"), QString::number(report.battery));
     q.addQueryItem(QStringLiteral("timestamp"), QString::number(static_cast<double>(report.timestampMs/1000)));
-    q.addQueryItem(QStringLiteral("useragent"), ua);
+    q.addQueryItem(QStringLiteral("useragent"), QUrl::toPercentEncoding(ua));
 
     url.setPath(path);
     url.setQuery(q);
