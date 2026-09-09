@@ -14,6 +14,7 @@
 #include <QUrl>
 #ifdef TRACK_MY_PHONE
 #include <QUrlQuery>
+#include <cmath>
 #endif
 
 #include <climits>
@@ -240,6 +241,22 @@ void Uploader::replyFinished()
 }
 
 #ifdef TRACK_MY_PHONE
+/* default:
+ * Nextcloud PhoneTrack:
+ * GET or POST to: https://your.server.org/NC_PATH_IF_NECESSARY/index.php/apps/phonetrack/logGet/TOKEN/DEVNAME
+ * query parameters:
+ *   - lat (decimal latitude)
+ *   - lon (decimal longitude)
+ *   - alt (altitude in meters)
+ *   - timestamp (epoch timestamp in seconds)
+ *   - acc (accuracy in meters)
+ *   - bat (battery level in percent)
+ *   - sat (number of satellites)
+ *   - useragent (device user agent)
+ *   - speed (speed in meter per second)
+ *   - bearing (bearing in decimal degrees)
+ */
+
 QUrl Uploader::formatTrackingUrl(const Settings::PhoneTrackType t, const QUrl& tpl,
                             const QString& session,
                             const QString& device,
@@ -249,8 +266,9 @@ QUrl Uploader::formatTrackingUrl(const Settings::PhoneTrackType t, const QUrl& t
     QUrl url(tpl);
     QUrlQuery q(url.query());
     if(t == Settings::PhoneTrackType::NextCloudPhoneTrack) {
-        url.path().append("/id/" + session);
-        q.addQueryItem(QStringLiteral("name"), device);
+        url.path().append("/" + session);
+        if (!device.isEmpty())
+            url.path().append("/" + device);
     } else if(t == Settings::PhoneTrackType::Traccar)
         q.addQueryItem(QStringLiteral("id"), session);
     q.addQueryItem(QStringLiteral("lat"), QString::number(report.position.latitude));
@@ -258,6 +276,10 @@ QUrl Uploader::formatTrackingUrl(const Settings::PhoneTrackType t, const QUrl& t
     q.addQueryItem(QStringLiteral("alt"), QString::number(report.position.altitude));
     q.addQueryItem(QStringLiteral("speed"), QString::number(report.position.speed));
     q.addQueryItem(QStringLiteral("acc"), QString::number(report.position.accuracy));
+    q.addQueryItem(QStringLiteral("bearing"), QString::number(report.position.direction));
+    // TODO: get this info from service to here...
+    //q.addQueryItem(QStringLiteral("bat"), QString::number());
+    //q.addQueryItem(QStringLiteral("sat"), QString::number());
     q.addQueryItem(QStringLiteral("timestamp"), QString::number(static_cast<double>(report.timestampMs/1000)));
     q.addQueryItem(QStringLiteral("useragent"), ua);
     url.setQuery(q);
@@ -416,14 +438,25 @@ void Uploader::uploadTrackPosition(const QGeoPositionInfo &info)
     if (info.isValid())
             return;
     Report report;
-    report.timestampMs = QDateTime::currentMSecsSinceEpoch();
+
     report.position.latitude = info.coordinate().latitude();
     report.position.longitude = info.coordinate().longitude();
     report.position.altitude = info.coordinate().altitude();
+
+    if (info.timestamp().isValid())
+        report.timestampMs = info.timestamp().currentMSecsSinceEpoch();
+    else
+        report.timestampMs = QDateTime::currentMSecsSinceEpoch();
+
+    if (info.hasAttribute(QGeoPositionInfo::HorizontalAccuracy) && info.hasAttribute(QGeoPositionInfo::VerticalAccuracy)) {
+        double acc = pow(info.attribute(QGeoPositionInfo::HorizontalAccuracy), 2)
+                 + pow(info.attribute(QGeoPositionInfo::VerticalAccuracy), 2);
+        report.position.accuracy = sqrt(acc);
+    }
     if (info.hasAttribute(QGeoPositionInfo::GroundSpeed))
         report.position.speed = info.attribute(QGeoPositionInfo::GroundSpeed);
     if (info.hasAttribute(QGeoPositionInfo::HorizontalAccuracy))
-        report.position.accuracy = info.attribute(QGeoPositionInfo::HorizontalAccuracy);
+        report.position.direction = info.attribute(QGeoPositionInfo::Direction);
 
     uploadTracked(report);
 }

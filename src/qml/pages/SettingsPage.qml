@@ -356,13 +356,13 @@ Page {
                     EnterKey.iconSource: "image://theme/icon-m-enter-accept"
                     EnterKey.onClicked: {
                         stumblefish.setPhoneTrackUrlTemplate(text);
-                        phoneTrackUser.enabled
+                        phoneTrackUser.visble && phoneTrackUser.enabled
                             ? phoneTrackUser.focus = true
                             : phoneTrackSession.focus = true
                     }
                 }
                 TextField { id: phoneTrackUser
-                    enabled: phoneTrackBox.currentItem.hasAuth
+                    visible: phoneTrackModel.get(phoneTrackBox.currentIndex).hasAuth
                     placeholderText: enabled ? label : "not required"
                     label: "Username"
                     EnterKey.iconSource: "image://theme/icon-m-enter-next"
@@ -372,7 +372,7 @@ Page {
                     }
                 }
                 PasswordField { id: phoneTrackPass
-                    enabled: phoneTrackBox.currentItem.hasAuth
+                    visible: phoneTrackModel.get(phoneTrackBox.currentIndex).hasAuth
                     placeholderText: enabled ? label : "not required"
                     label: "Password"
                     EnterKey.iconSource: "image://theme/icon-m-enter-next"
@@ -382,7 +382,7 @@ Page {
                     }
                 }
                 TextField { id: phoneTrackSession
-                    enabled: phoneTrackBox.currentItem.hasSession
+                    enabled:  phoneTrackModel.get(phoneTrackBox.currentIndex).hasSession
                     label: "Session ID"
                     EnterKey.iconSource: "image://theme/icon-m-enter-next"
                     EnterKey.onClicked: {
@@ -391,8 +391,9 @@ Page {
                     }
                 }
                 TextField { id: phoneTrackName
-                    enabled: phoneTrackBox.currentItem.hasName
-                    label: "Device Name"
+                    enabled:  phoneTrackModel.get(phoneTrackBox.currentIndex).hasName
+                    placeholderText: enabled ? "Jolla Phone" : "not required"
+                    label: "Device Name (optional)"
                     EnterKey.onClicked: { stumblefish.setPhoneTrackName(text); focus = false }
                 }
             }

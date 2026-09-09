@@ -39,12 +39,12 @@ public:
     };
     Q_ENUM(PhoneTrackType);
 
-    bool phoneTrackEnabled();
-    bool phoneTrackLive();
-    PhoneTrackType phoneTrackType();
-    QString phoneTrackUrlTemplate();
-    QString phoneTrackSessionID();
-    QString phoneTrackDeviceID();
+    bool phoneTrackEnabled() const;
+    bool phoneTrackLive() const;
+    PhoneTrackType phoneTrackType() const;
+    QString phoneTrackUrlTemplate() const;
+    QString phoneTrackSessionID() const;
+    QString phoneTrackDeviceID() const;
 #endif
 
     QVariantMap toMap() const;

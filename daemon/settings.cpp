@@ -144,6 +144,14 @@ QVariantMap Settings::toMap() const
     map.insert(QStringLiteral("endpoint"), endpoint());
     map.insert(QStringLiteral("mapTileUrlTemplate"), mapTileUrlTemplate());
     map.insert(QStringLiteral("reportRetentionDays"), reportRetentionDays());
+#ifdef TRACK_MY_PHONE
+    map.insert(QStringLiteral("phoneTrackEnabled"),  phoneTrackEnabled());
+    map.insert(QStringLiteral("phoneTrackLive"),     phoneTrackLive());
+    map.insert(QStringLiteral("phoneTrackType"),     phoneTrackType());
+//    map.insert(QStringLiteral("phoneTrackUrlTemplate"),phoneTrackUrlTemplate());
+//    map.insert(QStringLiteral("phoneTrackSessionID"),phoneTrackSessionID());
+//    map.insert(QStringLiteral("phoneTrackDeviceID"), phoneTrackDeviceID());
+#endif
     return map;
 }
 
@@ -192,6 +200,33 @@ void Settings::setValue(const QString &key, const QVariant &newValue)
     } else if (key == QStringLiteral("reportRetentionDays")) {
         storageKey = QString::fromLatin1(ReportRetentionDaysKey);
         value = normalizedRetentionDays(newValue);
+#ifdef TRACK_MY_PHONE
+    } else if (key == QStringLiteral("phoneTrackEnabled")) {
+        storageKey = QString::fromLatin1(PhoneTrackEnableKey);
+        value = newValue.toBool();
+    } else if (key == QStringLiteral("phoneTrackLive")) {
+        storageKey = QString::fromLatin1(PhoneTrackLiveKey);
+        value = newValue.toBool();
+    } else if (key == QStringLiteral("phoneTrackUrlTemplate")) {
+        storageKey = QString::fromLatin1(PhoneTrackUrlKey);
+        value = newValue.toString().trimmed();
+
+    } else if (key == QStringLiteral("phoneTrackSession")) {
+        storageKey = QString::fromLatin1(PhoneTrackSessionKey);
+        value = newValue.toString().trimmed();
+    } else if (key == QStringLiteral("phoneTrackName")) {
+        storageKey = QString::fromLatin1(PhoneTrackNameKey);
+        value = newValue.toString().trimmed();
+    // FIXME/TODO
+    /*
+    } else if (key == QStringLiteral("phoneTrackType")) {
+        qWarning() << "Setting" << key << "not supported yet!";
+    } else if (key == QStringLiteral("phoneTrackUser")) {
+        qWarning() << "Setting" << key << "not supported yet!";
+    } else if (key == QStringLiteral("phoneTrackPass")) {
+        qWarning() << "Setting" << key << "not supported yet!";
+    */
+#endif
     } else {
         return;
     }
@@ -258,31 +293,36 @@ void Settings::ensureDefaults()
     if (!m_settings.contains(QString::fromLatin1(LastPruneMsKey))) {
         m_settings.setValue(QString::fromLatin1(LastPruneMsKey), 0);
     }
+#ifdef TRACK_MY_PHONE
+    if (!m_settings.contains(QString::fromLatin1(PhoneTrackEnableKey))) {
+        m_settings.setValue(QString::fromLatin1(PhoneTrackEnableKey), false);
+    }
+#endif
     m_settings.sync();
 }
 
 #ifdef TRACK_MY_PHONE
-bool Settings::phoneTrackEnabled()
+bool Settings::phoneTrackEnabled() const
 {
     return value(QString::fromLatin1(PhoneTrackEnableKey), false).toBool();
 }
-bool Settings::phoneTrackLive()
+bool Settings::phoneTrackLive() const
 {
     return value(QString::fromLatin1(PhoneTrackLiveKey), false).toBool();
 }
-Settings::PhoneTrackType Settings::phoneTrackType()
+Settings::PhoneTrackType Settings::phoneTrackType() const
 {
     return (Settings::PhoneTrackType) value(QString::fromLatin1(PhoneTrackTypeKey), 0).toInt();
 }
-QString Settings::phoneTrackUrlTemplate()
+QString Settings::phoneTrackUrlTemplate() const
 {
     return value(QString::fromLatin1(PhoneTrackUrlKey), QString()).toString();
 }
-QString Settings::phoneTrackSessionID()
+QString Settings::phoneTrackSessionID() const
 {
     return value(QString::fromLatin1(PhoneTrackSessionKey), "unknown").toString();
 }
-QString Settings::phoneTrackDeviceID()
+QString Settings::phoneTrackDeviceID() const
 {
     return value(QString::fromLatin1(PhoneTrackNameKey), "").toString();
 }

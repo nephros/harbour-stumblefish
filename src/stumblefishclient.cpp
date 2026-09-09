@@ -386,29 +386,32 @@ void StumblefishClient::setSetting(const QString &key, const QVariant &value)
     asyncCall(QStringLiteral("setSetting"), arguments, QStringLiteral("void"));
 }
 #ifdef TRACK_MY_PHONE
-void StumblefishClient::setPhoneTrackType(const QString &type)
+void StumblefishClient::setPhoneTrackEnabled(bool enabled)
 {
-    setSetting(QStringLiteral("phoneTrackType"), type);
+    setSetting(QStringLiteral("phoneTrackEnabled"), enabled);
 }
 void StumblefishClient::setPhoneTrackLive(bool enabled)
 {
     setSetting(QStringLiteral("phoneTrackLive"), enabled);
 }
-void StumblefishClient::setPhoneTrackUrlTemplate(const QString &url)
+void StumblefishClient::setPhoneTrackType(const QString &type)
 {
-    setSetting(QStringLiteral("phoneTrackUrlTemplate"), url);
-}
-void StumblefishClient::setPhoneTrackEnabled(bool enabled)
-{
-    setSetting(QStringLiteral("phoneTrackEnabled"), enabled);
+    // FIXME/TODO: See daemon/settings.cpp
+    setSetting(QStringLiteral("phoneTrackType"), type);
 }
 void StumblefishClient::setPhoneTrackUser(const QString &user)
 {
+    // FIXME/TODO: See daemon/settings.cpp
     setSetting(QStringLiteral("phoneTrackUser"), user);
 }
 void StumblefishClient::setPhoneTrackPass(const QString &pass)
 {
+    // FIXME/TODO: See daemon/settings.cpp
     setSetting(QStringLiteral("phoneTrackPass"), pass);
+}
+void StumblefishClient::setPhoneTrackUrlTemplate(const QString &url)
+{
+    setSetting(QStringLiteral("phoneTrackUrlTemplate"), url);
 }
 void StumblefishClient::setPhoneTrackSession(const QString &session)
 {

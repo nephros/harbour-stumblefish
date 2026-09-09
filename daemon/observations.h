@@ -16,7 +16,10 @@ struct PositionFix
     double longitude;
     double altitude;
     double accuracy;
+#ifdef TRACK_MY_PHONE
     double speed;
+    double direction;
+#endif
 
     PositionFix()
         : valid(false)
@@ -25,7 +28,10 @@ struct PositionFix
         , longitude(0.0)
         , altitude(0.0)
         , accuracy(-1.0)
+#ifdef TRACK_MY_PHONE
         , speed(-1.0)
+        , direction(-1.0)
+#endif
     {
     }
 };
