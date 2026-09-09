@@ -204,6 +204,10 @@ QVariantMap Service::status() const
     map.insert(QStringLiteral("batteryPluggedIn"), m_battery.pluggedIn());
     map.insert(QStringLiteral("activeBackgroundPausedOnLowBattery"),
                activeBackgroundPausedForBattery());
+#ifdef TRACK_MY_PHONE
+    map.insert(QStringLiteral("phoneTrackEnabled"), m_settings.phoneTrackEnabled());
+    map.insert(QStringLiteral("phoneTrackLiveMode"), m_settings.phoneTrackLiveMode());
+#endif
 
     const PositionFix fix = m_position.lastFix();
     map.insert(QStringLiteral("hasFix"), fix.valid);

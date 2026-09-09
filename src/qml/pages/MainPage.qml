@@ -188,13 +188,13 @@ Page {
             DetailItem {
                 label: qsTr("Status")
                 value: phoneTrackingAvailable
-                    ?  stumblefish.settings.phoneTrackEnabled ? qsTr("Enabled") : qsTr("Disabled")
+                    ?  stumblefish.status.phoneTrackEnabled ? qsTr("Enabled") : qsTr("Disabled")
                     : qsTr("Not Supported")
             }
             DetailItem {
                 label: qsTr("Live Submission")
                 visible: phoneTrackingAvailable
-                value: stumblefish.settings.phoneTrackEnabled ? qsTr("Enabled") : qsTr("Disabled")
+                value: stumblefish.status.phoneTrackLiveMode ? qsTr("Enabled") : qsTr("Disabled")
             }
 
             SectionHeader {
