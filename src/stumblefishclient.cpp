@@ -102,6 +102,16 @@ StumblefishClient::StumblefishClient(QObject *parent)
                 this,
                 SLOT(handleUploadFinished(bool,QString)));
 
+#ifdef TRACK_MY_PHONE
+    bus.connect(QString::fromLatin1(Stumblefish::ServiceName),
+                QString::fromLatin1(Stumblefish::ObjectPath),
+                QString::fromLatin1(Stumblefish::InterfaceName),
+                QStringLiteral("canApplyLiveTrackConfig"),
+                this,
+                SLOT(handleCanApplyLiveTrackConfig(bool)));
+#endif
+
+
     sendLifecycleMessage(QStringLiteral("appOpened"));
     refresh();
 }
@@ -386,6 +396,12 @@ void StumblefishClient::setSetting(const QString &key, const QVariant &value)
     asyncCall(QStringLiteral("setSetting"), arguments, QStringLiteral("void"));
 }
 #ifdef TRACK_MY_PHONE
+
+void StumblefishClient::applyLiveTrackConfig()
+{
+    asyncCall(QStringLiteral("applyLiveTrackConfig"), QVariantList(), QStringLiteral("void"));
+}
+
 void StumblefishClient::setPhoneTrackEnabled(bool enabled)
 {
     setSetting(QStringLiteral("phoneTrackEnabled"), enabled);
@@ -421,6 +437,9 @@ void StumblefishClient::setPhoneTrackName(const QString &name)
 {
     setSetting(QStringLiteral("phoneTrackName"), name);
 }
+void StumblefishClient::handleCanApplyLiveTrackConfig(bool canApply)
+{
+    m_liveTrackConfig = canApply;
+    emit canApplyLiveTrackConfigChanged();
+}
 #endif
-
-

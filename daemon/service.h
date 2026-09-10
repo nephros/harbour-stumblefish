@@ -51,11 +51,19 @@ public Q_SLOTS:
     void clearPendingReports();
     int pruneReports();
 
+#ifdef TRACK_MY_PHONE
+    Q_NOREPLY void applyLiveTrackConfig();
+#endif
+
 Q_SIGNALS:
     void statusChanged(const QVariantMap &status);
     void settingsChanged(const QVariantMap &settings);
     void reportsChanged();
     void uploadFinished(bool success, const QString &message);
+#ifdef TRACK_MY_PHONE
+    void canApplyLiveTrackConfig(bool canApply);
+#endif
+
 
 private Q_SLOTS:
     void applySettings();
@@ -116,6 +124,11 @@ private:
     bool m_statusNotificationVisible;
     bool m_statusNotificationDismissed;
     bool m_quitWhenIdle;
+
+#ifdef TRACK_MY_PHONE
+    bool checkLiveTrackConfig();
+    QVariantMap m_liveTrackConfig;
+#endif
 };
 
 #endif

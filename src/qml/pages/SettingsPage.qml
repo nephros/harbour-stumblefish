@@ -338,6 +338,13 @@ Page {
                         }
                     }
                 }
+                ButtonLayout {
+                    visible: (phoneTrackBox.currentIndex <= 0) && stumblefish.canApplyLiveTrackConfig
+                    Button {
+                        text: qsTr("Apply from LiveTrack")
+                        onClicked: Remorse.popupAction(page, qsTr("Importing config"), function() { stumblefish.applyLiveTrackConfig() })
+                    }
+                }
 
                 TextSwitch { id: phoneTrackLiveMode
                     text: "Enable live tracking"
@@ -355,7 +362,7 @@ Page {
                            ? stumblefish.settings.phoneTrackUrlTemplate
                            : phoneTrackModel.get(phoneTrackBox.currentIndex).urlTemplate
                     placeholderText: phoneTrackModel.get(phoneTrackBox.currentIndex).urlTemplate
-                    description: phoneTrackBox.currentIndex <= 0)
+                    description: phoneTrackBox.currentIndex <= 0
                            ? qsTr("the app path will be added automatically")
                            : ""
                     inputMethodHints: Qt.ImhUrlCharactersOnly | Qt.ImhNoPredictiveText
