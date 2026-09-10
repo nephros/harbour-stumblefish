@@ -221,10 +221,6 @@ void Settings::setValue(const QString &key, const QVariant &newValue)
     /*
     } else if (key == QStringLiteral("phoneTrackType")) {
         qWarning() << "Setting" << key << "not supported yet!";
-    } else if (key == QStringLiteral("phoneTrackUser")) {
-        qWarning() << "Setting" << key << "not supported yet!";
-    } else if (key == QStringLiteral("phoneTrackPass")) {
-        qWarning() << "Setting" << key << "not supported yet!";
     */
 #endif
     } else {

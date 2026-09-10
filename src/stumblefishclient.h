@@ -64,8 +64,6 @@ public:
     Q_INVOKABLE void setPhoneTrackEnabled(bool enabled);
     Q_INVOKABLE void setPhoneTrackLive(bool enabled);
 
-    Q_INVOKABLE void setPhoneTrackUser(const QString &user);
-    Q_INVOKABLE void setPhoneTrackPass(const QString &pass);
     Q_INVOKABLE void setPhoneTrackSession(const QString &session);
     Q_INVOKABLE void setPhoneTrackName(const QString &name);
 #endif

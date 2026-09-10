@@ -415,16 +415,6 @@ void StumblefishClient::setPhoneTrackType(const QString &type)
     // FIXME/TODO: See daemon/settings.cpp
     setSetting(QStringLiteral("phoneTrackType"), type);
 }
-void StumblefishClient::setPhoneTrackUser(const QString &user)
-{
-    // FIXME/TODO: See daemon/settings.cpp
-    setSetting(QStringLiteral("phoneTrackUser"), user);
-}
-void StumblefishClient::setPhoneTrackPass(const QString &pass)
-{
-    // FIXME/TODO: See daemon/settings.cpp
-    setSetting(QStringLiteral("phoneTrackPass"), pass);
-}
 void StumblefishClient::setPhoneTrackUrlTemplate(const QString &url)
 {
     setSetting(QStringLiteral("phoneTrackUrlTemplate"), url);

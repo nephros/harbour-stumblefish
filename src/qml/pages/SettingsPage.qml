@@ -306,20 +306,17 @@ Page {
                         urlTemplate: "https://server.example.org/{nextcloud}"
                         hasSession: true
                         hasName: true
-                        hasAuth: false
                     }
                     /* TODO
                     ListElement {
                         text: "OsmAnd/Traccar"
                         hasSession: true
                         hasName: true
-                        hasAuth: false
                     }
                     ListElement {
                         text: "Other (Custom GET URL)"
                         hasSession: true
                         hasName: true
-                        hasAuth: false
                     }
                     */
                 }
@@ -373,31 +370,7 @@ Page {
                             text.replace(/apps\/phonetrack.*$/, "")
                         }
                         stumblefish.setPhoneTrackUrlTemplate(text);
-                        phoneTrackUser.visble && phoneTrackUser.enabled
-                            ? phoneTrackUser.focus = true
-                            : phoneTrackSession.focus = true
-                    }
-                }
-                TextField { id: phoneTrackUser
-                    visible: phoneTrackModel.get(phoneTrackBox.currentIndex).hasAuth
-                    placeholderText: enabled ? label : "not required"
-                    label: "Username"
-                    inputMethodHints: Qt.ImhNoAutoUppercase
-                    EnterKey.iconSource: "image://theme/icon-m-enter-next"
-                    EnterKey.onClicked: {
-                        stumblefish.setPhoneTrackUser(text);
-                        phoneTrackPass.focus=true
-                    }
-                }
-                PasswordField { id: phoneTrackPass
-                    visible: phoneTrackModel.get(phoneTrackBox.currentIndex).hasAuth
-                    placeholderText: enabled ? label : "not required"
-                    label: "Password"
-                    inputMethodHints: Qt.ImhNoPredictiveText | Qt.ImhNoAutoUppercase
-                    EnterKey.iconSource: "image://theme/icon-m-enter-next"
-                    EnterKey.onClicked: {
-                        stumblefish.setPhoneTrackPass(text);
-                        phoneTrackSession.focus=true
+                        phoneTrackSession.focus = true
                     }
                 }
                 PasswordField { id: phoneTrackSession
