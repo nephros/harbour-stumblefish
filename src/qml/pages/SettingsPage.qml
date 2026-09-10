@@ -1,6 +1,7 @@
 // SPDX-License-Identifier: MIT
 import QtQuick 2.0
 import Sailfish.Silica 1.0
+import PhoneTrack 1.0
 
 Page {
     id: page
@@ -300,37 +301,50 @@ Page {
 
                 ListModel { id: phoneTrackModel
                     ListElement {
+                        enabled: true
                         text: "NextCloud PhoneTrack"
-                        //type: StumbleFish.PhoneTrackType.NextCloudPhoneTrack
+                        type: PhoneTrackType.NextCloudPhoneTrack
                         post: false // default: GET
                         urlTemplate: "https://server.example.org/{nextcloud}"
                         hasSession: true
                         hasName: true
                     }
-                    /* TODO
+
                     ListElement {
+                        enabled: false
                         text: "OsmAnd/Traccar"
+                        type: PhoneTrackType.Traccar
+                        post: false // default: GET
+                        urlTemplate: ""
                         hasSession: true
-                        hasName: true
+                        hasName: false
                     }
                     ListElement {
+                        enabled: false
                         text: "Other (Custom GET URL)"
+                        type: PhoneTrackType.Custom
+                        post: false // default: GET
+                        urlTemplate: ""
                         hasSession: true
                         hasName: true
                     }
-                    */
+
                 }
 
                 ComboBox { id: phoneTrackBox
                     width: parent.width
                     label: "Service"
+                    currentIndex: stumblefish.settings.phoneTrackType
 
                     menu: ContextMenu {
                         Repeater {
                             model: phoneTrackModel
+
                             delegate: MenuItem {
+                                enabled: model.enabled
                                 text: model.text
-                                //onClicked: stumblefish.setPhoneTrackType(model.type)
+                                onClicked: stumblefish.setPhoneTrackType(model.type)
+                                //Component.onCompleted: if (model.type == stumblefish.phoneTrackType) phoneTrackBox.currentIndex = index
                             }
                         }
                     }

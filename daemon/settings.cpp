@@ -218,11 +218,9 @@ void Settings::setValue(const QString &key, const QVariant &newValue)
     } else if (key == QStringLiteral("phoneTrackName")) {
         storageKey = QString::fromLatin1(PhoneTrackNameKey);
         value = newValue.toString().trimmed();
-    // FIXME/TODO
-    /*
     } else if (key == QStringLiteral("phoneTrackType")) {
-        qWarning() << "Setting" << key << "not supported yet!";
-    */
+        storageKey = QString::fromLatin1(PhoneTrackTypeKey);
+        value = newValue.toString().trimmed();
 #endif
     } else {
         return;

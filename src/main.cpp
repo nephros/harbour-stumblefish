@@ -3,11 +3,16 @@
 #include <QQmlContext>
 #include <QQmlEngine>
 #include <QQuickView>
+#include <QtQml>
 #include <sailfishapp.h>
 
 #include "constants.h"
 #include "mapnetworkaccessmanagerfactory.h"
 #include "stumblefishclient.h"
+
+#ifdef TRACK_MY_PHONE
+#include "phonetrack.h"
+#endif
 
 int main(int argc, char *argv[])
 {
@@ -28,6 +33,7 @@ int main(int argc, char *argv[])
     view->rootContext()->setContextProperty(QStringLiteral("appVersion"), application->applicationVersion());
 #ifdef TRACK_MY_PHONE
     view->rootContext()->setContextProperty(QStringLiteral("phoneTrackingAvailable"), true);
+    qmlRegisterUncreatableType<Stumblefish::PhoneTrack>("PhoneTrack", 1, 0, "PhoneTrackType", "Not creatable");
 #else
     view->rootContext()->setContextProperty(QStringLiteral("phoneTrackingAvailable"), false);
 #endif

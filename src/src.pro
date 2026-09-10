@@ -16,6 +16,7 @@ SOURCES += \
     stumblefishclient.cpp
 
 HEADERS += \
+    ../common/phonetrack.h \
     mapnetworkaccessmanagerfactory.h \
     stumblefishclient.h
 

@@ -8,15 +8,19 @@ namespace Stumblefish {
 
 class PhoneTrack : public QObject
 {
-    Q_OBJECT
+    Q_GADGET
 public:
     enum Type {
-        NextCloudPhoneTrack,
-        SailfishFindMyDevice, // https://sailfishos-chum.github.io/apps/harbour-find-my-device/
+        NextCloudPhoneTrack,    // https://github.com/julien-nc/phonetrack/blob/main/doc/user.md
+        SailfishFindMyDevice,   // https://sailfishos-chum.github.io/apps/harbour-find-my-device/
         Traccar,
+        OsmAnd,
+        GpsTracker,             // https://github.com/nickfox/GpsTracker
         Custom
     };
     Q_ENUM(Type);
+private:
+    explicit PhoneTrack();
 };
 
 } // namespace

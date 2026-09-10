@@ -59,7 +59,7 @@ public:
 
 #ifdef TRACK_MY_PHONE
     Q_INVOKABLE void applyLiveTrackConfig();
-    Q_INVOKABLE void setPhoneTrackType(const QString &type);
+    Q_INVOKABLE void setPhoneTrackType(int type);
     Q_INVOKABLE void setPhoneTrackUrlTemplate(const QString &url);
     Q_INVOKABLE void setPhoneTrackEnabled(bool enabled);
     Q_INVOKABLE void setPhoneTrackLive(bool enabled);
