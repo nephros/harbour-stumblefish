@@ -682,22 +682,12 @@ bool Service::collectReport(const PositionFix &fix, const QString &reason)
 
 #ifdef TRACK_MY_PHONE
     if (m_settings.phoneTrackEnabled() && m_settings.phoneTrackLiveMode()) {
-
-    /*
-        if (info.hasAttribute(QGeoPositionInfo::HorizontalAccuracy) && info.hasAttribute(QGeoPositionInfo::VerticalAccuracy)) {
-            double acc = pow(info.attribute(QGeoPositionInfo::HorizontalAccuracy), 2)
-                     + pow(info.attribute(QGeoPositionInfo::VerticalAccuracy), 2);
-            report.position.accuracy = sqrt(acc);
+        // lets  e a bit more accurate here
+        if (fix.accuracy > 0.0 && fix.accuracy < 50.0) {
+            report.position.satellites = m_position.satellitesInUse();
+            report.battery =  m_battery.chargePercentage();
+            m_uploader.uploadTracked(report);
         }
-        if (info.hasAttribute(QGeoPositionInfo::GroundSpeed))
-            report.position.speed = info.attribute(QGeoPositionInfo::GroundSpeed);
-        if (info.hasAttribute(QGeoPositionInfo::HorizontalAccuracy))
-            report.position.direction = info.attribute(QGeoPositionInfo::Direction);
-     */
-
-        report.position.satellites = m_position.satellitesInUse();
-        report.battery =  m_battery.chargePercentage();
-        m_uploader.uploadTracked(report);
     }
 #endif
 
