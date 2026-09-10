@@ -196,6 +196,14 @@ Page {
                 visible: phoneTrackingAvailable
                 value: stumblefish.status.phoneTrackLiveMode ? qsTr("Enabled") : qsTr("Disabled")
             }
+            DetailItem {
+                label: qsTr("Uploaded")
+                value: stumblefish.status.phoneTrackSubmissions
+            }
+            DetailItem {
+                label: qsTr("Skipped")
+                value: stumblefish.status.phoneTrackSubmissionsSkipped
+            }
 
             SectionHeader {
                 text: "Reports"

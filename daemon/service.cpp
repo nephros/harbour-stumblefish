@@ -34,6 +34,13 @@ const char NotificationTurnOffAction[] = "turn-off";
 const char StatusNotificationCategory[] = "org.stumblefish.status";
 const char StatusNotificationOrigin[] = "org.stumblefish.status";
 
+#ifdef TRACK_MY_PHONE
+static qint64 _phoneTrackSubmissions = 0;
+static qint64 _phoneTrackSubmissionsSkipped = 0;
+static qint64 _phoneTrackLastSubmission = 0;
+const int _phoneTrackMinSubmissionInterval = 1000 * 60 * 15;
+#endif
+
 bool isStatusNotification(Notification *notification)
 {
     return notification
@@ -207,6 +214,8 @@ QVariantMap Service::status() const
 #ifdef TRACK_MY_PHONE
     map.insert(QStringLiteral("phoneTrackEnabled"), m_settings.phoneTrackEnabled());
     map.insert(QStringLiteral("phoneTrackLiveMode"), m_settings.phoneTrackLiveMode());
+    map.insert(QStringLiteral("phoneTrackSubmissions"), QVariant::fromValue(_phoneTrackSubmissions));
+    map.insert(QStringLiteral("phoneTrackSubmissionsSkipped"), QVariant::fromValue(_phoneTrackSubmissionsSkipped));
 #endif
 
     const PositionFix fix = m_position.lastFix();
@@ -682,12 +691,18 @@ bool Service::collectReport(const PositionFix &fix, const QString &reason)
 
 #ifdef TRACK_MY_PHONE
     if (m_settings.phoneTrackEnabled() && m_settings.phoneTrackLiveMode()) {
-        // lets  e a bit more accurate here
-        if (fix.accuracy > 0.0 && fix.accuracy < 50.0) {
-            report.position.satellites = m_position.satellitesInUse();
-            report.battery =  m_battery.chargePercentage();
-            m_uploader.uploadTracked(report);
-        }
+        if ((QDateTime::currentMSecsSinceEpoch() - _phoneTrackLastSubmission) > _phoneTrackMinSubmissionInterval) {
+            // lets  e a bit more accurate here
+            if (fix.accuracy > 0.0 && fix.accuracy < 50.0) {
+                report.position.satellites = m_position.satellitesInUse();
+                report.battery =  m_battery.chargePercentage();
+                m_uploader.uploadTracked(report);
+                _phoneTrackLastSubmission = QDateTime::currentMSecsSinceEpoch();
+                _phoneTrackSubmissions++;
+            } else
+                _phoneTrackSubmissionsSkipped++;
+        } else
+            qDebug() << "PhoneTrack: skipped sumbission, too soon";
     }
 #endif
 
