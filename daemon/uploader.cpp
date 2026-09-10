@@ -13,6 +13,7 @@
 #include <QNetworkRequest>
 #include <QUrl>
 #ifdef TRACK_MY_PHONE
+#include "phonetrack.h"
 #include <QUrlQuery>
 #include <cmath>
 #endif
@@ -262,7 +263,7 @@ void Uploader::replyFinished()
  *   - bearing (bearing in decimal degrees)
  */
 
-QUrl Uploader::formatTrackingUrl(const Settings::PhoneTrackType t, const QUrl& tpl,
+QUrl Uploader::formatTrackingUrl(const Stumblefish::PhoneTrack::Type t, const QUrl& tpl,
                             const QString& session,
                             const QString& device,
                             const Report& report,
@@ -271,13 +272,13 @@ QUrl Uploader::formatTrackingUrl(const Settings::PhoneTrackType t, const QUrl& t
     QUrl url(tpl);
     QUrlQuery q(url.query());
     QString path = url.path();
-    if(t == Settings::PhoneTrackType::NextCloudPhoneTrack) {
+    if(t == Stumblefish::PhoneTrack::Type::NextCloudPhoneTrack) {
         path.append(QString::fromLatin1(NCPhoneTrackAppPath));
         path.append("/logGet");
         path.append("/" + session);
         if (!device.isEmpty())
             path.append("/" + device);
-    } else if(t == Settings::PhoneTrackType::Traccar)
+    } else if(t == Stumblefish::PhoneTrack::Type::Traccar)
         q.addQueryItem(QStringLiteral("id"), session);
     q.addQueryItem(QStringLiteral("lat"), QString::number(report.position.latitude));
     q.addQueryItem(QStringLiteral("lon"), QString::number(report.position.longitude));

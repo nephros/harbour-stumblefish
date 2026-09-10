@@ -5,6 +5,9 @@
 #include <QObject>
 #include <QSettings>
 #include <QVariantMap>
+#ifdef TRACK_MY_PHONE
+#include "phonetrack.h"
+#endif
 
 class Settings : public QObject
 {
@@ -31,17 +34,9 @@ public:
     void setLastAutoUploadMs(qint64 timestampMs);
 
 #ifdef TRACK_MY_PHONE
-    enum PhoneTrackType {
-        NextCloudPhoneTrack,
-        SailfishFindMyDevice, // https://sailfishos-chum.github.io/apps/harbour-find-my-device/
-        Traccar,
-        Custom
-    };
-    Q_ENUM(PhoneTrackType);
-
     bool phoneTrackEnabled() const;
     bool phoneTrackLiveMode() const;
-    PhoneTrackType phoneTrackType() const;
+    Stumblefish::PhoneTrack::Type phoneTrackType() const;
     QString phoneTrackUrlTemplate() const;
     QString phoneTrackSessionID() const;
     QString phoneTrackDeviceID() const;
