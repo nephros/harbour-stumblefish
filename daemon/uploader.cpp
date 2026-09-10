@@ -27,6 +27,10 @@ const int MaxBleObservationAgeMs = 30 * 1000;
 const int InvalidLocationAreaCode = 0xffff;
 const qint64 InvalidCellId = 0x0fffffff;
 
+#ifdef TRACK_MY_PHONE
+const char NCPhoneTrackAppPath[] = "/apps/phonetrack";
+#endif
+
 int age(qint64 reportTimestamp, qint64 seenTimestamp)
 {
     if (reportTimestamp <= 0 || seenTimestamp <= 0) {
@@ -268,6 +272,8 @@ QUrl Uploader::formatTrackingUrl(const Settings::PhoneTrackType t, const QUrl& t
     QUrlQuery q(url.query());
     QString path = url.path();
     if(t == Settings::PhoneTrackType::NextCloudPhoneTrack) {
+        path.append(QString::fromLatin1(NCPhoneTrackAppPath));
+        path.append("/logGet");
         path.append("/" + session);
         if (!device.isEmpty())
             path.append("/" + device);

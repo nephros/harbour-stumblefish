@@ -303,7 +303,7 @@ Page {
                         text: "NextCloud PhoneTrack"
                         //type: StumbleFish.PhoneTrackType.NextCloudPhoneTrack
                         post: false // default: GET
-                        urlTemplate: "https://nextcloud.example.org/apps/phonetrack/logGet/"
+                        urlTemplate: "https://server.example.org/{nextcloud}"
                         hasSession: true
                         hasName: true
                         hasAuth: false
@@ -351,11 +351,20 @@ Page {
                 TextField { id: phoneTrackUrlTemplate
                     //enabled: phoneTrackBox.currentIndex == 2
                     label: "Submission URL"
-                    text: stumblefish.settings.phoneTrackUrlTemplate
+                    text: !!stumblefish.settings.phoneTrackUrlTemplate
+                           ? stumblefish.settings.phoneTrackUrlTemplate
+                           : phoneTrackModel.get(phoneTrackBox.currentIndex).urlTemplate
                     placeholderText: phoneTrackModel.get(phoneTrackBox.currentIndex).urlTemplate
+                    description: phoneTrackBox.currentIndex <= 0)
+                           ? qsTr("the app path will be added automatically")
+                           : ""
                     inputMethodHints: Qt.ImhUrlCharactersOnly | Qt.ImhNoPredictiveText
                     EnterKey.iconSource: "image://theme/icon-m-enter-accept"
                     EnterKey.onClicked: {
+                        text.replace(/\/$/, "")
+                        if (phoneTrackBox.currentIndex <= 0) {
+                            text.replace(/apps\/phonetrack.*$/, "")
+                        }
                         stumblefish.setPhoneTrackUrlTemplate(text);
                         phoneTrackUser.visble && phoneTrackUser.enabled
                             ? phoneTrackUser.focus = true
