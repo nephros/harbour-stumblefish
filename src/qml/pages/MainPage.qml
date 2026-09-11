@@ -186,23 +186,19 @@ Page {
                 visible: phoneTrackingAvailable
             }
             DetailItem {
+                visible: phoneTrackingAvailable
                 label: qsTr("Status")
                 value: phoneTrackingAvailable
-                    ?  stumblefish.status.phoneTrackEnabled ? qsTr("Enabled") : qsTr("Disabled")
-                    : qsTr("Not Supported")
+                    ?  stumblefish.status.phoneTrackEnabled
+                        ?  stumblefish.status.phoneTrackLiveMode ? qsTr("Enabled (live)") : qsTr("Enabled")
+                        : qsTr("Disabled")
+                    : qsTr("Not Supported") // fixme?
             }
             DetailItem {
-                label: qsTr("Live Submission")
                 visible: phoneTrackingAvailable
                 value: stumblefish.status.phoneTrackLiveMode ? qsTr("Enabled") : qsTr("Disabled")
-            }
-            DetailItem {
-                label: qsTr("Uploaded")
-                value: stumblefish.status.phoneTrackSubmissions
-            }
-            DetailItem {
-                label: qsTr("Skipped")
-                value: stumblefish.status.phoneTrackSubmissionsSkipped
+                label: qsTr("Uploaded/Skipped")
+                value: stumblefish.status.phoneTrackSubmissions + "/" + stumblefish.status.phoneTrackSubmissionsSkipped
             }
 
             SectionHeader {
