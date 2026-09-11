@@ -28,7 +28,6 @@ class PhoneTrackConfig : public QSettings
 {
     Q_OBJECT
     Q_PROPERTY(int count READ count CONSTANT);
-    Q_PROPERTY(bool haveLiveTrackConfig READ haveLiveTrackConfig CONSTANT);
     Q_PROPERTY(QVariantList model READ model NOTIFY modelChanged);
 public:
     explicit PhoneTrackConfig(const QString &path = QString::fromLatin1(PhoneTrackConfigFilePath),
@@ -37,7 +36,6 @@ public:
         {
             if (isWritable())
                  qCritical() << "PhoneTrackConfig: ini file is writable!";
-            checkLiveTrackConfig();
         };
 
     /* we hide all write operations: */

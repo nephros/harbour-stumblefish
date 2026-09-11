@@ -20,6 +20,10 @@
 #include "uploader.h"
 #include "wificollector.h"
 
+#ifdef TRACK_MY_PHONE
+#include "phonetrackconfig.h"
+#endif
+
 class NetworkManager;
 class Notification;
 
@@ -53,6 +57,7 @@ public Q_SLOTS:
 
 #ifdef TRACK_MY_PHONE
     Q_NOREPLY void applyLiveTrackConfig();
+    bool canApplyLiveTrackConfig();
 #endif
 
 Q_SIGNALS:
@@ -60,10 +65,6 @@ Q_SIGNALS:
     void settingsChanged(const QVariantMap &settings);
     void reportsChanged();
     void uploadFinished(bool success, const QString &message);
-#ifdef TRACK_MY_PHONE
-    void canApplyLiveTrackConfig(bool canApply);
-#endif
-
 
 private Q_SLOTS:
     void applySettings();
@@ -124,6 +125,10 @@ private:
     bool m_statusNotificationVisible;
     bool m_statusNotificationDismissed;
     bool m_quitWhenIdle;
+
+#ifdef TRACK_MY_PHONE
+    Stumblefish::PhoneTrackConfig* m_phoneTrackConfig;
+#endif
 
 };
 
