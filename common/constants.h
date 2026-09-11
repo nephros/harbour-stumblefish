@@ -14,8 +14,19 @@ const char OrganizationName[] = "org.stumblefish";
 const char ApplicationName[] = "harbour-stumblefish";
 
 }
+
 #ifdef TRACK_MY_PHONE
 #include "phonetrackconfig.h"
+namespace Trackfish {
+
+const char ServiceName[] = "org.stumblefish.Tracker";
+const char ObjectPath[] = "/org/stumblefish/Tracker";
+const char InterfaceName[] = "org.stumblefish.Tracker";
+const char OrganizationName[] = "org.stumblefish";
+const char ApplicationName[] = "harbour-trackfish";
+
+}
+
 #endif
 
 #endif

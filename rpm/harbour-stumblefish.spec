@@ -50,6 +50,15 @@ Links:
   Bugtracker: https://github.com/abranson/harbour-stumblefish/issues
 %endif
 
+%if %{with phonetrack}
+%package -n harbour-trackfish
+Summary: PhoneTrack Companion for Stumblefish
+Requires: %{name} >= %{version}
+
+%description -n harbour-trackfish
+Summary: PhoneTrack Companion for Stumblefish
+%endif
+
 %prep
 %autosetup
 
@@ -108,3 +117,14 @@ systemctl-user daemon-reload || true
 %{_datadir}/icons/hicolor/172x172/apps/%{name}.png
 %{_sysconfdir}/sailjail/permissions/Stumblefish.permission
 %{_userunitdir}/%{name}d.service
+%if %{with phonetrack}
+%exclude %{_datadir}/%{name}/lib/phonetrack/
+%endif
+
+%if %{with phonetrack}
+%files -n harbour-trackfish
+%{_bindir}/harbour-trackfishd
+%{_datadir}/dbus-1/services/org.stumblefish.Tracker.service
+%{_userunitdir}/harbour-trackfishd.service
+%{_datadir}/%{name}/lib/phonetrack/
+%endif

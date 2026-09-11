@@ -1,0 +1,12 @@
+# SPDX-License-Identifier: MIT
+[Unit]
+Description=Stumblefish PhoneTrack Companion
+After=pre-user-session.target
+BindsTo=harbour-stumblefishd.service
+
+[Service]
+ExecStart=/usr/bin/harbour-trackfishd
+Restart=on-failure
+
+[Install]
+WantedBy=user-session.target

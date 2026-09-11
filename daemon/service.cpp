@@ -119,9 +119,6 @@ Service::Service(QObject *parent)
     , m_statusNotificationVisible(false)
     , m_statusNotificationDismissed(false)
     , m_quitWhenIdle(false)
-#ifdef TRACK_MY_PHONE
-    , m_phoneTrackConfig(new Stumblefish::PhoneTrackConfig())
-#endif
 {
     qRegisterMetaType<PositionFix>("PositionFix");
 
@@ -1038,16 +1035,4 @@ void Service::maybeQuitForAppLifecycle()
     }
 }
 
-#ifdef TRACK_MY_PHONE
-bool Service::canApplyLiveTrackConfig() {
-    return m_phoneTrackConfig->haveLiveTrackConfig()
-        && m_settings.phoneTrackEnabled();
-}
-void Service::applyLiveTrackConfig()
-{
-    m_settings.setValue(QStringLiteral("phoneTrackUrlTemplate"), m_phoneTrackConfig->liveTrackConfig()->value("UrlTemplate").toString());
-    m_settings.setValue(QStringLiteral("phoneTrackSession"),     m_phoneTrackConfig->liveTrackConfig()->value("SessionID").toString());
-    m_settings.setValue(QStringLiteral("phoneTrackName"),        m_phoneTrackConfig->liveTrackConfig()->value("DeviceID").toString());
-    emit settingsChanged(m_settings.toMap());
-}
-#endif
+

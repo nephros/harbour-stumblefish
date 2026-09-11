@@ -1,0 +1,5 @@
+# SPDX-License-Identifier: MIT
+[D-BUS Service]
+Name=org.stumblefish.Tracker
+Exec=/usr/bin/harbour-trackfishd
+SystemdService=harbour-trackfishd.service

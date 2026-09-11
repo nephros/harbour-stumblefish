@@ -8,7 +8,7 @@
 
 namespace Stumblefish {
 
-static char PhoneTrackConfigFilePath[] = "/usr/share/harbour-stumblefish/phonetrack.ini";
+static char PhoneTrackConfigFilePath[] = "/usr/share/harbour-stumblefish/lib/phonetrack/phonetrack.ini";
 const char LiveTrackConfigFilePath[] = ".config/harbour-livetrack/harbour-livetrack.conf";
 
 struct PhoneTrackInfo {

@@ -13,7 +13,9 @@ phonetrack {
   CONFIG += warn_on
   DISTFILES += common/phonetrack.ini
 
-  phonetrackini.path = /usr/share/harbour-stumblefish/
+  SUBDIRS += daemon/phonetrack
+
+  phonetrackini.path = /usr/share/harbour-stumblefish/lib/phonetrack/
   phonetrackini.files += common/phonetrack.ini
   INSTALLS += phonetrackini
 }
