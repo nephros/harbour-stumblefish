@@ -332,13 +332,6 @@ Page {
                         }
                     }
                 }
-                ButtonLayout {
-                    visible: (phoneTrackBox.currentIndex <= 1) && stumblefish.status.canApplyLiveTrackConfig
-                    Button {
-                        text: qsTr("Apply from LiveTrack")
-                        onClicked: Remorse.popupAction(page, qsTr("Importing config"), function() { stumblefish.applyLiveTrackConfig() })
-                    }
-                }
 
                 TextField { id: phoneTrackUrlTemplate
                     label: "Submission URL"
@@ -377,6 +370,22 @@ Page {
                     placeholderText: enabled ? label : "not required"
                     label: "Device Name (optional)"
                     EnterKey.onClicked: { stumblefish.setPhoneTrackName(text); focus = false }
+                }
+                Label {
+                    visible: importButt.visible
+                    x: Theme.horizontalPageMargin
+                    width: parent.width - 2 * Theme.horizontalPageMargin
+                    text: qsTr("Found configuation of the LiveTrack app. Tap the button to import.")
+                    color: Theme.secondaryColor
+                    font.pixelSize: Theme.fontSizeSmall
+                    wrapMode: Text.Wrap
+                }
+                ButtonLayout { id: importButt
+                    visible: (phoneTrackBox.currentIndex <= 1) && stumblefish.status.canApplyLiveTrackConfig
+                    Button {
+                        text: qsTr("Apply from LiveTrack")
+                        onClicked: Remorse.popupAction(page, qsTr("Importing config"), function() { stumblefish.applyLiveTrackConfig() })
+                    }
                 }
             }
 /* **** PhoneTrack section  ends **** */
