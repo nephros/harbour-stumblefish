@@ -8,7 +8,9 @@ PKGCONFIG += sailfishapp
 INCLUDEPATH += . ../common
 DEFINES += APP_VERSION=\\\"$$VERSION\\\"
 
-DEFINES += TRACK_MY_PHONE
+phonetrack {
+  include(../phonetrack.pri)
+}
 
 SOURCES += \
     main.cpp \
@@ -16,7 +18,6 @@ SOURCES += \
     stumblefishclient.cpp
 
 HEADERS += \
-    ../common/phonetrack.h \
     mapnetworkaccessmanagerfactory.h \
     stumblefishclient.h
 

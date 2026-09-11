@@ -1,3 +1,5 @@
+%bcond_without phonetrack
+
 # SPDX-License-Identifier: MIT
 Name:       harbour-stumblefish
 Summary:    Location report collector for Sailfish OS
@@ -52,7 +54,12 @@ Links:
 %autosetup
 
 %build
-%qmake5 VERSION='%{version}'
+%qmake5 VERSION='%{version}' \
+%if %{with phonetrack}
+    CONFIG+=phonetrack \
+%endif
+%{nil}
+
 %make_build
 
 %install

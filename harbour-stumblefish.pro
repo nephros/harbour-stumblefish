@@ -6,6 +6,18 @@ SUBDIRS += daemon
 SUBDIRS += src
 SUBDIRS += tests
 
+phonetrack {
+  message("Building $$TARGET with PhoneTrack support.")
+
+  QMAKE_CXXFLAGS += -Werror -Wall
+  CONFIG += warn_on
+  DISTFILES += common/phonetrack.ini
+
+  phonetrackini.path = /usr/share/harbour-stumblefish/
+  phonetrackini.files += common/phonetrack.ini
+  INSTALLS += phonetrackini
+}
+
 OTHER_FILES += \
     rpm/harbour-stumblefish.spec \
     rpm/harbour-stumblefish.changes
