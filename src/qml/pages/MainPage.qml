@@ -180,25 +180,14 @@ Page {
                     }
                 }
             }
-
-            SectionHeader {
-                text: qsTr("Phone Tracking")
-                visible: phoneTrackingAvailable
+/* **** PhoneTrack section **** */
+            Loader {
+                active: phoneTrackingAvailable
+                x: Theme.horizontalPageMargin
+                width: parent.width - 2 * Theme.horizontalPageMargin
+                source: Qt.resolvedUrl("plugins/PhoneTrackStats.qml")
             }
-            DetailItem {
-                visible: phoneTrackingAvailable
-                label: qsTr("Status")
-                value: phoneTrackingAvailable
-                    ?  stumblefish.status.phoneTrackEnabled
-                        ?  stumblefish.status.phoneTrackLiveMode ? qsTr("Enabled (live)") : qsTr("Enabled")
-                        : qsTr("Disabled")
-                    : qsTr("Not Supported") // fixme?
-            }
-            DetailItem {
-                visible: phoneTrackingAvailable
-                label: qsTr("Uploaded/Skipped")
-                value: stumblefish.status.phoneTrackSubmissions + "/" + stumblefish.status.phoneTrackSubmissionsSkipped
-            }
+/* **** PhoneTrack section  ends **** */
 
             SectionHeader {
                 text: "Reports"
