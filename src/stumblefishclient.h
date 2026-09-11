@@ -20,9 +20,6 @@ class StumblefishClient : public QObject
     Q_PROPERTY(QVariantList mapCells READ mapCells NOTIFY mapCellsChanged)
     Q_PROPERTY(bool busy READ busy NOTIFY busyChanged)
     Q_PROPERTY(QString message READ message NOTIFY messageChanged)
-#ifdef TRACK_MY_PHONE
-    Q_PROPERTY(bool canApplyLiveTrackConfig MEMBER m_liveTrackConfig NOTIFY canApplyLiveTrackConfigChanged)
-#endif
 
 public:
     explicit StumblefishClient(QObject *parent = 0);
@@ -79,9 +76,6 @@ Q_SIGNALS:
     void mapCellsChanged();
     void busyChanged();
     void messageChanged();
-#ifdef TRACK_MY_PHONE
-    void canApplyLiveTrackConfigChanged();
-#endif
 
 private Q_SLOTS:
     void handleStatusSignal(const QVariantMap &status);
@@ -89,9 +83,6 @@ private Q_SLOTS:
     void handleReportsSignal();
     void handleUploadFinished(bool success, const QString &message);
     void pendingFinished(QDBusPendingCallWatcher *watcher);
-#ifdef TRACK_MY_PHONE
-    void handleCanApplyLiveTrackConfig(bool canApply);
-#endif
 
 private:
     void asyncCall(const QString &method, const QVariantList &arguments, const QString &kind);
@@ -109,10 +100,6 @@ private:
     QVariantList m_mapCells;
     int m_busyCount;
     QString m_message;
-
-#ifdef TRACK_MY_PHONE
-    bool m_liveTrackConfig;
-#endif
 };
 
 #endif

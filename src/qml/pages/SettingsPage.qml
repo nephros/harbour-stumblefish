@@ -333,7 +333,7 @@ Page {
                     }
                 }
                 ButtonLayout {
-                    visible: (phoneTrackBox.currentIndex <= 1) && stumblefish.canApplyLiveTrackConfig
+                    visible: (phoneTrackBox.currentIndex <= 1) && stumblefish.status.canApplyLiveTrackConfig
                     Button {
                         text: qsTr("Apply from LiveTrack")
                         onClicked: Remorse.popupAction(page, qsTr("Importing config"), function() { stumblefish.applyLiveTrackConfig() })
