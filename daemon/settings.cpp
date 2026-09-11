@@ -321,5 +321,3 @@ QString Settings::phoneTrackDeviceID() const
     return value(QString::fromLatin1(PhoneTrackNameKey), "").toString();
 }
 #endif
-
-

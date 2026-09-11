@@ -116,7 +116,6 @@ private:
     bool m_statusNotificationVisible;
     bool m_statusNotificationDismissed;
     bool m_quitWhenIdle;
-
 };
 
 #endif
