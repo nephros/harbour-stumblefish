@@ -305,6 +305,15 @@ Page {
                 width: parent.width
                 enabled: phoneTrackEnable.checked
 
+                TextSwitch { id: phoneTrackLiveMode
+                    text: "Enable live tracking"
+                    description: checked
+                                 ? "Locations will be submitted as they are discovered"
+                                 : "Location uploads will happen together with Stumble uploads"
+                    checked: !!stumblefish.settings.phoneTrackLiveMode
+                    onClicked: stumblefish.setPhoneTrackLive(checked)
+                }
+
                 ComboBox { id: phoneTrackBox
                     width: parent.width
                     label: "Service"
@@ -317,8 +326,8 @@ Page {
                             delegate: MenuItem {
                                 enabled: model.supported
                                 opacity: enabled ? 1.0 : Theme.opacityLow
-                                text: model.id + ": " + model.name
-                                onClicked: if(supported) { stumblefish.setPhoneTrackType(model.id) } else { return }
+                                text: model.name
+                                onClicked: if(model.supported) { stumblefish.setPhoneTrackType(model.id) } else { return }
                             }
                         }
                     }
@@ -331,30 +340,20 @@ Page {
                     }
                 }
 
-                TextSwitch { id: phoneTrackLiveMode
-                    text: "Enable live tracking"
-                    description: checked
-                                 ? "Locations will be submitted as they are discovered"
-                                 : "Location uploads will happen together with Stumble uploads"
-                    checked: !!stumblefish.settings.phoneTrackLiveMode
-                    onClicked: stumblefish.setPhoneTrackLive(checked)
-                }
-
                 TextField { id: phoneTrackUrlTemplate
-                    //enabled: phoneTrackBox.currentIndex == 2
                     label: "Submission URL"
                     text: !!stumblefish.settings.phoneTrackUrlTemplate
                            ? stumblefish.settings.phoneTrackUrlTemplate
                            : "" // fixme: default template
-                    //placeholderText: phoneTrackModel.get(phoneTrackBox.currentIndex).urlTemplate
-                    description: phoneTrackBox.currentIndex <= 0
+                    placeholderText: phoneTrackConfigModel.get(phoneTrackBox.currentIndex).urlTemplate
+                    description: phoneTrackBox.currentIndex <= 1
                            ? qsTr("the app path will be added automatically")
                            : ""
                     inputMethodHints: Qt.ImhUrlCharactersOnly | Qt.ImhNoPredictiveText
                     EnterKey.iconSource: "image://theme/icon-m-enter-accept"
                     EnterKey.onClicked: {
                         text.replace(/\/$/, "")
-                        if (phoneTrackBox.currentIndex <= 0) {
+                        if (phoneTrackBox.currentIndex <= 1) {
                             text.replace(/apps\/phonetrack.*$/, "")
                         }
                         stumblefish.setPhoneTrackUrlTemplate(text);
@@ -362,7 +361,7 @@ Page {
                     }
                 }
                 PasswordField { id: phoneTrackSession
-                    //enabled:  phoneTrackModel.get(phoneTrackBox.currentIndex).hasSession
+                    enabled:  phoneTrackConfigModel.get(phoneTrackBox.currentIndex).hasSession
                     text: stumblefish.settings.phoneTrackSessionID
                     label: "Session ID"
                     inputMethodHints: Qt.ImhNoPredictiveText | Qt.ImhNoAutoUppercase
@@ -373,7 +372,7 @@ Page {
                     }
                 }
                 TextField { id: phoneTrackName
-                    //enabled:  phoneTrackModel.get(phoneTrackBox.currentIndex).hasName
+                    enabled:  phoneTrackConfigModel.get(phoneTrackBox.currentIndex).hasDevice
                     text: stumblefish.settings.phoneTrackDeviceID
                     placeholderText: enabled ? label : "not required"
                     label: "Device Name (optional)"
