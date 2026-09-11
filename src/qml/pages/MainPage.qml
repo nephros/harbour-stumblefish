@@ -196,7 +196,6 @@ Page {
             }
             DetailItem {
                 visible: phoneTrackingAvailable
-                value: stumblefish.status.phoneTrackLiveMode ? qsTr("Enabled") : qsTr("Disabled")
                 label: qsTr("Uploaded/Skipped")
                 value: stumblefish.status.phoneTrackSubmissions + "/" + stumblefish.status.phoneTrackSubmissionsSkipped
             }
