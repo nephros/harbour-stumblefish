@@ -125,10 +125,6 @@ private:
     bool m_statusNotificationDismissed;
     bool m_quitWhenIdle;
 
-#ifdef TRACK_MY_PHONE
-    bool checkLiveTrackConfig();
-    QVariantMap m_liveTrackConfig;
-#endif
 };
 
 #endif

@@ -1,6 +1,8 @@
 // SPDX-License-Identifier: MIT
 #include "phonetrackconfig.h"
 
+#include <QDir>
+
 namespace Stumblefish {
 
 uint PhoneTrackConfig::defaultConfigId() {
@@ -38,5 +40,36 @@ QVariantList PhoneTrackConfig::model() {
     }
     return list;
 }
+
+QVariantMap* PhoneTrackConfig::liveTrackConfig() {
+    if(!m_liveTrackConfig)
+        checkLiveTrackConfig();
+    return m_liveTrackConfig;
+}
+
+bool PhoneTrackConfig::haveLiveTrackConfig()
+{
+    if(!m_liveTrackConfig)
+        checkLiveTrackConfig();
+    return !m_liveTrackConfig->isEmpty()
+            && m_liveTrackConfig->value("SessionID").isValid()
+            && m_liveTrackConfig->value("UrlTemplate").isValid();
+};
+
+void PhoneTrackConfig::checkLiveTrackConfig() {
+    QSettings ltconfig(QDir::homePath() + "/" + QString::fromLatin1(LiveTrackConfigFilePath), QSettings::IniFormat);
+    if(ltconfig.contains("traccar") && ltconfig.value("traccar").toBool())
+        return; // false; // FIXME: support traccar type
+
+    if(ltconfig.contains("ID")) {
+        const auto id = ltconfig.value("ID").toString().split("/");
+        m_liveTrackConfig->insert("SessionID", id.first());
+        m_liveTrackConfig->insert("DeviceID",  id.last());
+    }
+    if(ltconfig.contains("URL"))
+        m_liveTrackConfig->insert("UrlTemplate",  ltconfig.value("URL").toString());
+    qDebug() << "Found liveTrack config:" << ltconfig.allKeys();
+}
+
 
 } // namespace

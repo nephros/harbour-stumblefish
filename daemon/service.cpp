@@ -18,10 +18,6 @@
 
 #include <climits>
 
-#ifdef TRACK_MY_PHONE
-#include <QSettings>
-#endif
-
 namespace {
 
 const qint64 DuplicateHeartbeatMs = 15 * 60 * 1000;
@@ -39,7 +35,6 @@ const char StatusNotificationCategory[] = "org.stumblefish.status";
 const char StatusNotificationOrigin[] = "org.stumblefish.status";
 
 #ifdef TRACK_MY_PHONE
-const char LiveTrackConfigPath[] = ".config/harbour-livetrack/harbour-livetrack.conf";
 static qint64 _phoneTrackSubmissions = 0;
 static qint64 _phoneTrackSubmissionsSkipped = 0;
 static qint64 _phoneTrackLastSubmission = 0;
@@ -162,10 +157,6 @@ Service::Service(QObject *parent)
                             QDBusConnection::ExportAllSlots | QDBusConnection::ExportAllSignals)) {
         qWarning() << "Failed to register D-Bus object" << bus.lastError().message();
     }
-
-#ifdef TRACK_MY_PHONE
-    emit canApplyLiveTrackConfig(checkLiveTrackConfig());
-#endif
 
     closeStoredStatusNotifications();
     applySettings();
@@ -1044,31 +1035,12 @@ void Service::maybeQuitForAppLifecycle()
 }
 
 #ifdef TRACK_MY_PHONE
-bool Service::checkLiveTrackConfig() {
-    QVariantMap map;
-    QSettings ltconfig(QDir::homePath() + "/" + QString::fromLatin1(LiveTrackConfigPath), QSettings::IniFormat);
-
-    if(ltconfig.contains("traccar") && ltconfig.value("traccar").toBool())
-        return false; // FIXME: support traccar type
-
-    if(ltconfig.contains("ID")) {
-        const auto id = ltconfig.value("ID").toString().split("/");
-        m_liveTrackConfig.insert("SessionID", id.first());
-        m_liveTrackConfig.insert("DeviceID",  id.last());
-    }
-    if(ltconfig.contains("URL"))
-        m_liveTrackConfig.insert("UrlTemplate",  ltconfig.value("URL").toString());
-    qDebug() << "Found liveTrack config:" << ltconfig.allKeys();
-    return !m_liveTrackConfig.isEmpty()
-            && m_liveTrackConfig.value("SessionID").isValid()
-            && m_liveTrackConfig.value("UrlTemplate").isValid();
-}
-
 void Service::applyLiveTrackConfig()
 {
-    m_settings.setValue(QStringLiteral("phoneTrackUrlTemplate"), m_liveTrackConfig.value("UrlTemplate").toString());
-    m_settings.setValue(QStringLiteral("phoneTrackSession"),     m_liveTrackConfig.value("SessionID").toString());
-    m_settings.setValue(QStringLiteral("phoneTrackName"),        m_liveTrackConfig.value("DeviceID").toString());
+    Stumblefish::PhoneTrackConfig conf;
+    m_settings.setValue(QStringLiteral("phoneTrackUrlTemplate"), conf.liveTrackConfig()->value("UrlTemplate").toString());
+    m_settings.setValue(QStringLiteral("phoneTrackSession"),     conf.liveTrackConfig()->value("SessionID").toString());
+    m_settings.setValue(QStringLiteral("phoneTrackName"),        conf.liveTrackConfig()->value("DeviceID").toString());
     emit settingsChanged(m_settings.toMap());
 }
 #endif

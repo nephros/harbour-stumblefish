@@ -9,6 +9,7 @@
 namespace Stumblefish {
 
 static char PhoneTrackConfigFilePath[] = "/usr/share/harbour-stumblefish/phonetrack.ini";
+const char LiveTrackConfigFilePath[] = ".config/harbour-livetrack/harbour-livetrack.conf";
 
 struct PhoneTrackInfo {
      uint id;
@@ -27,6 +28,7 @@ class PhoneTrackConfig : public QSettings
 {
     Q_OBJECT
     Q_PROPERTY(int count READ count CONSTANT);
+    Q_PROPERTY(bool haveLiveTrackConfig READ haveLiveTrackConfig CONSTANT);
     Q_PROPERTY(QVariantList model READ model NOTIFY modelChanged);
 public:
     explicit PhoneTrackConfig(const QString &path = QString::fromLatin1(PhoneTrackConfigFilePath),
@@ -35,6 +37,7 @@ public:
         {
             if (isWritable())
                  qCritical() << "PhoneTrackConfig: ini file is writable!";
+            checkLiveTrackConfig();
         };
 
     /* we hide all write operations: */
@@ -48,10 +51,17 @@ public:
 
     QVariantList model();
 
+    bool haveLiveTrackConfig();
+
+public Q_SLOTS:
+    QVariantMap* liveTrackConfig();
+
 Q_SIGNALS:
     void modelChanged();
 
 private:
+    void checkLiveTrackConfig();
+
     /* hide all write operations: */
     //PhoneTrackConfig(const QString &organization, const QString &application = QString(), QObject *parent = Q_NULLPTR);
     //PhoneTrackConfig(Scope scope, const QString &organization, const QString &application = QString(), QObject *parent = Q_NULLPTR);
@@ -70,6 +80,8 @@ private:
     void setIniCodec(const char *codecName);
     void setValue(const QString &key, const QVariant &value);
     void sync();
+
+    QVariantMap* m_liveTrackConfig = nullptr;
 };
 
 } // namespace
