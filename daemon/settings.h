@@ -5,9 +5,6 @@
 #include <QObject>
 #include <QSettings>
 #include <QVariantMap>
-#ifdef TRACK_MY_PHONE
-#include "phonetrack.h"
-#endif
 
 class Settings : public QObject
 {
@@ -36,7 +33,7 @@ public:
 #ifdef TRACK_MY_PHONE
     bool phoneTrackEnabled() const;
     bool phoneTrackLiveMode() const;
-    Stumblefish::PhoneTrack::Type phoneTrackType() const;
+    uint phoneTrackType() const;
     QString phoneTrackUrlTemplate() const;
     QString phoneTrackSessionID() const;
     QString phoneTrackDeviceID() const;

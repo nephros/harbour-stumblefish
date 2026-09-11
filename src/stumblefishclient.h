@@ -20,7 +20,9 @@ class StumblefishClient : public QObject
     Q_PROPERTY(QVariantList mapCells READ mapCells NOTIFY mapCellsChanged)
     Q_PROPERTY(bool busy READ busy NOTIFY busyChanged)
     Q_PROPERTY(QString message READ message NOTIFY messageChanged)
+#ifdef TRACK_MY_PHONE
     Q_PROPERTY(bool canApplyLiveTrackConfig MEMBER m_liveTrackConfig NOTIFY canApplyLiveTrackConfigChanged)
+#endif
 
 public:
     explicit StumblefishClient(QObject *parent = 0);
@@ -59,7 +61,7 @@ public:
 
 #ifdef TRACK_MY_PHONE
     Q_INVOKABLE void applyLiveTrackConfig();
-    Q_INVOKABLE void setPhoneTrackType(int type);
+    Q_INVOKABLE void setPhoneTrackType(unsigned int type);
     Q_INVOKABLE void setPhoneTrackUrlTemplate(const QString &url);
     Q_INVOKABLE void setPhoneTrackEnabled(bool enabled);
     Q_INVOKABLE void setPhoneTrackLive(bool enabled);

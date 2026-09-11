@@ -18,6 +18,10 @@
 
 #include <climits>
 
+#ifdef TRACK_MY_PHONE
+#include <QSettings>
+#endif
+
 namespace {
 
 const qint64 DuplicateHeartbeatMs = 15 * 60 * 1000;
@@ -707,7 +711,7 @@ bool Service::collectReport(const PositionFix &fix, const QString &reason)
             } else
                 _phoneTrackSubmissionsSkipped++;
         } else
-            qDebug() << "PhoneTrack: skipped sumbission, too soon";
+            qInfo() << "PhoneTrack: skipped sumbission, too soon";
     }
 #endif
 

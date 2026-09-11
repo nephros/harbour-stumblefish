@@ -14,5 +14,8 @@ const char OrganizationName[] = "org.stumblefish";
 const char ApplicationName[] = "harbour-stumblefish";
 
 }
+#ifdef TRACK_MY_PHONE
+#include "phonetrackconfig.h"
+#endif
 
 #endif

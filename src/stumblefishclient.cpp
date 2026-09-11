@@ -410,9 +410,8 @@ void StumblefishClient::setPhoneTrackLive(bool enabled)
 {
     setSetting(QStringLiteral("phoneTrackLiveMode"), enabled);
 }
-void StumblefishClient::setPhoneTrackType(int type)
+void StumblefishClient::setPhoneTrackType(uint type)
 {
-    // FIXME/TODO: See daemon/settings.cpp
     setSetting(QStringLiteral("phoneTrackType"), type);
 }
 void StumblefishClient::setPhoneTrackUrlTemplate(const QString &url)

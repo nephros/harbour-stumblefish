@@ -10,10 +10,6 @@
 #include "mapnetworkaccessmanagerfactory.h"
 #include "stumblefishclient.h"
 
-#ifdef TRACK_MY_PHONE
-#include "phonetrack.h"
-#endif
-
 int main(int argc, char *argv[])
 {
     QGuiApplication *application = SailfishApp::application(argc, argv);
@@ -33,7 +29,8 @@ int main(int argc, char *argv[])
     view->rootContext()->setContextProperty(QStringLiteral("appVersion"), application->applicationVersion());
 #ifdef TRACK_MY_PHONE
     view->rootContext()->setContextProperty(QStringLiteral("phoneTrackingAvailable"), true);
-    qmlRegisterUncreatableType<Stumblefish::PhoneTrack>("PhoneTrack", 1, 0, "PhoneTrackType", "Not creatable");
+    Stumblefish::PhoneTrackConfig trackConfig;
+    view->rootContext()->setContextProperty(QStringLiteral("PhoneTrackConfig"), &trackConfig);
 #else
     view->rootContext()->setContextProperty(QStringLiteral("phoneTrackingAvailable"), false);
 #endif

@@ -6,9 +6,6 @@
 #include <QList>
 
 #include "observations.h"
-#ifdef TRACK_MY_PHONE
-#include "phonetrack.h"
-#endif
 
 class QNetworkAccessManager;
 class QNetworkReply;
@@ -46,7 +43,7 @@ private:
     QByteArray buildPayload(const QList<Report> &reports, QList<int> *includedIds) const;
 #ifdef TRACK_MY_PHONE
     QUrl buildTrackingUrl(Report &report, int includedId) const;
-    QUrl formatTrackingUrl(const Stumblefish::PhoneTrack::Type t, const QUrl& tpl,
+    QUrl formatTrackingUrl(unsigned int trackType, const QUrl& tpl,
                             const QString& session,
                             const QString& device,
                             const Report& report,

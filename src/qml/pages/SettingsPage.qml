@@ -1,7 +1,6 @@
 // SPDX-License-Identifier: MIT
 import QtQuick 2.0
 import Sailfish.Silica 1.0
-import PhoneTrack 1.0
 
 Page {
     id: page
@@ -294,42 +293,17 @@ Page {
                 onClicked: stumblefish.setPhoneTrackEnabled(checked)
             }
 
+            ListModel { id: phoneTrackConfigModel
+                Component.onCompleted: {
+                    var cfgs = PhoneTrackConfig.model
+                    cfgs.sort(function(a,b) { return a.id - b.id })
+                    cfgs.forEach(function(e) { phoneTrackConfigModel.append(e) })
+                }
+            }
             Column { id: phoneTrackCol
                 visible: phoneTrackingAvailable
                 width: parent.width
                 enabled: phoneTrackEnable.checked
-
-                ListModel { id: phoneTrackModel
-                    ListElement {
-                        enabled: true
-                        text: "NextCloud PhoneTrack"
-                        type: PhoneTrackType.NextCloudPhoneTrack
-                        post: false // default: GET
-                        urlTemplate: "https://server.example.org/{nextcloud}"
-                        hasSession: true
-                        hasName: true
-                    }
-
-                    ListElement {
-                        enabled: false
-                        text: "OsmAnd/Traccar"
-                        type: PhoneTrackType.Traccar
-                        post: false // default: GET
-                        urlTemplate: ""
-                        hasSession: true
-                        hasName: false
-                    }
-                    ListElement {
-                        enabled: false
-                        text: "Other (Custom GET URL)"
-                        type: PhoneTrackType.Custom
-                        post: false // default: GET
-                        urlTemplate: ""
-                        hasSession: true
-                        hasName: true
-                    }
-
-                }
 
                 ComboBox { id: phoneTrackBox
                     width: parent.width
@@ -338,19 +312,19 @@ Page {
 
                     menu: ContextMenu {
                         Repeater {
-                            model: phoneTrackModel
+                            model: phoneTrackConfigModel
 
                             delegate: MenuItem {
-                                enabled: model.enabled
-                                text: model.text
-                                onClicked: stumblefish.setPhoneTrackType(model.type)
-                                //Component.onCompleted: if (model.type == stumblefish.phoneTrackType) phoneTrackBox.currentIndex = index
+                                enabled: model.supported
+                                opacity: enabled ? 1.0 : Theme.opacityLow
+                                text: model.id + ": " + model.name
+                                onClicked: if(supported) { stumblefish.setPhoneTrackType(model.id) } else { return }
                             }
                         }
                     }
                 }
                 ButtonLayout {
-                    visible: (phoneTrackBox.currentIndex <= 0) && stumblefish.canApplyLiveTrackConfig
+                    visible: (phoneTrackBox.currentIndex <= 1) && stumblefish.canApplyLiveTrackConfig
                     Button {
                         text: qsTr("Apply from LiveTrack")
                         onClicked: Remorse.popupAction(page, qsTr("Importing config"), function() { stumblefish.applyLiveTrackConfig() })
@@ -371,8 +345,8 @@ Page {
                     label: "Submission URL"
                     text: !!stumblefish.settings.phoneTrackUrlTemplate
                            ? stumblefish.settings.phoneTrackUrlTemplate
-                           : phoneTrackModel.get(phoneTrackBox.currentIndex).urlTemplate
-                    placeholderText: phoneTrackModel.get(phoneTrackBox.currentIndex).urlTemplate
+                           : "" // fixme: default template
+                    //placeholderText: phoneTrackModel.get(phoneTrackBox.currentIndex).urlTemplate
                     description: phoneTrackBox.currentIndex <= 0
                            ? qsTr("the app path will be added automatically")
                            : ""
@@ -388,7 +362,7 @@ Page {
                     }
                 }
                 PasswordField { id: phoneTrackSession
-                    enabled:  phoneTrackModel.get(phoneTrackBox.currentIndex).hasSession
+                    //enabled:  phoneTrackModel.get(phoneTrackBox.currentIndex).hasSession
                     text: stumblefish.settings.phoneTrackSessionID
                     label: "Session ID"
                     inputMethodHints: Qt.ImhNoPredictiveText | Qt.ImhNoAutoUppercase
@@ -399,7 +373,7 @@ Page {
                     }
                 }
                 TextField { id: phoneTrackName
-                    enabled:  phoneTrackModel.get(phoneTrackBox.currentIndex).hasName
+                    //enabled:  phoneTrackModel.get(phoneTrackBox.currentIndex).hasName
                     text: stumblefish.settings.phoneTrackDeviceID
                     placeholderText: enabled ? label : "not required"
                     label: "Device Name (optional)"

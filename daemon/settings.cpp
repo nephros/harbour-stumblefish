@@ -21,7 +21,6 @@ const char ReportRetentionDaysKey[] = "storage/reportRetentionDays";
 const char LastPruneMsKey[] = "storage/lastPruneMs";
 const char DefaultMapTileUrlTemplate[] = "https://tile.openstreetmap.org/{z}/{x}/{y}.png";
 #ifdef TRACK_MY_PHONE
-#include "phonetrack.h"
 const char PhoneTrackEnableKey[] = "phonetrack/enable";
 const char PhoneTrackLiveKey[] = "phonetrack/liveMode";
 const char PhoneTrackTypeKey[] = "phonetrack/type";
@@ -220,7 +219,7 @@ void Settings::setValue(const QString &key, const QVariant &newValue)
         value = newValue.toString().trimmed();
     } else if (key == QStringLiteral("phoneTrackType")) {
         storageKey = QString::fromLatin1(PhoneTrackTypeKey);
-        value = newValue.toString().trimmed();
+        value = newValue.value<uint>();
 #endif
     } else {
         return;
@@ -305,9 +304,9 @@ bool Settings::phoneTrackLiveMode() const
 {
     return value(QString::fromLatin1(PhoneTrackLiveKey), false).toBool();
 }
-Stumblefish::PhoneTrack::Type Settings::phoneTrackType() const
+uint Settings::phoneTrackType() const
 {
-    return (Stumblefish::PhoneTrack::Type) value(QString::fromLatin1(PhoneTrackTypeKey), 0).toInt();
+    return value(QString::fromLatin1(PhoneTrackTypeKey), 0).value<uint>();
 }
 QString Settings::phoneTrackUrlTemplate() const
 {

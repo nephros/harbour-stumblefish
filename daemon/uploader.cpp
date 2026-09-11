@@ -13,9 +13,8 @@
 #include <QNetworkRequest>
 #include <QUrl>
 #ifdef TRACK_MY_PHONE
-#include "phonetrack.h"
 #include <QUrlQuery>
-#include <cmath>
+#include "phonetrackconfig.h"
 #endif
 
 #include <climits>
@@ -29,7 +28,7 @@ const int InvalidLocationAreaCode = 0xffff;
 const qint64 InvalidCellId = 0x0fffffff;
 
 #ifdef TRACK_MY_PHONE
-const char NCPhoneTrackAppPath[] = "/apps/phonetrack";
+const char NCPhoneTrackAppUri[] = "/apps/phonetrack";
 #endif
 
 int age(qint64 reportTimestamp, qint64 seenTimestamp)
@@ -247,23 +246,7 @@ void Uploader::replyFinished()
 }
 
 #ifdef TRACK_MY_PHONE
-/* default:
- * Nextcloud PhoneTrack:
- * GET or POST to: https://your.server.org/NC_PATH_IF_NECESSARY/index.php/apps/phonetrack/logGet/TOKEN/DEVNAME
- * query parameters:
- *   - lat (decimal latitude)
- *   - lon (decimal longitude)
- *   - alt (altitude in meters)
- *   - timestamp (epoch timestamp in seconds)
- *   - acc (accuracy in meters)
- *   - bat (battery level in percent)
- *   - sat (number of satellites)
- *   - useragent (device user agent)
- *   - speed (speed in meter per second)
- *   - bearing (bearing in decimal degrees)
- */
-
-QUrl Uploader::formatTrackingUrl(const Stumblefish::PhoneTrack::Type t, const QUrl& tpl,
+QUrl Uploader::formatTrackingUrl(uint trackType, const QUrl& tpl,
                             const QString& session,
                             const QString& device,
                             const Report& report,
@@ -272,14 +255,25 @@ QUrl Uploader::formatTrackingUrl(const Stumblefish::PhoneTrack::Type t, const QU
     QUrl url(tpl);
     QUrlQuery q(url.query());
     QString path = url.path();
-    if(t == Stumblefish::PhoneTrack::Type::NextCloudPhoneTrack) {
-        path.append(QString::fromLatin1(NCPhoneTrackAppPath));
-        path.append("/logGet");
+
+    Stumblefish::PhoneTrackConfig conf;
+    if(trackType == conf.info(conf.defaultConfig())->id) { // nextcloud phoneTrack
+        path.append(QString::fromLatin1(NCPhoneTrackAppUri));
         path.append("/" + session);
         if (!device.isEmpty())
             path.append("/" + device);
-    } else if(t == Stumblefish::PhoneTrack::Type::Traccar)
+    } else if(trackType == conf.info("traccar")->id) {
         q.addQueryItem(QStringLiteral("id"), session);
+    } else if(trackType == conf.info("custom")->id) {
+        QString qs = q.toString();
+        qs.replace(QStringLiteral("{latitude}"), QString::number(report.position.latitude));
+        qs.replace(QStringLiteral("{longitude}"), QString::number(report.position.longitude));
+        qs.replace(QStringLiteral("{useragent}"), QUrl::toPercentEncoding(ua));
+        qs.replace(QStringLiteral("{session}"), session);
+        url.setPath(path);
+        url.setQuery(QUrlQuery(qs));
+        return url;
+    }
     q.addQueryItem(QStringLiteral("lat"), QString::number(report.position.latitude));
     q.addQueryItem(QStringLiteral("lon"), QString::number(report.position.longitude));
     q.addQueryItem(QStringLiteral("alt"), QString::number(report.position.altitude));
