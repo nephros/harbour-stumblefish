@@ -213,10 +213,6 @@ QVariantMap Service::status() const
     map.insert(QStringLiteral("longitude"), fix.longitude);
     map.insert(QStringLiteral("accuracy"), fix.accuracy);
     map.insert(QStringLiteral("fixTimestampMs"), fix.timestampMs);
-#ifdef TRACK_MY_PHONE
-    map.insert(QStringLiteral("direction"), fix.direction);
-    map.insert(QStringLiteral("speed"), fix.speed);
-#endif
     return map;
 }
 
