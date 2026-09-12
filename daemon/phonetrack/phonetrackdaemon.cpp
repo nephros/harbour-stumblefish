@@ -16,7 +16,7 @@
 #include "settings.h"
 #include <climits>
 
-//namespace {
+namespace {
 const char PhoneTrackEnableKey[] = "phonetrack/enable";
 const char PhoneTrackLiveKey[] = "phonetrack/liveMode";
 const char PhoneTrackTypeKey[] = "phonetrack/type";
@@ -29,7 +29,7 @@ static qint64 _phoneTrackSubmissionsSkipped = 0;
 static qint64 _phoneTrackLastSubmission = 0;
 const int _phoneTrackMinSubmissionInterval = 1000 * 60 * 15;
 
-//}
+}
 
 Watcher::Watcher(QObject *parent)
     : QObject(parent)
@@ -65,8 +65,38 @@ Watcher::Watcher(QObject *parent)
 Watcher::~Watcher()
 {
 }
+
+QVariantMap Watcher::settings() const
+{
+}
+
+QVariantMap Watcher::status() const
+{
+    QVariantMap map;
+    map.insert(QStringLiteral("phoneTrackEnabled"), m_settings.phoneTrackEnabled());
+    map.insert(QStringLiteral("phoneTrackLiveMode"), m_settings.phoneTrackLiveMode());
+    map.insert(QStringLiteral("phoneTrackSubmissions"), QVariant::fromValue(_phoneTrackSubmissions));
+    map.insert(QStringLiteral("phoneTrackSubmissionsSkipped"), QVariant::fromValue(_phoneTrackSubmissionsSkipped));
+    map.insert(QStringLiteral("canApplyLiveTrackConfig"), m_settings.phoneTrackEnabled());
+    return map;
+}
+
 void Watcher::onReportsChanged()
 {
+    if (m_settings.phoneTrackEnabled() && m_settings.phoneTrackLiveMode()) {
+        if ((QDateTime::currentMSecsSinceEpoch() - _phoneTrackLastSubmission) > _phoneTrackMinSubmissionInterval) {
+            // lets  e a bit more accurate here
+            if (fix.accuracy > 0.0 && fix.accuracy < 50.0) {
+                report.position.satellites = m_position.satellitesInUse();
+                report.battery =  m_battery.chargePercentage();
+                m_uploader.uploadTracked(report);
+                _phoneTrackLastSubmission = QDateTime::currentMSecsSinceEpoch();
+                _phoneTrackSubmissions++;
+            } else
+                _phoneTrackSubmissionsSkipped++;
+        } else
+            qInfo() << "PhoneTrack: skipped sumbission, too soon";
+    }
 }
 void Watcher::onSettingsChanged(QVariant)
 {

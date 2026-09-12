@@ -34,13 +34,6 @@ const char NotificationTurnOffAction[] = "turn-off";
 const char StatusNotificationCategory[] = "org.stumblefish.status";
 const char StatusNotificationOrigin[] = "org.stumblefish.status";
 
-#ifdef TRACK_MY_PHONE
-static qint64 _phoneTrackSubmissions = 0;
-static qint64 _phoneTrackSubmissionsSkipped = 0;
-static qint64 _phoneTrackLastSubmission = 0;
-const int _phoneTrackMinSubmissionInterval = 1000 * 60 * 15;
-#endif
-
 bool isStatusNotification(Notification *notification)
 {
     return notification
@@ -211,14 +204,6 @@ QVariantMap Service::status() const
     map.insert(QStringLiteral("batteryPluggedIn"), m_battery.pluggedIn());
     map.insert(QStringLiteral("activeBackgroundPausedOnLowBattery"),
                activeBackgroundPausedForBattery());
-#ifdef TRACK_MY_PHONE
-    map.insert(QStringLiteral("phoneTrackEnabled"), m_settings.phoneTrackEnabled());
-    map.insert(QStringLiteral("phoneTrackLiveMode"), m_settings.phoneTrackLiveMode());
-    map.insert(QStringLiteral("phoneTrackSubmissions"), QVariant::fromValue(_phoneTrackSubmissions));
-    map.insert(QStringLiteral("phoneTrackSubmissionsSkipped"), QVariant::fromValue(_phoneTrackSubmissionsSkipped));
-    map.insert(QStringLiteral("canApplyLiveTrackConfig"), m_settings.phoneTrackEnabled());
-#endif
-
     const PositionFix fix = m_position.lastFix();
     map.insert(QStringLiteral("hasFix"), fix.valid);
     map.insert(QStringLiteral("gnssBackedFix"), m_position.hasGnssFix(fix.timestampMs));
@@ -690,22 +675,6 @@ bool Service::collectReport(const PositionFix &fix, const QString &reason)
     }
     report.timestampMs = QDateTime::currentMSecsSinceEpoch();
 
-#ifdef TRACK_MY_PHONE
-    if (m_settings.phoneTrackEnabled() && m_settings.phoneTrackLiveMode()) {
-        if ((QDateTime::currentMSecsSinceEpoch() - _phoneTrackLastSubmission) > _phoneTrackMinSubmissionInterval) {
-            // lets  e a bit more accurate here
-            if (fix.accuracy > 0.0 && fix.accuracy < 50.0) {
-                report.position.satellites = m_position.satellitesInUse();
-                report.battery =  m_battery.chargePercentage();
-                m_uploader.uploadTracked(report);
-                _phoneTrackLastSubmission = QDateTime::currentMSecsSinceEpoch();
-                _phoneTrackSubmissions++;
-            } else
-                _phoneTrackSubmissionsSkipped++;
-        } else
-            qInfo() << "PhoneTrack: skipped sumbission, too soon";
-    }
-#endif
 
     if (report.cells.isEmpty() && report.ble.isEmpty() && report.wifi.count() < 2) {
         m_lastMessage = QStringLiteral("Not enough radio observations for a report");

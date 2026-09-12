@@ -28,6 +28,9 @@ public:
     ~Watcher();
 
 public Q_SLOTS:
+    QVariantMap status() const;
+    QVariantMap settings() const;
+
     Q_NOREPLY void applyLiveTrackConfig();
     bool canApplyLiveTrackConfig();
 
