@@ -1,4 +1,6 @@
 %bcond_without phonetrack
+%bcond_without glassfish
+%bcond_without jollapass
 
 # SPDX-License-Identifier: MIT
 Name:       harbour-stumblefish
@@ -66,6 +68,12 @@ Summary: PhoneTrack Companion for Stumblefish
 %qmake5 VERSION='%{version}' \
 %if %{with phonetrack}
     CONFIG+=phonetrack \
+%endif
+%if %{with glassfish}
+    CONFIG+=glassfish \
+%endif
+%if %{with jollapass}
+    CONFIG+=jollapass \
 %endif
 %{nil}
 
