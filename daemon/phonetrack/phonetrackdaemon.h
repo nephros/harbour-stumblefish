@@ -4,51 +4,52 @@
 
 #include <QObject>
 #include <QDBusContext>
-#include <QDBusServiceWatcher>
 #include <QDBusInterface>
-#include <QDBusPendingCallWatcher>
-#include <QDBusVariant>
-//#include <QSet>
-//#include <QTimer>
+#include <QDBusServiceWatcher>
 #include <QVariantList>
 #include <QVariantMap>
 
 #include "settings.h"
-#include "phonetrackconfig.h"
+#include "common/constants.h"
+//#include "common/phonetrackconfig.h"
 #include "trackuploader.h"
 
 
-class Watcher : public QObject, protected QDBusContext
+class Companion : public QObject, protected QDBusContext
 {
     Q_OBJECT
-    Q_CLASSINFO("D-Bus Interface", "org.stumblefish.PhoneTrack")
+    Q_CLASSINFO("D-Bus Interface", "org.stumblefish.Tracker")
 
 public:
-    explicit Watcher(QObject *parent = 0);
-    ~Watcher();
+    explicit Companion(QObject *parent = 0);
+    ~Companion();
 
 public Q_SLOTS:
-    QVariantMap status() const;
-    QVariantMap settings() const;
 
     Q_NOREPLY void applyLiveTrackConfig();
     bool canApplyLiveTrackConfig();
 
 Q_SIGNALS:
 private Q_SLOTS:
+    QVariantMap status() const;
+    QVariantMap settings() const;
+
     void onReportsChanged();
     void onSettingsChanged(QVariant);
     void onStatusChanged(QVariant);
 private:
-    void asyncCall(const QString &method, const QVariantList &arguments, const QString &kind);
-    void setSetting(const QString &key, const QVariant &value);
-    QVariant getSetting(const QString &key);
+    //void asyncCall(const QString &method, const QVariantList &arguments, const QString &kind);
+    //void setSetting(const QString &key, const QVariant &value);
+    //QVariant getSetting(const QString &key);
+    void getReport(int reportId = 0);
+
+    QDBusInterface *m_stumbleService;
+    QDBusServiceWatcher m_stumbleWatcher;
 
     Settings m_settings;
+    TrackUploader m_uploader;
     Stumblefish::PhoneTrackConfig* m_phoneTrackConfig;
-    QDBusServiceWatcher m_daemonWatcher;
-    QDBusInterface *m_interface;
-    TrackUploader* m_uploader;
+
 
 };
 

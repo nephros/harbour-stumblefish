@@ -8,14 +8,16 @@ QMAKE_LFLAGS += -pie
 
 QT -= gui
 #QT += core dbus network positioning
-QT += core dbus
+QT += core dbus network
 
 # PKGCONFIG += connman-qt5 nemonotifications-qt5 qofonoext systemsettings
 
-INCLUDEPATH += . ../../common ../
+INCLUDEPATH += . ../..
 DEFINES += APP_VERSION=\\\"$$VERSION\\\"
 
 DEFINES += TRACK_MY_PHONE
+
+TARGET.depends += harbour-stumblefishd
 
 SOURCES += \
     main.cpp \

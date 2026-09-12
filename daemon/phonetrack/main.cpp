@@ -2,11 +2,14 @@
 #include <signal.h>
 
 #include <QCoreApplication>
-#include <QDebug>
+#include<QDBusServiceWatcher>
+#include<QDBusConnection>
+#include<QObject>
 
-#include "constants.h"
+#include "common/constants.h"
 #include "phonetrackdaemon.h"
 
+#include <QDebug>
 namespace {
 
 void signalHandler(int signal)
@@ -28,8 +31,9 @@ int main(int argc, char *argv[])
     signal(SIGINT, signalHandler);
     signal(SIGTERM, signalHandler);
 
-    Watcher service;
-    Q_UNUSED(service);
+    Companion companion;
+    Q_UNUSED(companion);
+//    signal(SIGUSR1, service.reloadConfig);
 
     return app.exec();
 }

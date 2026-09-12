@@ -24,7 +24,10 @@ const char ObjectPath[] = "/org/stumblefish/Tracker";
 const char InterfaceName[] = "org.stumblefish.Tracker";
 const char OrganizationName[] = "org.stumblefish";
 const char ApplicationName[] = "harbour-trackfish";
-
+const QByteArray UserAgent = QStringLiteral("harbour-stumblefish/%1 (%2)")
+                             .arg(QStringLiteral(APP_VERSION))
+                             .arg(QStringLiteral("PhoneTrack Companion"))
+                             .toUtf8();
 }
 
 #endif
