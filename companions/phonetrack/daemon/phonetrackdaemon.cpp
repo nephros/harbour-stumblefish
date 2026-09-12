@@ -7,7 +7,7 @@
 #include <QDebug>
 #include <QStringList>
 
-#include "common/constants.h"
+#include "companions/common/constants.h"
 #include "phonetrackdaemon.h"
 #include "settings.h"
 

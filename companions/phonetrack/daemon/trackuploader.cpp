@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: MIT
 #include "trackuploader.h"
 
-#include "common/constants.h"
+#include "companions/common/constants.h"
 //#include "daemon/observations.h"
 
 //#include <QJsonArray>
@@ -293,14 +293,14 @@ void TrackUploader::uploadTracked(const Report& report, const QVariantMap& setti
                                  settings.value("phoneTrackSessionID").toString(),
                                  settings.value("phoneTrackDeviceID").toString(),
                                  report,
-                                 Trackfish::UserAgent
+                                 Trackfish::UserAgent.toUtf8()
                             );
      if (!url.isValid() || url.scheme().isEmpty() || url.host().isEmpty()) {
          emit uploadFinished(false, QStringLiteral("Phone track endpoint is invalid"));
          return;
     }
     QNetworkRequest request(url);
-    request.setRawHeader("User-Agent", Trackfish::UserAgent);
+    request.setRawHeader("User-Agent", Trackfish::UserAgent.toUtf8());
     m_network->get(request);
 
 }

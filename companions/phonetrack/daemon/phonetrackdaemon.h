@@ -10,8 +10,7 @@
 #include <QVariantMap>
 
 #include "settings.h"
-#include "common/constants.h"
-//#include "common/phonetrackconfig.h"
+#include "companions/common/constants.h"
 #include "trackuploader.h"
 
 

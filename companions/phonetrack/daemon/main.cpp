@@ -6,7 +6,7 @@
 #include<QDBusConnection>
 #include<QObject>
 
-#include "common/constants.h"
+#include "companions/common/constants.h"
 #include "phonetrackdaemon.h"
 
 #include <QDebug>

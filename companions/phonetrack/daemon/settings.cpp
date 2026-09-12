@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: MIT
 #include "settings.h"
 
-#include "common/constants.h"
+#include "companions/common/constants.h"
 
 namespace {
 const char PhoneTrackEnableKey[] = "phonetrack/enable";
