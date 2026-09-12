@@ -85,7 +85,7 @@ QVariantMap Companion::status() const
     const PositionFix fix = m_position.lastFix();
     map.insert(QStringLiteral("direction"), fix.direction);
     map.insert(QStringLiteral("speed"), fix.speed);
-    /*
+    */
     return map;
 }
 
