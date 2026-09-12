@@ -19,8 +19,7 @@ DEFINES += TRACK_MY_PHONE
 
 TARGET.depends += harbour-stumblefishd
 
-GLOBAL_COMMON_DIR = ../../../common
-COMPANIONS_COMMON_DIR = ../../common
+include(../../common/common.pri)
 
 SOURCES += \
     main.cpp \

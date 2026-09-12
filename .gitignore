@@ -12,6 +12,9 @@
 /daemon/*.o
 /daemon/moc_*.cpp
 /companions/phonetrack/daemon/harbour-trackfishd
+/companions/*/*.o
+/companions/*/Makefile
+/companions/*/moc_*.cpp
 /companions/*/daemon/*.o
 /companions/*/daemon/Makefile
 /companions/*/daemon/moc_*.cpp
