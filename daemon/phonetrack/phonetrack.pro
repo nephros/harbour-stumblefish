@@ -12,17 +12,21 @@ QT += core dbus
 
 # PKGCONFIG += connman-qt5 nemonotifications-qt5 qofonoext systemsettings
 
-INCLUDEPATH += . ../../common
+INCLUDEPATH += . ../../common ../
 DEFINES += APP_VERSION=\\\"$$VERSION\\\"
 
 DEFINES += TRACK_MY_PHONE
 
 SOURCES += \
     main.cpp \
+    settings.cpp \
+    trackuploader.cpp \
     phonetrackdaemon.cpp \
     ../../common/phonetrackconfig.cpp
 
 HEADERS += \
+    settings.h \
+    trackuploader.h \
     phonetrackdaemon.h \
     ../../common/phonetrackconfig.h
 

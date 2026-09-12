@@ -30,15 +30,6 @@ public:
     qint64 lastAutoUploadMs() const;
     void setLastAutoUploadMs(qint64 timestampMs);
 
-#ifdef TRACK_MY_PHONE
-    bool phoneTrackEnabled() const;
-    bool phoneTrackLiveMode() const;
-    uint phoneTrackType() const;
-    QString phoneTrackUrlTemplate() const;
-    QString phoneTrackSessionID() const;
-    QString phoneTrackDeviceID() const;
-#endif
-
     QVariantMap toMap() const;
 
 public Q_SLOTS:
