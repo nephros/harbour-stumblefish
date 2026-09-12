@@ -11,6 +11,13 @@
 /daemon/harbour-stumblefishd
 /daemon/*.o
 /daemon/moc_*.cpp
+/companions/*/*.o
+/companions/*/Makefile
+/companions/*/moc_*.cpp
+/companions/Makefile
+/companions/glassfish/harbour-glassfishd
+/companions/jollapass/harbour-jollapassd
+/companions/phonetrack/harbour-phonetrackd
 /tests/Makefile
 /tests/tst_uploaduseragent
 /tests/*.o

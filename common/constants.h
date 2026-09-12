@@ -12,7 +12,6 @@ const char InterfaceName[] = "org.stumblefish.Collector";
 const char DefaultEndpoint[] = "https://api.beacondb.net/v2/geosubmit";
 const char OrganizationName[] = "org.stumblefish";
 const char ApplicationName[] = "harbour-stumblefish";
-
 }
 
 #endif
