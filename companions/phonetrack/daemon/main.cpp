@@ -2,11 +2,7 @@
 #include <signal.h>
 
 #include <QCoreApplication>
-#include<QDBusServiceWatcher>
-#include<QDBusConnection>
-#include<QObject>
 
-#include "companions/common/constants.h"
 #include "phonetrackdaemon.h"
 
 #include <QDebug>
