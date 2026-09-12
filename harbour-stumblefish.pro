@@ -13,7 +13,7 @@ phonetrack {
   CONFIG += warn_on
   DISTFILES += common/phonetrack.ini
 
-  SUBDIRS += daemon/phonetrack
+  SUBDIRS += companions/phonetrack/daemon
 
   phonetrackini.path = /usr/share/harbour-stumblefish/lib/phonetrack/
   phonetrackini.files += common/phonetrack.ini

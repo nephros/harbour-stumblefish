@@ -11,10 +11,10 @@
 /daemon/harbour-stumblefishd
 /daemon/*.o
 /daemon/moc_*.cpp
-/daemon/phonetrack/Makefile
-/daemon/phonetrack/harbour-trackfishd
-/daemon/phonetrack/*.o
-/daemon/phonetrack/moc_*.cpp
+/companions/phonetrack/daemon/harbour-trackfishd
+/companions/*/daemon/*.o
+/companions/*/daemon/Makefile
+/companions/*/daemon/moc_*.cpp
 /tests/Makefile
 /tests/tst_uploaduseragent
 /tests/*.o
