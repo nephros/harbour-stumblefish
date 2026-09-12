@@ -7,4 +7,17 @@
 #define TRACKFISH_VERSION "1.0"
 #endif
 #endif // TRACK_MY_PHONE
+       //
+#ifdef GLASSFISH
+#ifndef GLASSFISH_VERSION
+#define GLASSFISH_VERSION "1.0"
+#endif
+#endif // GLASSFISH
+
+#ifdef FIND_JOLLA_BUDDIES
+#ifndef JOLLAPASS_VERSION
+#define JOLLAPASS_VERSION "1.0"
+#endif
+#endif // FIND_JOLLA_BUDDIES
+
 #endif // STUMBLEFISH_COMPANION_VERSIONS_H
