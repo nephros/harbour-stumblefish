@@ -204,6 +204,7 @@ QVariantMap Service::status() const
     map.insert(QStringLiteral("batteryPluggedIn"), m_battery.pluggedIn());
     map.insert(QStringLiteral("activeBackgroundPausedOnLowBattery"),
                activeBackgroundPausedForBattery());
+
     const PositionFix fix = m_position.lastFix();
     map.insert(QStringLiteral("hasFix"), fix.valid);
     map.insert(QStringLiteral("gnssBackedFix"), m_position.hasGnssFix(fix.timestampMs));
@@ -675,7 +676,6 @@ bool Service::collectReport(const PositionFix &fix, const QString &reason)
     }
     report.timestampMs = QDateTime::currentMSecsSinceEpoch();
 
-
     if (report.cells.isEmpty() && report.ble.isEmpty() && report.wifi.count() < 2) {
         m_lastMessage = QStringLiteral("Not enough radio observations for a report");
         emitStatus();
@@ -1003,5 +1003,3 @@ void Service::maybeQuitForAppLifecycle()
         m_lifecycleQuitTimer.start(AppLifecycleQuitDelayMs);
     }
 }
-
-
