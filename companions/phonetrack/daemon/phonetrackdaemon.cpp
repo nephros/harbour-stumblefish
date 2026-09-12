@@ -81,6 +81,11 @@ QVariantMap Companion::status() const
     map.insert(QStringLiteral("phoneTrackSubmissionsSkipped"), QVariant::fromValue(_phoneTrackSubmissionsSkipped));
     map.insert(QStringLiteral("canApplyLiveTrackConfig"), m_settings.phoneTrackEnabled());
     */
+    /*
+    const PositionFix fix = m_position.lastFix();
+    map.insert(QStringLiteral("direction"), fix.direction);
+    map.insert(QStringLiteral("speed"), fix.speed);
+    /*
     return map;
 }
 
