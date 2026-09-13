@@ -8,10 +8,6 @@ PKGCONFIG += sailfishapp
 INCLUDEPATH += . ../common
 DEFINES += APP_VERSION=\\\"$$VERSION\\\"
 
-phonetrack {
-  include(../phonetrack.pri)
-}
-
 SOURCES += \
     main.cpp \
     mapnetworkaccessmanagerfactory.cpp \

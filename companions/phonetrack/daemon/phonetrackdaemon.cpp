@@ -4,10 +4,11 @@
 #include <QDateTime>
 #include <QDBusConnection>
 #include <QDBusPendingCallWatcher>
-#include <QDebug>
 #include <QStringList>
+#include <QDebug>
 
 #include "companions/common/constants.h"
+#include "config/phonetrackconfig.h"
 #include "phonetrackdaemon.h"
 #include "settings.h"
 
@@ -21,16 +22,16 @@ const char PhoneTrackUrlKey[] = "phonetrack/url";
 const char PhoneTrackSessionKey[] = "phonetrack/session";
 const char PhoneTrackNameKey[] = "phonetrack/name";
 
-static qint64 _phoneTrackSubmissions = 0;
-static qint64 _phoneTrackSubmissionsSkipped = 0;
-static qint64 _phoneTrackLastSubmission = 0;
-const int _phoneTrackMinSubmissionInterval = 1000 * 60 * 15;
+//static qint64 _phoneTrackSubmissions = 0;
+//static qint64 _phoneTrackSubmissionsSkipped = 0;
+//static qint64 _phoneTrackLastSubmission = 0;
+//const int _phoneTrackMinSubmissionInterval = 1000 * 60 * 15;
 
 const char StumblefishReportsMethod[] = "reports";
 }
 
 Companion::Companion(QObject *parent)
-    : QObject(parent)
+    : StumblefishCompanion(parent)
     , m_stumbleService(new QDBusInterface(QString::fromLatin1(Stumblefish::ServiceName),
                                      QString::fromLatin1(Stumblefish::ObjectPath),
                                      QString::fromLatin1(Stumblefish::InterfaceName),
@@ -61,9 +62,9 @@ Companion::Companion(QObject *parent)
 
 }
 
-Companion::~Companion()
-{
-}
+//Companion::~Companion()
+//{
+//}
 
 QVariantMap Companion::settings() const
 {

@@ -1,7 +1,7 @@
 GLOBAL_COMMON_DIR = $$PWD/../../common
 COMPANIONS_COMMON_DIR = $$PWD
 
-INCLUDEPATH += \
+INCLUDEPATH += . \
             $${COMPANIONS_COMMON_DIR} \
             $${GLOBAL_COMMON_DIR}
 

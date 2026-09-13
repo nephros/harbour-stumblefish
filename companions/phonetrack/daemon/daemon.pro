@@ -12,7 +12,7 @@ QT += core dbus network
 
 # PKGCONFIG += connman-qt5 nemonotifications-qt5 qofonoext systemsettings
 
-INCLUDEPATH += . ../../../
+INCLUDEPATH += . .. ../../../
 DEFINES += APP_VERSION=\\\"$$VERSION\\\"
 
 DEFINES += TRACK_MY_PHONE
@@ -26,13 +26,15 @@ SOURCES += \
     settings.cpp \
     trackuploader.cpp \
     phonetrackdaemon.cpp \
-    $${GLOBAL_COMMON_DIR}/phonetrackconfig.cpp
+    ../config/phonetrackconfig.cpp
 
 HEADERS += \
     settings.h \
     trackuploader.h \
     phonetrackdaemon.h \
-    $${GLOBAL_COMMON_DIR}/phonetrackconfig.h
+    $${COMPANIONS_COMMON_DIR}/constants.h
+    $${COMPANIONS_COMMON_DIR}/abstractcompanion.h
+    ../config/phonetrackconfig.h
 
 INSTALLS += target service dbusservice
 

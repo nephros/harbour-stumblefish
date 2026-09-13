@@ -2,26 +2,25 @@
 #ifndef TRACKFISH_SERVICE_H
 #define TRACKFISH_SERVICE_H
 
-#include <QObject>
-#include <QDBusContext>
-#include <QDBusInterface>
-#include <QDBusServiceWatcher>
-#include <QVariantList>
-#include <QVariantMap>
 
-#include "settings.h"
+#include "companions/common/abstractcompanion.h"
+
+#include <QObject>
+
 #include "companions/common/constants.h"
+#include "config/phonetrackconfig.h"
+#include "settings.h"
 #include "trackuploader.h"
 
-
-class Companion : public QObject, protected QDBusContext
+class Companion : public StumblefishCompanion
 {
     Q_OBJECT
     Q_CLASSINFO("D-Bus Interface", "org.stumblefish.Tracker")
 
 public:
     explicit Companion(QObject *parent = 0);
-    ~Companion();
+//    explicit Companion(StumblefishCompanion *other);
+//    ~Companion();
 
 public Q_SLOTS:
 

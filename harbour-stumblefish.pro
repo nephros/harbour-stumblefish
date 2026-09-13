@@ -23,13 +23,10 @@ phonetrack {
 
   QMAKE_CXXFLAGS += -Werror -Wall
   CONFIG += warn_on
-  DISTFILES += common/phonetrack.ini
+  DISTFILES += companions/phonetrack/config/phonetrack.ini
 
-  SUBDIRS += companions/phonetrack/daemon
+  SUBDIRS += companions/phonetrack
 
-  phonetrackini.path = /usr/share/harbour-stumblefish/lib/phonetrack/
-  phonetrackini.files += common/phonetrack.ini
-  INSTALLS += phonetrackini
 }
 
 OTHER_FILES += \

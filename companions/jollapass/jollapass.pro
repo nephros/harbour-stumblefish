@@ -18,6 +18,6 @@ DEFINES += FIND_JOLLA_BUDDIES
 
 TARGET.depends += harbour-stumblefishd
 
-include(../../common/common.pri)
+include(../common/common.pri)
 
 
