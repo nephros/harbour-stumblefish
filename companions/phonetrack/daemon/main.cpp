@@ -2,10 +2,10 @@
 #include <signal.h>
 
 #include <QCoreApplication>
+#include <QDebug>
 
 #include "phonetrackdaemon.h"
 
-#include <QDebug>
 namespace {
 
 void signalHandler(int signal)

@@ -12,7 +12,7 @@ QT += core dbus network
 
 # PKGCONFIG += connman-qt5 nemonotifications-qt5 qofonoext systemsettings
 
-INCLUDEPATH += . .. ../../../
+INCLUDEPATH += . .. ../..
 DEFINES += APP_VERSION=\\\"$$VERSION\\\"
 
 DEFINES += TRACK_MY_PHONE

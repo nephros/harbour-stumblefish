@@ -8,7 +8,7 @@
 #include <QDBusServiceWatcher>
 #include <QVariantMap>
 
-#include "base/constants.h"
+#include "constants.h"
 
 //class Settings;
 class StumblefishCompanionBase : public QObject, protected QDBusContext

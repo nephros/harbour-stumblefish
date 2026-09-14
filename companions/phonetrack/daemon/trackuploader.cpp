@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: MIT
 #include "trackuploader.h"
 
-#include "companions/common/constants.h"
+#include "companions/base/constants.h"
 #include "config/phonetrackconfig.h"
 //#include "daemon/observations.h"
 

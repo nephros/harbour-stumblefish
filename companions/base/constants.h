@@ -3,7 +3,7 @@
 #define STUMBLEFISH_COMPANION_CONSTANTS_H
 
 #include <QString>
-#include "base/versions.h"
+#include "versions.h"
 
 #ifdef TRACK_MY_PHONE
 namespace Trackfish {

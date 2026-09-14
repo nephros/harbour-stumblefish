@@ -2,11 +2,10 @@
 #ifndef TRACKFISH_SERVICE_H
 #define TRACKFISH_SERVICE_H
 
-#include "companionbase.h"
-
+#include "base/companionbase.h"
 #include <QObject>
+#include <QDebug>
 
-#include "companions/common/constants.h"
 #include "config/phonetrackconfig.h"
 #include "settings.h"
 #include "trackuploader.h"
@@ -18,7 +17,6 @@ class Companion : public StumblefishCompanionBase
 
 public:
     explicit Companion(QObject *parent = 0);
-//    explicit Companion(StumblefishCompanion *other);
 //    ~Companion();
 
 public Q_SLOTS:
@@ -28,12 +26,15 @@ public Q_SLOTS:
 
 Q_SIGNALS:
 private Q_SLOTS:
+    void handleDBusMethod() override; // Implement pure virtual method
+
     QVariantMap status() const;
     QVariantMap settings() const;
 
     void onReportsChanged();
     void onSettingsChanged(QVariant);
     void onStatusChanged(QVariant);
+
 private:
     //void asyncCall(const QString &method, const QVariantList &arguments, const QString &kind);
     //void setSetting(const QString &key, const QVariant &value);

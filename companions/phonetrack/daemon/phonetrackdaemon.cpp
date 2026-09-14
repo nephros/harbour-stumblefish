@@ -7,7 +7,7 @@
 #include <QStringList>
 #include <QDebug>
 
-#include "companions/common/constants.h"
+#include "common/constants.h"
 #include "config/phonetrackconfig.h"
 #include "phonetrackdaemon.h"
 #include "settings.h"
@@ -65,6 +65,11 @@ Companion::Companion(QObject *parent)
 //Companion::~Companion()
 //{
 //}
+
+void Companion::handleDBusMethod()
+{
+    qDebug() << Q_FUNC_INFO;
+}
 
 QVariantMap Companion::settings() const
 {
