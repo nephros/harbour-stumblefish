@@ -6,8 +6,8 @@ SUBDIRS += ./daemon
 include(../companions.pri)
 
 phonetrackini.path = /usr/share/harbour-stumblefish/lib/phonetrack/
-phonetrackini.files += config/phonetrack.ini
+phonetrackini.files += phonetrack.ini
 INSTALLS += phonetrackini
 
-DISTFILES += companions/phonetrack/config/phonetrack.ini
+DISTFILES += phonetrack.ini
 
