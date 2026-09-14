@@ -2,7 +2,8 @@
 #include "trackuploader.h"
 
 #include "companions/base/constants.h"
-#include "config/phonetrackconfig.h"
+#include "keys.h"
+//#include "config/phonetrackconfig.h"
 //#include "daemon/observations.h"
 
 //#include <QJsonArray>
@@ -18,7 +19,7 @@
 #include <climits>
 
 namespace {
-const char NCPhoneTrackAppUri[] = "/apps/phonetrack";
+const char NCPhoneTrackAppUri[] = "/apps/phonetrack/logGet";
 const int AutomaticMaxRetries = 5;
 }
 
@@ -39,7 +40,8 @@ void TrackUploader::reportsHandler(QDBusPendingCallWatcher* watcher)
     watcher->deleteLater();
 }
 
-QUrl TrackUploader::formatTrackingUrl(uint trackType, const QUrl& tpl,
+QUrl TrackUploader::formatTrackingUrl(uint trackType,
+                            const QUrl& tpl,
                             const QString& session,
                             const QString& device,
                             const Trackfish::Report& report,
@@ -49,15 +51,18 @@ QUrl TrackUploader::formatTrackingUrl(uint trackType, const QUrl& tpl,
     QUrlQuery q(url.query());
     QString path = url.path();
 
-    Stumblefish::PhoneTrackConfig conf;
-    if(trackType == conf.info(conf.defaultConfig())->id) { // nextcloud phoneTrack
+//    Stumblefish::PhoneTrackConfig conf;
+//    if(trackType == conf.info(conf.defaultConfig())->id) { // nextcloud phoneTrack
+    if(trackType == 0) { // nextcloud phoneTrack
         path.append(QString::fromLatin1(NCPhoneTrackAppUri));
         path.append("/" + session);
         if (!device.isEmpty())
             path.append("/" + device);
-    } else if(trackType == conf.info("traccar")->id) {
+//    } else if(trackType == conf.info("traccar")->id) {
+    } else if(trackType == 3) {
         q.addQueryItem(QStringLiteral("id"), session);
-    } else if(trackType == conf.info("custom")->id) {
+//    } else if(trackType == conf.info("custom")->id) {
+    } else if(trackType == 99) {
         QString qs = q.toString();
         qs.replace(QStringLiteral("{latitude}"), QString::number(report.position.latitude));
         qs.replace(QStringLiteral("{longitude}"), QString::number(report.position.longitude));
@@ -89,7 +94,9 @@ QUrl TrackUploader::formatTrackingUrl(uint trackType, const QUrl& tpl,
 void TrackUploader::uploadTracked(const Trackfish::Report& report, const QVariantMap& settings)
 {
     qDebug() << Q_FUNC_INFO;
-    QUrl url = formatTrackingUrl(settings.value("phoneTrackType").value<uint>(), settings.value("phoneTrackUrlTemplate").toString(),
+
+    QUrl url = formatTrackingUrl(settings.value("phoneTrackType").value<uint>(),
+                                 settings.value("phoneTrackUrlTemplate").toString(),
                                  settings.value("phoneTrackSessionID").toString(),
                                  settings.value("phoneTrackDeviceID").toString(),
                                  report,
@@ -97,7 +104,7 @@ void TrackUploader::uploadTracked(const Trackfish::Report& report, const QVarian
                             );
      if (!url.isValid() || url.scheme().isEmpty() || url.host().isEmpty()) {
          emit uploadFinished(false, QStringLiteral("Phone track endpoint is invalid"));
-         qDebug() << QStringLiteral("Phone track endpoint is invalid") << settings.value("phoneTrackUrlTemplate").toString();
+         qDebug() << QStringLiteral("Phone track endpoint is invalid") << url;
          return;
     }
     QNetworkRequest request(url);

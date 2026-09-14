@@ -9,7 +9,7 @@
 #include <QDebug>
 
 #include "common/constants.h"
-#include "config/phonetrackconfig.h"
+#include "keys.h"
 #include "phonetrackdaemon.h"
 
 #include <climits>
@@ -23,13 +23,6 @@ const int _phoneTrackMinAccuracy = 15;
 
 const char StumblefishReportsMethod[] = "reports";
 const char StumblefishCollectMethod[] = "collectNow";
-
-const char PhoneTrackEnableKey[] = "phonetrack/enable";
-const char PhoneTrackLiveKey[] = "phonetrack/liveMode";
-const char PhoneTrackTypeKey[] = "phonetrack/type";
-const char PhoneTrackUrlKey[] = "phonetrack/url";
-const char PhoneTrackSessionKey[] = "phonetrack/session";
-const char PhoneTrackNameKey[] = "phonetrack/name";
 
 static bool isWorthSubmitting(bool fix, bool gnss, double acc, qulonglong last)
 {
@@ -55,7 +48,7 @@ Companion::Companion(QObject *parent)
 
     , m_stumbleWatcher(this)
     , m_settings(Trackfish::OrganizationName, Trackfish::ApplicationName)
-    , m_phoneTrackConfig(new Stumblefish::PhoneTrackConfig())
+//    , m_phoneTrackConfig(new Stumblefish::PhoneTrackConfig())
 {
     QDBusConnection bus = QDBusConnection::sessionBus();
 
@@ -138,9 +131,16 @@ void Companion::onStumblefishVanished(const QString& service)
 
 QVariantMap Companion::settings() const
 {
-    qDebug() << Q_FUNC_INFO;
-    return QVariantMap();
-//    return m_settings->toMap();
+    QVariantMap map;
+    for (const auto& key : m_settings.allKeys())
+    {
+        if ((key == QString::fromLatin1(PhoneTrackSessionKey))
+        || (key == QString::fromLatin1(PhoneTrackNameKey))) {
+            map.insert(key, "*****");
+        } else
+            map.insert(key, m_settings.value(key).toString());
+    }
+    return map;
 }
 
 QVariantMap Companion::status() const
@@ -155,6 +155,13 @@ QVariantMap Companion::status() const
     return map;
 }
 
+bool Companion::phoneTrackConfigValid()
+{
+    return !m_settings.value(QString::fromLatin1(PhoneTrackTypeKey)).toString().isEmpty()
+        && !m_settings.value(QString::fromLatin1(PhoneTrackUrlKey)).toString().isEmpty()
+        && !m_settings.value(QString::fromLatin1(PhoneTrackSessionKey)).toString().isEmpty();
+
+}
 void Companion::onReportsChanged()
 {
     qDebug() << Q_FUNC_INFO;
@@ -224,7 +231,12 @@ void Companion::onStatusChanged(const QVariantMap& status)
              <<  status.value(QStringLiteral("speed")).toDouble()
              << status.value(QStringLiteral("satellitesInUse")).toInt();
     _phoneTrackSubmissions++;
-    m_uploader.uploadTracked(report, settings());
+    QVariantMap settings;
+    settings.insert("phoneTrackType", m_settings.value(QString::fromLatin1(PhoneTrackTypeKey)).toString());
+    settings.insert("phoneTrackUrlTemplate", m_settings.value(QString::fromLatin1(PhoneTrackUrlKey)).toString());
+    settings.insert("phoneTrackSessionID",   m_settings.value(QString::fromLatin1(PhoneTrackSessionKey)).toString());
+    settings.insert("phoneTrackDeviceID",    m_settings.value(QString::fromLatin1(PhoneTrackNameKey)).toString());
+    m_uploader.uploadTracked(report, settings);
 }
 
 /*
@@ -277,6 +289,7 @@ void Companion::setPhoneTrackType(uint type)
 }
 
 
+/*
 void Companion::applyLiveTrackConfig()
 {
 }
@@ -285,3 +298,4 @@ bool Companion::canApplyLiveTrackConfig()
 {
     return m_phoneTrackConfig->haveLiveTrackConfig();
 }
+*/

@@ -25,12 +25,12 @@ SOURCES += \
     main.cpp \
     trackuploader.cpp \
     phonetrackdaemon.cpp \
-    ../config/phonetrackconfig.cpp
+#    ../config/phonetrackconfig.cpp
 
 HEADERS += \
     trackuploader.h \
     phonetrackdaemon.h \
-    ../config/phonetrackconfig.h
+#    ../config/phonetrackconfig.h
 
 INSTALLS += target service dbusservice
 
