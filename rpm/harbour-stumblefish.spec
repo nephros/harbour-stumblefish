@@ -58,7 +58,27 @@ Summary: PhoneTrack Companion for Stumblefish
 Requires: %{name} >= %{version}
 
 %description -n harbour-trackfish
-Summary: PhoneTrack Companion for Stumblefish
+PhoneTrack Companion for Stumblefish
+%endif
+
+
+%if %{with glassfish}
+%package -n harbour-glassfish
+Summary: GlassFish Companion for Stumblefish
+Requires: %{name} >= %{version}
+
+%description -n harbour-glassfish
+GlassFish Companion for Stumblefish
+%endif
+
+
+%if %{with jollapass}
+%package -n harbour-jollapass
+Summary: JollaPass Companion for Stumblefish
+Requires: %{name} >= %{version}
+
+%description -n harbour-jollapass
+Summary: JollaPass Companion for Stumblefish
 %endif
 
 %prep
@@ -128,6 +148,12 @@ systemctl-user daemon-reload || true
 %if %{with phonetrack}
 %exclude %{_datadir}/%{name}/lib/phonetrack/
 %endif
+%if %{with glassfish}
+%exclude %{_datadir}/%{name}/lib/glassfish/
+%endif
+%if %{with jollapass}
+%exclude %{_datadir}/%{name}/lib/jollapass/
+%endif
 
 %if %{with phonetrack}
 %files -n harbour-trackfish
@@ -135,4 +161,20 @@ systemctl-user daemon-reload || true
 %{_datadir}/dbus-1/services/org.stumblefish.Tracker.service
 %{_userunitdir}/harbour-trackfishd.service
 %{_datadir}/%{name}/lib/phonetrack/
+%endif
+
+%if %{with glassfish}
+%files -n harbour-glassfish
+%{_bindir}/harbour-glassfishd
+%{_datadir}/dbus-1/services/org.stumblefish.CrowsNest.service
+%{_userunitdir}/harbour-glasfishd.service
+%{_datadir}/%{name}/lib/glassfish/
+%endif
+
+%if %{with jollapass}
+%files -n harbour-jollapass
+%{_bindir}/harbour-jollapassd
+%{_datadir}/dbus-1/services/org.stumblefish.JollaPass.service
+%{_userunitdir}/harbour-jollapassd.service
+%{_datadir}/%{name}/lib/jollapass/
 %endif
