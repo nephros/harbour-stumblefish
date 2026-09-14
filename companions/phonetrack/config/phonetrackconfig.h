@@ -36,6 +36,7 @@ public:
         {
             if (isWritable())
                  qCritical() << "PhoneTrackConfig: ini file is writable!";
+            qDebug() << "PhoneTrackConfig: Using config file:" << path;
         };
     ~PhoneTrackConfig() = default;
 

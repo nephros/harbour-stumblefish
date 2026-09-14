@@ -7,6 +7,7 @@
 #include <QSettings>
 #include <QDebug>
 
+#include "config/phonetrackconfig.h"
 #include "trackuploader.h"
 
 class Companion : public StumblefishCompanionBase
@@ -51,6 +52,7 @@ private:
     QDBusServiceWatcher m_stumbleWatcher;
 
     QSettings m_settings;
+    Stumblefish::PhoneTrackConfig* m_phoneTrackConfig;
     TrackUploader m_uploader;
 };
 
