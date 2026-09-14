@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT
 TEMPLATE = subdirs
 
 SUBDIRS += ./daemon
@@ -9,3 +10,4 @@ phonetrackini.files += config/phonetrack.ini
 INSTALLS += phonetrackini
 
 DISTFILES += companions/phonetrack/config/phonetrack.ini
+
