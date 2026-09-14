@@ -12,12 +12,13 @@
 #include "config/phonetrackconfig.h"
 #include "phonetrackdaemon.h"
 #include "settings.h"
+#include "settings_keys.h"
 
 #include <climits>
 
 namespace {
-//static qint64 _phoneTrackSubmissions = 0;
-//static qint64 _phoneTrackSubmissionsSkipped = 0;
+static qint64 _phoneTrackSubmissions = 0;
+static qint64 _phoneTrackSubmissionsSkipped = 0;
 //static qint64 _phoneTrackLastSubmission = 0;
 const int _phoneTrackMinSubmissionInterval = 1000 * 15;
 const int _phoneTrackMinAccuracy = 15;
@@ -27,13 +28,13 @@ const char StumblefishCollectMethod[] = "collectNow";
 
 static bool isWorthSubmitting(bool fix, bool gnss, double acc, qulonglong last)
 {
-    qDebug() << Q_FUNC_INFO;
     if (!fix || !gnss) return false;
     qDebug() << "Acc" << acc;
     if (acc > _phoneTrackMinAccuracy) return false;
     qulonglong ts = QDateTime::currentMSecsSinceEpoch();
     qDebug() << "TS" << ((ts - last)/1000) <<  _phoneTrackMinSubmissionInterval/1000;
     if ((ts - last) < _phoneTrackMinSubmissionInterval) return false;
+    qDebug() << Q_FUNC_INFO << "OK";
     return true;
 }
 
@@ -136,18 +137,11 @@ QVariantMap Companion::status() const
 {
     qDebug() << Q_FUNC_INFO;
     QVariantMap map;
-    /*
-    map.insert(QStringLiteral("phoneTrackEnabled"), m_settings.phoneTrackEnabled());
-    map.insert(QStringLiteral("phoneTrackLiveMode"), m_settings.phoneTrackLiveMode());
+//    map.insert(QStringLiteral("phoneTrackEnabled"), phoneTrackEnabled());
+//    map.insert(QStringLiteral("phoneTrackLiveMode"), phoneTrackLiveMode());
     map.insert(QStringLiteral("phoneTrackSubmissions"), QVariant::fromValue(_phoneTrackSubmissions));
     map.insert(QStringLiteral("phoneTrackSubmissionsSkipped"), QVariant::fromValue(_phoneTrackSubmissionsSkipped));
-    map.insert(QStringLiteral("canApplyLiveTrackConfig"), m_settings.phoneTrackEnabled());
-    */
-    /*
-    const PositionFix fix = m_position.lastFix();
-    map.insert(QStringLiteral("direction"), fix.direction);
-    map.insert(QStringLiteral("speed"), fix.speed);
-    */
+//    map.insert(QStringLiteral("canApplyLiveTrackConfig"), ());
     return map;
 }
 
@@ -201,6 +195,7 @@ void Companion::onStatusChanged(const QVariantMap& status)
 //                          status.value("fixTimestampMs").value<qulonglong>(),
                           m_lastReport)) {
             qDebug() << "Skipping report.";
+            _phoneTrackSubmissionsSkipped++;
             return;
     }
     m_lastReport = status.value("fixTimestampMs").value<qulonglong>();
@@ -218,6 +213,7 @@ void Companion::onStatusChanged(const QVariantMap& status)
              <<  status.value(QStringLiteral("direction")).toDouble()
              <<  status.value(QStringLiteral("speed")).toDouble()
              << status.value(QStringLiteral("satellitesInUse")).toInt();
+    _phoneTrackSubmissions++;
     m_uploader.uploadTracked(report, settings());
 }
 
@@ -232,12 +228,6 @@ void Companion::asyncCall(const QString &method, const QVariantList &arguments, 
         //setBusyCount(m_busyCount + 1);
 }
 
-void Companion::setSetting(const QString &key, const QVariant &value)
-{
-        QVariantList arguments;
-        arguments << key << QVariant::fromValue(QDBusVariant(value));
-        asyncCall(QStringLiteral("setSetting"), arguments, QStringLiteral("void"));
-}
 void Companion::getReport(int reportId)
 {
         QVariantList arguments;
@@ -246,9 +236,41 @@ void Companion::getReport(int reportId)
 }
 */
 
+bool Companion::phoneTrackEnabled()
+{
+    return m_settings.toMap().value(QString::fromLatin1(PhoneTrackEnableKey)).toBool();
+}
+
+void Companion::setPhoneTrackEnabled(bool enable)
+{
+    m_settings.setValue(QString::fromLatin1(PhoneTrackEnableKey), QVariant::fromValue(enable));
+}
+
+bool Companion::phoneTrackLiveEnabled()
+{
+    return m_settings.toMap().value(QString::fromLatin1(PhoneTrackLiveKey)).toBool();
+}
+
+void Companion::setPhoneTrackLiveEnabled(bool enable)
+{
+    m_settings.setValue(QString::fromLatin1(PhoneTrackLiveKey), QVariant::fromValue(enable));
+}
+
+uint Companion::phoneTrackType()
+{
+    return m_settings.toMap().value(QString::fromLatin1(PhoneTrackTypeKey)).value<uint>();
+}
+
+void Companion::setPhoneTrackType(uint type)
+{
+    m_settings.setValue(QString::fromLatin1(PhoneTrackTypeKey), QVariant::fromValue(type));
+}
+
+
 void Companion::applyLiveTrackConfig() {
     m_settings.applyLiveTrackConfig();
 }
+
 bool Companion::canApplyLiveTrackConfig() {
     return m_settings.canApplyLiveTrackConfig();
 }

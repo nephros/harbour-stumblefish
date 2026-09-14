@@ -18,6 +18,12 @@ public:
     explicit Companion(QObject *parent = 0);
 
 public Q_SLOTS:
+    bool phoneTrackEnabled();
+    void setPhoneTrackEnabled(bool enable);
+    bool phoneTrackLiveEnabled();
+    void setPhoneTrackLiveEnabled(bool enable);
+    uint phoneTrackType();
+    void setPhoneTrackType(uint type);
 
     Q_NOREPLY void applyLiveTrackConfig();
     bool canApplyLiveTrackConfig();
