@@ -8,10 +8,6 @@
 #include <QStringList>
 #include <QVariantMap>
 
-#ifdef TRACK_MY_PHONE
-#include <cfloat>
-#endif
-
 struct PositionFix
 {
     bool valid;
@@ -20,11 +16,6 @@ struct PositionFix
     double longitude;
     double altitude;
     double accuracy;
-#ifdef TRACK_MY_PHONE
-    double speed;
-    double direction;
-    int satellites;
-#endif
 
     PositionFix()
         : valid(false)
@@ -33,11 +24,6 @@ struct PositionFix
         , longitude(0.0)
         , altitude(0.0)
         , accuracy(-1.0)
-#ifdef TRACK_MY_PHONE
-        , speed(DBL_MAX)
-        , direction(DBL_MAX)
-        , satellites(0)
-#endif
     {
     }
 };
@@ -100,9 +86,6 @@ struct Report
     QList<WifiObservation> wifi;
     QList<CellObservation> cells;
     QList<BleObservation> ble;
-#ifdef TRACK_MY_PHONE
-    int battery;
-#endif
 
     Report()
         : id(0)
@@ -112,9 +95,6 @@ struct Report
         , bleEnabled(false)
         , retryCount(0)
         , uploadedAtMs(0)
-#ifdef TRACK_MY_PHONE
-        , battery(0)
-#endif
     {
     }
 };
