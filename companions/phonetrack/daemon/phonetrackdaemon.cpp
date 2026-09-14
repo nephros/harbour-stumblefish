@@ -5,6 +5,7 @@
 #include <QDBusConnection>
 #include <QDBusPendingCallWatcher>
 #include <QStringList>
+#include <QTimer>
 #include <QDebug>
 
 #include "common/constants.h"
@@ -15,19 +16,27 @@
 #include <climits>
 
 namespace {
-const char PhoneTrackEnableKey[] = "phonetrack/enable";
-const char PhoneTrackLiveKey[] = "phonetrack/liveMode";
-const char PhoneTrackTypeKey[] = "phonetrack/type";
-const char PhoneTrackUrlKey[] = "phonetrack/url";
-const char PhoneTrackSessionKey[] = "phonetrack/session";
-const char PhoneTrackNameKey[] = "phonetrack/name";
-
 //static qint64 _phoneTrackSubmissions = 0;
 //static qint64 _phoneTrackSubmissionsSkipped = 0;
 //static qint64 _phoneTrackLastSubmission = 0;
-//const int _phoneTrackMinSubmissionInterval = 1000 * 60 * 15;
+const int _phoneTrackMinSubmissionInterval = 1000 * 15;
+const int _phoneTrackMinAccuracy = 15;
 
 const char StumblefishReportsMethod[] = "reports";
+const char StumblefishCollectMethod[] = "collectNow";
+
+static bool isWorthSubmitting(bool fix, bool gnss, double acc, qulonglong last)
+{
+    qDebug() << Q_FUNC_INFO;
+    if (!fix || !gnss) return false;
+    qDebug() << "Acc" << acc;
+    if (acc > _phoneTrackMinAccuracy) return false;
+    qulonglong ts = QDateTime::currentMSecsSinceEpoch();
+    qDebug() << "TS" << ((ts - last)/1000) <<  _phoneTrackMinSubmissionInterval/1000;
+    if ((ts - last) < _phoneTrackMinSubmissionInterval) return false;
+    return true;
+}
+
 }
 
 Companion::Companion(QObject *parent)
@@ -43,6 +52,7 @@ Companion::Companion(QObject *parent)
 {
     QDBusConnection bus = QDBusConnection::sessionBus();
 
+    /* watch for unregistration and quit if detected: */
     m_stumbleWatcher.setConnection(bus);
     m_stumbleWatcher.setWatchMode(QDBusServiceWatcher::WatchForUnregistration);
     m_stumbleWatcher.addWatchedService((Stumblefish::ServiceName));
@@ -96,6 +106,12 @@ Companion::Companion(QObject *parent)
                        << QString::fromLatin1(Stumblefish::InterfaceName)
                        << QStringLiteral("reportsChanged");
     }
+//    QDBusMessage message = QDBusMessage::createMethodCall(QString::fromLatin1(Stumblefish::ServiceName),
+//                                                          QString::fromLatin1(Stumblefish::ObjectPath),
+//                                                          QString::fromLatin1(Stumblefish::InterfaceName),
+//                                                          QString::fromLatin1(StumblefishCollectMethod));
+//    QTimer::singleShot(2000, QDBusConnection::sessionBus().send(message));
+
 }
 
 void Companion::handleDBusMethod()
@@ -113,8 +129,7 @@ void Companion::onStumblefishVanished(const QString& service)
 QVariantMap Companion::settings() const
 {
     qDebug() << Q_FUNC_INFO;
-    QVariantMap map;
-    return map;
+    return m_settings.toMap();
 }
 
 QVariantMap Companion::status() const
@@ -139,10 +154,11 @@ QVariantMap Companion::status() const
 void Companion::onReportsChanged()
 {
     qDebug() << Q_FUNC_INFO;
-    QVariantList arguments;
-    arguments << QVariant::fromValue(960);
+    //QVariantList args;
+    //args << QVariant::fromValue(960);
+    QVariant args = QVariant::fromValue(960);
 
-    QDBusPendingCall call = m_stumbleService->asyncCall(QString::fromLatin1(StumblefishReportsMethod));
+    QDBusPendingCall call = m_stumbleService->asyncCall(QString::fromLatin1(StumblefishReportsMethod), args);
     QDBusPendingCallWatcher* watcher = new QDBusPendingCallWatcher(call, this);
     connect(watcher, &QDBusPendingCallWatcher::finished, &m_uploader, &TrackUploader::reportsHandler);
 
@@ -168,22 +184,54 @@ void Companion::onReportsChanged()
 }
 void Companion::onSettingsChanged(const QVariantMap& settings)
 {
+    qDebug() << Q_FUNC_INFO;
+    qDebug() << "Stumblefish settings::" << settings;
 }
 
 void Companion::onStatusChanged(const QVariantMap& status)
 {
+    qDebug() << Q_FUNC_INFO;
+//    qDebug() << "Stumblefish status:" << status;
+//    qDebug() << "    gnssBackedFix:" << status.value("gnssBackedFix").toString();
+//    qDebug() << "    hasFix:" << status.value("hasFix").toString();
+
+    if(!isWorthSubmitting(status.value("hasFix").toBool(),
+                          status.value("gnssBackedFix").toBool(),
+                          status.value("accuracy").toDouble(),
+//                          status.value("fixTimestampMs").value<qulonglong>(),
+                          m_lastReport)) {
+            qDebug() << "Skipping report.";
+            return;
+    }
+    m_lastReport = status.value("fixTimestampMs").value<qulonglong>();
+    Trackfish::Report report;
+    report.position.latitude    = status.value(QStringLiteral("latitude")).toDouble();
+    report.position.longitude   = status.value(QStringLiteral("longitude")).toDouble();
+    report.position.accuracy    = status.value(QStringLiteral("accuracy")).toDouble();
+    report.position.direction   = status.value(QStringLiteral("direction")).toDouble();
+    report.position.speed       = status.value(QStringLiteral("speed")).toDouble();
+    report.position.satellites  = status.value(QStringLiteral("satellitesInUse")).toInt();
+    qDebug() << "Report:"
+             <<  status.value(QStringLiteral("latitude")).toDouble()
+             <<  status.value(QStringLiteral("longitude")).toDouble()
+             <<  status.value(QStringLiteral("accuracy")).toDouble()
+             <<  status.value(QStringLiteral("direction")).toDouble()
+             <<  status.value(QStringLiteral("speed")).toDouble()
+             << status.value(QStringLiteral("satellitesInUse")).toInt();
+    m_uploader.uploadTracked(report, settings());
 }
 
 /*
 void Companion::asyncCall(const QString &method, const QVariantList &arguments, const QString &kind)
 {
-        QDBusPendingCall call = m_interface->asyncCallWithArgumentList(method, arguments);
+        QDBusPendingCall call = m_stumbleService->asyncCallWithArgumentList(method, arguments);
         QDBusPendingCallWatcher *watcher = new QDBusPendingCallWatcher(call, this);
         watcher->setProperty("kind", kind);
         connect(watcher, SIGNAL(finished(QDBusPendingCallWatcher*)),
                         this, SLOT(pendingFinished(QDBusPendingCallWatcher*)));
         //setBusyCount(m_busyCount + 1);
 }
+
 void Companion::setSetting(const QString &key, const QVariant &value)
 {
         QVariantList arguments;
@@ -198,16 +246,9 @@ void Companion::getReport(int reportId)
 }
 */
 
-bool Companion::canApplyLiveTrackConfig() {
-    return m_phoneTrackConfig->haveLiveTrackConfig()
-        && m_settings.phoneTrackEnabled();
+void Companion::applyLiveTrackConfig() {
+    m_settings.applyLiveTrackConfig();
 }
-void Companion::applyLiveTrackConfig()
-{
-    m_settings.setValue(QString::fromLatin1(PhoneTrackUrlKey),
-               m_phoneTrackConfig->liveTrackConfig()->value("UrlTemplate").toString());
-    m_settings.setValue(QString::fromLatin1(PhoneTrackSessionKey),
-               m_phoneTrackConfig->liveTrackConfig()->value("SessionID").toString());
-    m_settings.setValue(QString::fromLatin1(PhoneTrackNameKey),
-               m_phoneTrackConfig->liveTrackConfig()->value("DeviceID").toString());
+bool Companion::canApplyLiveTrackConfig() {
+    return m_settings.canApplyLiveTrackConfig();
 }

@@ -6,7 +6,6 @@
 #include <QObject>
 #include <QDebug>
 
-#include "config/phonetrackconfig.h"
 #include "settings.h"
 #include "trackuploader.h"
 
@@ -40,6 +39,7 @@ private:
     //void setSetting(const QString &key, const QVariant &value);
     //QVariant getSetting(const QString &key);
     void getReport(int reportId = 0);
+    unsigned long int m_lastReport = 0;
 
     QDBusInterface *m_stumbleService;
     QDBusServiceWatcher m_stumbleWatcher;
@@ -47,7 +47,6 @@ private:
     Settings m_settings;
     TrackUploader m_uploader;
     Stumblefish::PhoneTrackConfig* m_phoneTrackConfig;
-
 
 };
 

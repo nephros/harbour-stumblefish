@@ -5,6 +5,9 @@
 #include <QObject>
 #include <QSettings>
 #include <QVariantMap>
+#include <QDBusInterface>
+
+#include "config/phonetrackconfig.h"
 
 class Settings : public QObject
 {
@@ -20,19 +23,25 @@ public:
     QString phoneTrackSessionID() const;
     QString phoneTrackDeviceID() const;
 
-    QVariantMap toMap() const;
 
 public Q_SLOTS:
+    QVariantMap toMap() const;
+    void applyLiveTrackConfig();
+    bool canApplyLiveTrackConfig();
+
     void setValue(const QString &key, const QVariant &value);
+    void onSettingsChanged(const QVariantMap&);
 
 Q_SIGNALS:
     void changed();
 
 private:
-    QVariant value(const QString &key, const QVariant &defaultValue) const;
-    void ensureDefaults();
+//    QVariant value(const QString &key, const QVariant &defaultValue) const;
+    void updateSettings();
 
-    QSettings m_settings;
+    QVariantMap m_settings;
+    QDBusInterface *m_stumbleService;
+    Stumblefish::PhoneTrackConfig* m_phoneTrackConfig;
 };
 
 #endif

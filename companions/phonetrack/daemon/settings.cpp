@@ -1,7 +1,13 @@
 // SPDX-License-Identifier: MIT
-#include "settings.h"
 
+#include "common/constants.h"
 #include "companions/base/constants.h"
+
+#include <QDBusConnection>
+#include <QDBusPendingCall>
+#include <QTimer>
+
+#include "settings.h"
 
 namespace {
 const char PhoneTrackEnableKey[] = "phonetrack/enable";
@@ -10,97 +16,80 @@ const char PhoneTrackTypeKey[] = "phonetrack/type";
 const char PhoneTrackUrlKey[] = "phonetrack/url";
 const char PhoneTrackSessionKey[] = "phonetrack/session";
 const char PhoneTrackNameKey[] = "phonetrack/name";
+
+const char StumblefishSettingsMethod[] = "settings";
+const char StumblefishSetValueMethod[] = "setSetting";
 }
 
 Settings::Settings(QObject *parent)
     : QObject(parent)
+    , m_stumbleService(new QDBusInterface(QString::fromLatin1(Stumblefish::ServiceName),
+                                     QString::fromLatin1(Stumblefish::ObjectPath),
+                                     QString::fromLatin1(Stumblefish::InterfaceName),
+                                     QDBusConnection::sessionBus(),
+                                     this))
+    , m_phoneTrackConfig()
 {
-    ensureDefaults();
+    QDBusConnection bus = QDBusConnection::sessionBus();
+    if(!bus.connect(QString::fromLatin1(Stumblefish::ServiceName),
+                    QString::fromLatin1(Stumblefish::ObjectPath),
+                    QString::fromLatin1(Stumblefish::InterfaceName),
+                    QStringLiteral("settingsChanged"),
+                    this, SLOT(onSettingsChanged(QVariantMap))) ) {
+        qWarning() << "Failed to connect D-Bus signal settingsChanged" << bus.lastError().message();
+     } else {
+        qDebug() << "Watching D-Bus signal" << QString::fromLatin1(Stumblefish::ServiceName)
+                        << QString::fromLatin1(Stumblefish::ObjectPath)
+                        << QString::fromLatin1(Stumblefish::InterfaceName)
+                        << QStringLiteral("settingsChanged");
+    }
+    updateSettings();
+}
+
+void Settings::updateSettings() {
+    QDBusPendingCall call = m_stumbleService->asyncCall(QString::fromLatin1(StumblefishSettingsMethod), QVariant());
+    QDBusPendingCallWatcher* watcher = new QDBusPendingCallWatcher(call, this);
+    connect(watcher, SIGNAL(finished), this, SLOT(onSettingsUpdated()));
+
+}
+
+void Settings::onSettingsChanged(const QVariantMap& settings)
+{
+    m_settings = settings;
 }
 
 QVariantMap Settings::toMap() const
 {
-    QVariantMap map;
-
-    map.insert(QStringLiteral("phoneTrackEnabled"),  phoneTrackEnabled());
-    map.insert(QStringLiteral("phoneTrackLiveMode"),     phoneTrackLiveMode());
-    map.insert(QStringLiteral("phoneTrackType"),     phoneTrackType());
-    map.insert(QStringLiteral("phoneTrackUrlTemplate"),phoneTrackUrlTemplate());
-    map.insert(QStringLiteral("phoneTrackSessionID"),phoneTrackSessionID());
-    map.insert(QStringLiteral("phoneTrackDeviceID"), phoneTrackDeviceID());
-    return map;
+    return QVariantMap(m_settings);
 }
 
-void Settings::setValue(const QString &key, const QVariant &newValue)
+void Settings::setValue(const QString &key, const QVariant &value)
 {
-    QString storageKey;
-    QVariant value = newValue;
+    QVariantList args;
+    QVariantMap arg;
+    arg.insert(key, value.toString());
+    args << arg;
+    QDBusMessage message = QDBusMessage::createMethodCall(QString::fromLatin1(Stumblefish::ServiceName),
+                                                          QString::fromLatin1(Stumblefish::ObjectPath),
+                                                          QString::fromLatin1(Stumblefish::InterfaceName),
+                                                          QString::fromLatin1(StumblefishSetValueMethod));
+    message.setArguments(args);
+    QDBusConnection::sessionBus().send(message);
 
-    if (key == QStringLiteral("phoneTrackEnabled")) {
-        storageKey = QString::fromLatin1(PhoneTrackEnableKey);
-        value = newValue.toBool();
-    } else if (key == QStringLiteral("phoneTrackLiveMode")) {
-        storageKey = QString::fromLatin1(PhoneTrackLiveKey);
-        value = newValue.toBool();
-    } else if (key == QStringLiteral("phoneTrackUrlTemplate")) {
-        storageKey = QString::fromLatin1(PhoneTrackUrlKey);
-        value = newValue.toString().trimmed();
-    } else if (key == QStringLiteral("phoneTrackSession")) {
-        storageKey = QString::fromLatin1(PhoneTrackSessionKey);
-        value = newValue.toString().trimmed();
-    } else if (key == QStringLiteral("phoneTrackName")) {
-        storageKey = QString::fromLatin1(PhoneTrackNameKey);
-        value = newValue.toString().trimmed();
-    } else if (key == QStringLiteral("phoneTrackType")) {
-        storageKey = QString::fromLatin1(PhoneTrackTypeKey);
-        value = newValue.value<uint>();
-    } else {
-        return;
-    }
 
-    if (m_settings.value(storageKey) == value) {
-        return;
-    }
-
-    m_settings.setValue(storageKey, value);
-    m_settings.sync();
-    emit changed();
 }
 
-QVariant Settings::value(const QString &key, const QVariant &defaultValue) const
+void Settings::applyLiveTrackConfig()
 {
-    return m_settings.value(key, defaultValue);
+    setValue(QString::fromLatin1(PhoneTrackUrlKey),
+               m_phoneTrackConfig->liveTrackConfig()->value("UrlTemplate").toString());
+    setValue(QString::fromLatin1(PhoneTrackSessionKey),
+               m_phoneTrackConfig->liveTrackConfig()->value("SessionID").toString());
+    setValue(QString::fromLatin1(PhoneTrackNameKey),
+               m_phoneTrackConfig->liveTrackConfig()->value("DeviceID").toString());
 }
 
-void Settings::ensureDefaults()
+bool Settings::canApplyLiveTrackConfig()
 {
-    if (!m_settings.contains(QString::fromLatin1(PhoneTrackEnableKey))) {
-        m_settings.setValue(QString::fromLatin1(PhoneTrackEnableKey), false);
-    }
-    m_settings.sync();
-}
-
-bool Settings::phoneTrackEnabled() const
-{
-    return value(QString::fromLatin1(PhoneTrackEnableKey), false).toBool();
-}
-bool Settings::phoneTrackLiveMode() const
-{
-    return value(QString::fromLatin1(PhoneTrackLiveKey), false).toBool();
-}
-uint Settings::phoneTrackType() const
-{
-    return value(QString::fromLatin1(PhoneTrackTypeKey), 0).value<uint>();
-}
-QString Settings::phoneTrackUrlTemplate() const
-{
-    return value(QString::fromLatin1(PhoneTrackUrlKey), QString()).toString();
-}
-QString Settings::phoneTrackSessionID() const
-{
-    return value(QString::fromLatin1(PhoneTrackSessionKey), "unknown").toString();
-}
-QString Settings::phoneTrackDeviceID() const
-{
-    return value(QString::fromLatin1(PhoneTrackNameKey), "").toString();
+    return m_phoneTrackConfig->haveLiveTrackConfig();
 }
