@@ -8,11 +8,11 @@
 #endif
 #endif // TRACK_MY_PHONE
        //
-#ifdef GLASSFISH
+#ifdef FIND_KLABAUTERS
 #ifndef GLASSFISH_VERSION
 #define GLASSFISH_VERSION "1.0"
 #endif
-#endif // GLASSFISH
+#endif // FIND_KLABAUTERS
 
 #ifdef FIND_JOLLA_BUDDIES
 #ifndef JOLLAPASS_VERSION

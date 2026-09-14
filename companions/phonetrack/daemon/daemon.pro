@@ -19,7 +19,7 @@ DEFINES += TRACK_MY_PHONE
 
 TARGET.depends += harbour-stumblefishd
 
-include(../../common/common.pri)
+include(../../companions.pri)
 
 SOURCES += \
     main.cpp \
@@ -32,8 +32,6 @@ HEADERS += \
     settings.h \
     trackuploader.h \
     phonetrackdaemon.h \
-    $${COMPANIONS_COMMON_DIR}/constants.h
-    $${COMPANIONS_COMMON_DIR}/abstractcompanion.h
     ../config/phonetrackconfig.h
 
 INSTALLS += target service dbusservice

@@ -31,7 +31,7 @@ const char StumblefishReportsMethod[] = "reports";
 }
 
 Companion::Companion(QObject *parent)
-    : StumblefishCompanion(parent)
+    : StumblefishCompanionBase(parent)
     , m_stumbleService(new QDBusInterface(QString::fromLatin1(Stumblefish::ServiceName),
                                      QString::fromLatin1(Stumblefish::ObjectPath),
                                      QString::fromLatin1(Stumblefish::InterfaceName),

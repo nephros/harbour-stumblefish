@@ -24,3 +24,6 @@
 /tests/moc_*.cpp
 /tests/*.moc
 /tests/target_wrapper.sh
+/companions/Makefile
+/companions/glassfish/harbour-glassfishd
+/companions/jollapass/harbour-jollapassd

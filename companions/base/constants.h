@@ -1,0 +1,51 @@
+// SPDX-License-Identifier: MIT
+#ifndef STUMBLEFISH_COMPANION_CONSTANTS_H
+#define STUMBLEFISH_COMPANION_CONSTANTS_H
+
+#include <QString>
+#include "base/versions.h"
+
+#ifdef TRACK_MY_PHONE
+namespace Trackfish {
+
+const char ServiceName[] = "org.stumblefish.Tracker";
+const char ObjectPath[] = "/org/stumblefish/Tracker";
+const char InterfaceName[] = "org.stumblefish.Tracker";
+const char OrganizationName[] = "org.stumblefish";
+const char ApplicationName[] = "harbour-trackfish";
+const QString UserAgent = QStringLiteral("harbour-stumblefish/%1 (%2)")
+                             .arg(QStringLiteral(TRACKFISH_VERSION))
+                             .arg(QStringLiteral("PhoneTrack Companion"));
+} //namespace
+#endif //TRACK_MY_PHONE
+
+#ifdef FIND_JOLLA_BUDDIES
+namespace Jollapass {
+
+const char ServiceName[] = "org.stumblefish.JollaPass";
+const char ObjectPath[] = "/org/stumblefish/JollaPass";
+const char InterfaceName[] = "org.stumblefish.JollaPass";
+const char OrganizationName[] = "org.stumblefish";
+const char ApplicationName[] = "harbour-glassfish";
+const QString UserAgent = QStringLiteral("harbour-stumblefish/%1 (%2)")
+                             .arg(QStringLiteral(JOLLAPASS_VERSION))
+                             .arg(QStringLiteral("JollaPass Companion"));
+} //namespace
+#endif //FIND_JOLLA_BUDDIES
+
+#ifdef FIND_KLABAUTERS
+namespace Glassfish {
+
+const char ServiceName[] = "org.stumblefish.CrowsNest";
+const char ObjectPath[] = "/org/stumblefish/CrowsNest";
+const char InterfaceName[] = "org.stumblefish.CrowsNest";
+const char OrganizationName[] = "org.stumblefish";
+const char ApplicationName[] = "harbour-glassfish";
+const QString UserAgent = QStringLiteral("harbour-stumblefish/%1 (%2)")
+                             .arg(QStringLiteral(GLASSFISH_VERSION))
+                             .arg(QStringLiteral("CrowsNest Companion"));
+} //namespace
+#endif //FIND_KLABAUTERS
+
+
+#endif

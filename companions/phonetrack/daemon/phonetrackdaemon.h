@@ -2,8 +2,7 @@
 #ifndef TRACKFISH_SERVICE_H
 #define TRACKFISH_SERVICE_H
 
-
-#include "companions/common/abstractcompanion.h"
+#include "companionbase.h"
 
 #include <QObject>
 
@@ -12,7 +11,7 @@
 #include "settings.h"
 #include "trackuploader.h"
 
-class Companion : public StumblefishCompanion
+class Companion : public StumblefishCompanionBase
 {
     Q_OBJECT
     Q_CLASSINFO("D-Bus Interface", "org.stumblefish.Tracker")

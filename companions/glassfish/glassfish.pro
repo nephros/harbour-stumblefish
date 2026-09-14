@@ -1,23 +1,18 @@
 # SPDX-License-Identifier: MIT
-TEMPLATE = aux
+TEMPLATE = app
 TARGET = harbour-glassfishd
 
 CONFIG += console c++11 link_pkgconfig
-QMAKE_CFLAGS += -fPIE
-QMAKE_CXXFLAGS += -fPIE
-QMAKE_LFLAGS += -pie
 
-QT -= gui
-#QT += core dbus network positioning
-QT += core dbus
-
-INCLUDEPATH += . ../../../
+INCLUDEPATH += . ../
 DEFINES += APP_VERSION=\\\"$$VERSION\\\"
 
-DEFINES += GLASSFISH
+DEFINES += FIND_KLABAUTERS
+
+SOURCES += main.cpp \
+           glassfish.cpp
+HEADERS += glassfish.h
 
 TARGET.depends += harbour-stumblefishd
 
-include(../common/common.pri)
-
-
+include(../companions.pri)
