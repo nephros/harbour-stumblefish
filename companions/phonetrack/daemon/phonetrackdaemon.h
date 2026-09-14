@@ -17,7 +17,6 @@ class Companion : public StumblefishCompanionBase
 
 public:
     explicit Companion(QObject *parent = 0);
-//    ~Companion();
 
 public Q_SLOTS:
 
@@ -27,13 +26,14 @@ public Q_SLOTS:
 Q_SIGNALS:
 private Q_SLOTS:
     void handleDBusMethod() override; // Implement pure virtual method
+    void onStumblefishVanished(const QString&);
 
     QVariantMap status() const;
     QVariantMap settings() const;
 
     void onReportsChanged();
-    void onSettingsChanged(QVariant);
-    void onStatusChanged(QVariant);
+    void onSettingsChanged(const QVariantMap&);
+    void onStatusChanged(const QVariantMap&);
 
 private:
     //void asyncCall(const QString &method, const QVariantList &arguments, const QString &kind);

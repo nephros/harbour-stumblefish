@@ -42,43 +42,84 @@ Companion::Companion(QObject *parent)
     , m_phoneTrackConfig(new Stumblefish::PhoneTrackConfig())
 {
     QDBusConnection bus = QDBusConnection::sessionBus();
-    m_stumbleWatcher.setConnection(bus);
 
-    if (!bus.registerService(QString::fromLatin1(Stumblefish::ServiceName))) {
+    m_stumbleWatcher.setConnection(bus);
+    m_stumbleWatcher.setWatchMode(QDBusServiceWatcher::WatchForUnregistration);
+    m_stumbleWatcher.addWatchedService((Stumblefish::ServiceName));
+    QObject::connect(&m_stumbleWatcher, SIGNAL(serviceUnregistered(const QString&)),
+                            this, SLOT(onStumblefishVanished(const QString&)));
+
+
+    if (!bus.registerService(QString::fromLatin1(Trackfish::ServiceName))) {
         qWarning() << "Failed to register D-Bus service" << bus.lastError().message();
     }
     if (!bus.registerObject(QString::fromLatin1(Trackfish::ObjectPath), this,
                             QDBusConnection::ExportAllSlots | QDBusConnection::ExportAllSignals)) {
         qWarning() << "Failed to register D-Bus object" << bus.lastError().message();
     }
-    //stumblefish.setWatchMode(QDBusServiceWatcher::WatchForUnregistration);
-    QObject::connect(&m_stumbleWatcher, SIGNAL(settingsChanged),
-             this, SLOT(onSettingsChanged(QVariant)));
-    QObject::connect(&m_stumbleWatcher, SIGNAL(sstatusChanged),
-             this, SLOT(onsStatusChanged(QVariant)));
-    QObject::connect(&m_stumbleWatcher, SIGNAL(reportsChanged),
-             this, SLOT(onReportsChanged()));
 
+    if(!bus.connect(QString::fromLatin1(Stumblefish::ServiceName),
+                    QString::fromLatin1(Stumblefish::ObjectPath),
+                    QString::fromLatin1(Stumblefish::InterfaceName),
+                    QStringLiteral("settingsChanged"),
+                    this, SLOT(onSettingsChanged(QVariantMap))) ) {
+        qWarning() << "Failed to connect D-Bus signal settingsChanged" << bus.lastError().message();
+     } else {
+        qDebug() << "Watching D-Bus signal" << QString::fromLatin1(Stumblefish::ServiceName)
+                        << QString::fromLatin1(Stumblefish::ObjectPath)
+                        << QString::fromLatin1(Stumblefish::InterfaceName)
+                        << QStringLiteral("settingsChanged");
+    }
 
+    if(!bus.connect(QString::fromLatin1(Stumblefish::ServiceName),
+                    QString::fromLatin1(Stumblefish::ObjectPath),
+                    QString::fromLatin1(Stumblefish::InterfaceName),
+                    QStringLiteral("statusChanged"),
+                    this, SLOT(onStatusChanged(QVariantMap))) ) {
+        qWarning() << "Failed to connect D-Bus signal statusChanged" << bus.lastError().message();
+    } else {
+       qDebug() << "Watching D-Bus signal" << QString::fromLatin1(Stumblefish::ServiceName)
+                       << QString::fromLatin1(Stumblefish::ObjectPath)
+                       << QString::fromLatin1(Stumblefish::InterfaceName)
+                       << QStringLiteral("statusChanged");
+    }
+
+    if(!bus.connect(QString::fromLatin1(Stumblefish::ServiceName),
+                    QString::fromLatin1(Stumblefish::ObjectPath),
+                    QString::fromLatin1(Stumblefish::InterfaceName),
+                    QStringLiteral("reportsChanged"),
+                    this, SLOT(onReportsChanged())) ) {
+        qWarning() << "Failed to connect D-Bus signal reportsChanged" << bus.lastError().message();
+    } else {
+       qDebug() << "Watching D-Bus signal" << QString::fromLatin1(Stumblefish::ServiceName)
+                       << QString::fromLatin1(Stumblefish::ObjectPath)
+                       << QString::fromLatin1(Stumblefish::InterfaceName)
+                       << QStringLiteral("reportsChanged");
+    }
 }
-
-//Companion::~Companion()
-//{
-//}
 
 void Companion::handleDBusMethod()
 {
     qDebug() << Q_FUNC_INFO;
 }
 
+void Companion::onStumblefishVanished(const QString& service)
+{
+    Q_UNUSED(service)
+    qWarning() << "Stumblefish exited, quitting!";
+    qApp->quit();
+}
+
 QVariantMap Companion::settings() const
 {
+    qDebug() << Q_FUNC_INFO;
     QVariantMap map;
     return map;
 }
 
 QVariantMap Companion::status() const
 {
+    qDebug() << Q_FUNC_INFO;
     QVariantMap map;
     /*
     map.insert(QStringLiteral("phoneTrackEnabled"), m_settings.phoneTrackEnabled());
@@ -97,6 +138,7 @@ QVariantMap Companion::status() const
 
 void Companion::onReportsChanged()
 {
+    qDebug() << Q_FUNC_INFO;
     QVariantList arguments;
     arguments << QVariant::fromValue(960);
 
@@ -124,10 +166,11 @@ void Companion::onReportsChanged()
     }
     */
 }
-void Companion::onSettingsChanged(QVariant)
+void Companion::onSettingsChanged(const QVariantMap& settings)
 {
 }
-void Companion::onStatusChanged(QVariant)
+
+void Companion::onStatusChanged(const QVariantMap& status)
 {
 }
 
