@@ -8,7 +8,7 @@
 #ifdef TRACK_MY_PHONE
 namespace Trackfish {
 
-const char ServiceName[] = "org.stumblefish.Tracker";
+const char ServiceName[] = "org.stumblefish.Companions";
 const char ObjectPath[] = "/org/stumblefish/Tracker";
 const char InterfaceName[] = "org.stumblefish.Tracker";
 const char OrganizationName[] = "org.stumblefish";
@@ -22,7 +22,7 @@ const QString UserAgent = QStringLiteral("harbour-stumblefish/%1 (%2)")
 #ifdef FIND_JOLLA_BUDDIES
 namespace Jollapass {
 
-const char ServiceName[] = "org.stumblefish.JollaPass";
+const char ServiceName[] = "org.stumblefish.Companions";
 const char ObjectPath[] = "/org/stumblefish/JollaPass";
 const char InterfaceName[] = "org.stumblefish.JollaPass";
 const char OrganizationName[] = "org.stumblefish";
@@ -36,7 +36,7 @@ const QString UserAgent = QStringLiteral("harbour-stumblefish/%1 (%2)")
 #ifdef FIND_KLABAUTERS
 namespace Glassfish {
 
-const char ServiceName[] = "org.stumblefish.CrowsNest";
+const char ServiceName[] = "org.stumblefish.Companions";
 const char ObjectPath[] = "/org/stumblefish/CrowsNest";
 const char InterfaceName[] = "org.stumblefish.CrowsNest";
 const char OrganizationName[] = "org.stumblefish";
