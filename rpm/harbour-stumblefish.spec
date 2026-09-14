@@ -167,7 +167,7 @@ systemctl-user daemon-reload || true
 %files -n harbour-glassfish
 %{_bindir}/harbour-glassfishd
 %{_datadir}/dbus-1/services/org.stumblefish.CrowsNest.service
-%{_userunitdir}/harbour-glasfishd.service
+%{_userunitdir}/harbour-glassfishd.service
 %{_datadir}/%{name}/lib/glassfish/
 %endif
 
