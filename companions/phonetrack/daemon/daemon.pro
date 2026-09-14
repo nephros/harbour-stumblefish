@@ -23,13 +23,11 @@ include(../../companions.pri)
 
 SOURCES += \
     main.cpp \
-    settings.cpp \
     trackuploader.cpp \
     phonetrackdaemon.cpp \
     ../config/phonetrackconfig.cpp
 
 HEADERS += \
-    settings.h \
     trackuploader.h \
     phonetrackdaemon.h \
     ../config/phonetrackconfig.h

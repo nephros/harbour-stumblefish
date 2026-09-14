@@ -4,9 +4,9 @@
 
 #include "base/companionbase.h"
 #include <QObject>
+#include <QSettings>
 #include <QDebug>
 
-#include "settings.h"
 #include "trackuploader.h"
 
 class Companion : public StumblefishCompanionBase
@@ -19,14 +19,14 @@ public:
 
 public Q_SLOTS:
     bool phoneTrackEnabled();
-    void setPhoneTrackEnabled(bool enable);
     bool phoneTrackLiveEnabled();
-    void setPhoneTrackLiveEnabled(bool enable);
     uint phoneTrackType();
-    void setPhoneTrackType(uint type);
+    Q_NOREPLY void setPhoneTrackEnabled(bool enable);
+    Q_NOREPLY void setPhoneTrackLiveEnabled(bool enable);
+    Q_NOREPLY void setPhoneTrackType(uint type);
 
-    Q_NOREPLY void applyLiveTrackConfig();
     bool canApplyLiveTrackConfig();
+    Q_NOREPLY void applyLiveTrackConfig();
 
 Q_SIGNALS:
 private Q_SLOTS:
@@ -50,10 +50,8 @@ private:
     QDBusInterface *m_stumbleService;
     QDBusServiceWatcher m_stumbleWatcher;
 
-    Settings m_settings;
+    QSettings m_settings;
     TrackUploader m_uploader;
-    Stumblefish::PhoneTrackConfig* m_phoneTrackConfig;
-
 };
 
 #endif

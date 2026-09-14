@@ -11,8 +11,6 @@
 #include "common/constants.h"
 #include "config/phonetrackconfig.h"
 #include "phonetrackdaemon.h"
-#include "settings.h"
-#include "settings_keys.h"
 
 #include <climits>
 
@@ -26,13 +24,20 @@ const int _phoneTrackMinAccuracy = 15;
 const char StumblefishReportsMethod[] = "reports";
 const char StumblefishCollectMethod[] = "collectNow";
 
+const char PhoneTrackEnableKey[] = "phonetrack/enable";
+const char PhoneTrackLiveKey[] = "phonetrack/liveMode";
+const char PhoneTrackTypeKey[] = "phonetrack/type";
+const char PhoneTrackUrlKey[] = "phonetrack/url";
+const char PhoneTrackSessionKey[] = "phonetrack/session";
+const char PhoneTrackNameKey[] = "phonetrack/name";
+
 static bool isWorthSubmitting(bool fix, bool gnss, double acc, qulonglong last)
 {
     if (!fix || !gnss) return false;
-    qDebug() << "Acc" << acc;
+//    qDebug() << "Acc" << acc;
     if (acc > _phoneTrackMinAccuracy) return false;
     qulonglong ts = QDateTime::currentMSecsSinceEpoch();
-    qDebug() << "TS" << ((ts - last)/1000) <<  _phoneTrackMinSubmissionInterval/1000;
+//    qDebug() << "TS" << ((ts - last)/1000) <<  _phoneTrackMinSubmissionInterval/1000;
     if ((ts - last) < _phoneTrackMinSubmissionInterval) return false;
     qDebug() << Q_FUNC_INFO << "OK";
     return true;
@@ -49,7 +54,7 @@ Companion::Companion(QObject *parent)
                                      this))
 
     , m_stumbleWatcher(this)
-    , m_phoneTrackConfig(new Stumblefish::PhoneTrackConfig())
+    , m_settings(Trackfish::OrganizationName, Trackfish::ApplicationName)
 {
     QDBusConnection bus = QDBusConnection::sessionBus();
 
@@ -63,11 +68,14 @@ Companion::Companion(QObject *parent)
 
     if (!bus.registerService(QString::fromLatin1(Trackfish::ServiceName))) {
         qWarning() << "Failed to register D-Bus service" << bus.lastError().message();
-    }
+    } else
+        qInfo() << "Registerred D-Bus service" << QString::fromLatin1(Trackfish::ServiceName);
+
     if (!bus.registerObject(QString::fromLatin1(Trackfish::ObjectPath), this,
                             QDBusConnection::ExportAllSlots | QDBusConnection::ExportAllSignals)) {
         qWarning() << "Failed to register D-Bus object" << bus.lastError().message();
-    }
+    } else
+        qInfo() << "Registerred D-Bus path" << QString::fromLatin1(Trackfish::ObjectPath);
 
     if(!bus.connect(QString::fromLatin1(Stumblefish::ServiceName),
                     QString::fromLatin1(Stumblefish::ObjectPath),
@@ -130,7 +138,8 @@ void Companion::onStumblefishVanished(const QString& service)
 QVariantMap Companion::settings() const
 {
     qDebug() << Q_FUNC_INFO;
-    return m_settings.toMap();
+    return QVariantMap();
+//    return m_settings->toMap();
 }
 
 QVariantMap Companion::status() const
@@ -238,7 +247,7 @@ void Companion::getReport(int reportId)
 
 bool Companion::phoneTrackEnabled()
 {
-    return m_settings.toMap().value(QString::fromLatin1(PhoneTrackEnableKey)).toBool();
+    return m_settings.value(QString::fromLatin1(PhoneTrackEnableKey)).toBool();
 }
 
 void Companion::setPhoneTrackEnabled(bool enable)
@@ -248,7 +257,7 @@ void Companion::setPhoneTrackEnabled(bool enable)
 
 bool Companion::phoneTrackLiveEnabled()
 {
-    return m_settings.toMap().value(QString::fromLatin1(PhoneTrackLiveKey)).toBool();
+    return m_settings.value(QString::fromLatin1(PhoneTrackLiveKey)).toBool();
 }
 
 void Companion::setPhoneTrackLiveEnabled(bool enable)
@@ -258,7 +267,7 @@ void Companion::setPhoneTrackLiveEnabled(bool enable)
 
 uint Companion::phoneTrackType()
 {
-    return m_settings.toMap().value(QString::fromLatin1(PhoneTrackTypeKey)).value<uint>();
+    return m_settings.value(QString::fromLatin1(PhoneTrackTypeKey)).value<uint>();
 }
 
 void Companion::setPhoneTrackType(uint type)
@@ -268,9 +277,7 @@ void Companion::setPhoneTrackType(uint type)
 
 
 void Companion::applyLiveTrackConfig() {
-    m_settings.applyLiveTrackConfig();
 }
 
 bool Companion::canApplyLiveTrackConfig() {
-    return m_settings.canApplyLiveTrackConfig();
 }
