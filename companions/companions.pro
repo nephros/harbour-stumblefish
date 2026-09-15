@@ -1,7 +1,6 @@
 TEMPLATE = subdirs
 
 SUBDIRS += client
-SUBDIRS += qmlplugin
 
 QMAKE_CXXFLAGS += -Werror -Wall
 CONFIG += warn_on

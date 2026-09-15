@@ -24,10 +24,12 @@
 /companions/client/harbour-stumblefish-companion
 /companions/phonetrack/qml/Makefile
 /companions/client/qml/Makefile
-/companions/client/src/*.o
-/companions/client/src/moc_*.o
-/companions/client/src/moc_*.cpp
-/companions/client/src/Makefile
+/companions/client/app/Makefile
+/companions/client/app/harbour-stumblefish-companion
+/companions/client/app/*.o
+/companions/client/app/moc*.cpp
+/companions/client/plugin/Makefile
+/companions/client/plugin/*.so
 /tests/Makefile
 /tests/tst_uploaduseragent
 /tests/*.o
