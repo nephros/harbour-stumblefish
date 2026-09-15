@@ -93,7 +93,7 @@ QUrl TrackUploader::formatTrackingUrl(uint trackType,
 
 void TrackUploader::uploadTracked(const Trackfish::Report& report, const QVariantMap& settings)
 {
-    qDebug() << Q_FUNC_INFO;
+//    qDebug() << Q_FUNC_INFO;
 
     QUrl url = formatTrackingUrl(settings.value("phoneTrackType").value<uint>(),
                                  settings.value("phoneTrackUrlTemplate").toString(),

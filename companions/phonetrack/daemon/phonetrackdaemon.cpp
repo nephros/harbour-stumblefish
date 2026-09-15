@@ -27,12 +27,9 @@ const char StumblefishCollectMethod[] = "collectNow";
 static bool isWorthSubmitting(bool fix, bool gnss, double acc, qulonglong last)
 {
     if (!fix || !gnss) return false;
-//    qDebug() << "Acc" << acc;
     if (acc > _phoneTrackMinAccuracy) return false;
     qulonglong ts = QDateTime::currentMSecsSinceEpoch();
-//    qDebug() << "TS" << ((ts - last)/1000) <<  _phoneTrackMinSubmissionInterval/1000;
     if ((ts - last) < _phoneTrackMinSubmissionInterval) return false;
-    qDebug() << Q_FUNC_INFO << "OK";
     return true;
 }
 
@@ -145,7 +142,7 @@ QVariantMap Companion::settings() const
 
 QVariantMap Companion::status() const
 {
-    qDebug() << Q_FUNC_INFO;
+//    qDebug() << Q_FUNC_INFO;
     QVariantMap map;
 //    map.insert(QStringLiteral("phoneTrackEnabled"), phoneTrackEnabled());
 //    map.insert(QStringLiteral("phoneTrackLiveMode"), phoneTrackLiveMode());
@@ -211,7 +208,7 @@ void Companion::onStatusChanged(const QVariantMap& status)
                           status.value("accuracy").toDouble(),
 //                          status.value("fixTimestampMs").value<qulonglong>(),
                           m_lastReport)) {
-            qDebug() << "Skipping report.";
+//            qDebug() << "Skipping report.";
             _phoneTrackSubmissionsSkipped++;
             return;
     }
