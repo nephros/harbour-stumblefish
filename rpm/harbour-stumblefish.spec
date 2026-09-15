@@ -147,6 +147,7 @@ systemctl-user daemon-reload || true
 %{_userunitdir}/%{name}d.service
 %if %{with phonetrack}
 %exclude %{_datadir}/%{name}/lib/phonetrack/
+%exclude %{_datadir}/%{name}/qml/pages/components
 %endif
 
 %if %{with phonetrack}
