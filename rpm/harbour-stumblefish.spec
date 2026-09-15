@@ -148,12 +148,6 @@ systemctl-user daemon-reload || true
 %if %{with phonetrack}
 %exclude %{_datadir}/%{name}/lib/phonetrack/
 %endif
-%if %{with glassfish}
-%exclude %{_datadir}/%{name}/lib/glassfish/
-%endif
-%if %{with jollapass}
-%exclude %{_datadir}/%{name}/lib/jollapass/
-%endif
 
 %if %{with phonetrack}
 %files -n harbour-trackfish
@@ -168,7 +162,7 @@ systemctl-user daemon-reload || true
 %{_bindir}/harbour-glassfishd
 %{_datadir}/dbus-1/services/org.stumblefish.Lookout.service
 %{_userunitdir}/harbour-glassfishd.service
-%{_datadir}/%{name}/lib/glassfish/
+#%%{_datadir}/%%{name}/lib/glassfish/
 %endif
 
 %if %{with jollapass}
@@ -176,5 +170,5 @@ systemctl-user daemon-reload || true
 %{_bindir}/harbour-jollapassd
 %{_datadir}/dbus-1/services/org.stumblefish.JollaPass.service
 %{_userunitdir}/harbour-jollapassd.service
-%{_datadir}/%{name}/lib/jollapass/
+#%%{_datadir}/%%{name}/lib/jollapass/
 %endif

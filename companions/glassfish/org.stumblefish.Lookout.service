@@ -1,0 +1,5 @@
+# SPDX-License-Identifier: MIT
+[D-BUS Service]
+Name=org.stumblefish.Lookout
+Exec=/usr/bin/harbour-glassfishd
+SystemdService=harbour-glassfishd.service
