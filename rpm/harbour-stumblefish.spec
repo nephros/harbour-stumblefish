@@ -206,4 +206,8 @@ systemctl-user daemon-reload || true
 %{_bindir}/%{name}-companion
 %{_datadir}/applications/%{name}-companion.desktop
 %{_datadir}/%{name}/qml/harbour-stumblefish-companion.qml
+%{_datadir}/icons/hicolor/86x86/apps/%{name}-companion.png
+%{_datadir}/icons/hicolor/108x108/apps/%{name}-companion.png
+%{_datadir}/icons/hicolor/128x128/apps/%{name}-companion.png
+%{_datadir}/icons/hicolor/172x172/apps/%{name}-companion.png
 %endif

@@ -3,6 +3,7 @@ TARGET = harbour-stumblefish-companion
 
 message("Building the companion app.")
 
+CONFIG += sailfishapp
 CONFIG += sailfishapp_no_deploy_qml
 
 CONFIG += c++11 link_pkgconfig
@@ -42,20 +43,31 @@ lupdate_only {
     SOURCES += $$files(qml/*.qml)
 }
 
-INSTALLS += target qml desktop
+INSTALLS += target qml
 
 target.path = /usr/bin
 
 qml.files += qml/$${TARGET}.qml
 qml.path   = /usr/share/harbour-stumblefish/qml
 
-desktop.files = $${TARGET}.desktop
-desktop.path = /usr/share/applications
+SAILFISHAPP_ICONS = 108x108 128x128 172x172 86x86
 
 DISTFILES += \
     harbour-stumblefish-companion.desktop \
     qml/PhoneTrackSettings.qml \
-    qml/PhoneTrackStats.qml
+    qml/PhoneTrackStats.qml \
+    icons/icons-glassfish/108x108/apps/harbour-stumblefish.png \
+    icons/icons-glassfish/128x128/apps/harbour-stumblefish.png \
+    icons/icons-glassfish/172x172/apps/harbour-stumblefish.png \
+    icons/icons-glassfish/86x86/apps/harbour-stumblefish.png \
+    icons/icons-jollapass/108x108/apps/harbour-stumblefish.png \
+    icons/icons-jollapass/128x128/apps/harbour-stumblefish.png \
+    icons/icons-jollapass/172x172/apps/harbour-stumblefish.png \
+    icons/icons-jollapass/86x86/apps/harbour-stumblefish.png \
+    icons/icons-trackfish/108x108/apps/harbour-stumblefish.png \
+    icons/icons-trackfish/128x128/apps/harbour-stumblefish.png \
+    icons/icons-trackfish/172x172/apps/harbour-stumblefish.png \
+    icons/icons-trackfish/86x86/apps/harbour-stumblefish.png
 
 QMAKE_RPATHDIR += /usr/share/$${TARGET}/lib
 
