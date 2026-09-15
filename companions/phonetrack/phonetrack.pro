@@ -2,7 +2,6 @@
 TEMPLATE = subdirs
 
 SUBDIRS += ./daemon
-SUBDIRS += ./qml
 
 include(../companions.pri)
 

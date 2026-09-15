@@ -2,6 +2,18 @@
 %bcond_without glassfish
 %bcond_without jollapass
 
+%if %{with phonetrack}
+%global need_companion 1
+%endif
+
+%if %{with glassfish} || %{with jollapass}
+%global need_companion 1
+%endif
+
+%if %{with jollapass}
+%global need_companion 1
+%endif
+
 # SPDX-License-Identifier: MIT
 Name:       harbour-stumblefish
 Summary:    Location report collector for Sailfish OS
@@ -56,6 +68,7 @@ Links:
 %package -n harbour-trackfish
 Summary: PhoneTrack Companion for Stumblefish
 Requires: %{name} >= %{version}
+Requires: %{name}-companion >= %{version}
 
 %description -n harbour-trackfish
 PhoneTrack Companion for Stumblefish
@@ -66,6 +79,7 @@ PhoneTrack Companion for Stumblefish
 %package -n harbour-glassfish
 Summary: GlassFish Companion for Stumblefish
 Requires: %{name} >= %{version}
+Requires: %{name}-companion >= %{version}
 
 %description -n harbour-glassfish
 GlassFish Companion for Stumblefish
@@ -76,9 +90,19 @@ GlassFish Companion for Stumblefish
 %package -n harbour-jollapass
 Summary: JollaPass Companion for Stumblefish
 Requires: %{name} >= %{version}
+Requires: %{name}-companion >= %{version}
 
 %description -n harbour-jollapass
-Summary: JollaPass Companion for Stumblefish
+ JollaPass Companion for Stumblefish
+%endif
+
+%if 0%{?need_companion}
+%package companion
+Summary: Companion App for Stumblefish
+Requires: %{name} >= %{version}
+
+%description companion
+Companion App for Stumblefish
 %endif
 
 %prep
@@ -172,4 +196,10 @@ systemctl-user daemon-reload || true
 %{_datadir}/dbus-1/services/org.stumblefish.JollaPass.service
 %{_userunitdir}/harbour-jollapassd.service
 #%%{_datadir}/%%{name}/lib/jollapass/
+%endif
+
+%if 0%{?need_companion}
+%files companion
+%{_bindir}/%{name}-companion
+%{_datadir}/applications/%{name}-companion.desktop
 %endif
