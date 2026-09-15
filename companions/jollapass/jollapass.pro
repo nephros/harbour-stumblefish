@@ -16,3 +16,14 @@ HEADERS += jollapass.h
 TARGET.depends += harbour-stumblefishd
 
 include(../companions.pri)
+
+INSTALLS += target service dbusservice
+
+target.path = /usr/bin
+
+service.files = harbour-jollapassd.service
+service.path = /usr/lib/systemd/user
+
+dbusservice.files = org.stumblefish.JollaPass.service
+dbusservice.path = /usr/share/dbus-1/services
+
