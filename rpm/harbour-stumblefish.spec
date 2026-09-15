@@ -110,6 +110,7 @@ Companion App for Stumblefish
 
 %build
 %qmake5 VERSION='%{version}' \
+    QMAKE_CXX="ccache g++" \
 %if %{with phonetrack}
     CONFIG+=phonetrack \
 %endif
