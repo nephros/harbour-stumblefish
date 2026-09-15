@@ -3,7 +3,7 @@
 
 #include "companions/base/constants.h"
 #include "keys.h"
-//#include "config/phonetrackconfig.h"
+#include "config/phonetrackconfig.h"
 //#include "daemon/observations.h"
 
 //#include <QJsonArray>
@@ -51,18 +51,18 @@ QUrl TrackUploader::formatTrackingUrl(uint trackType,
     QUrlQuery q(url.query());
     QString path = url.path();
 
-//    Stumblefish::PhoneTrackConfig conf;
-//    if(trackType == conf.info(conf.defaultConfig())->id) { // nextcloud phoneTrack
-    if(trackType == 0) { // nextcloud phoneTrack
+    Stumblefish::PhoneTrackConfig conf;
+    if(trackType == conf.info(conf.defaultConfig())->id) { // nextcloud phoneTrack
+//    if(trackType == 0) { // nextcloud phoneTrack
         path.append(QString::fromLatin1(NCPhoneTrackAppUri));
         path.append("/" + session);
         if (!device.isEmpty())
             path.append("/" + device);
-//    } else if(trackType == conf.info("traccar")->id) {
-    } else if(trackType == 3) {
+    } else if(trackType == conf.info("traccar")->id) {
+//    } else if(trackType == 3) {
         q.addQueryItem(QStringLiteral("id"), session);
-//    } else if(trackType == conf.info("custom")->id) {
-    } else if(trackType == 99) {
+    } else if(trackType == conf.info("custom")->id) {
+//    } else if(trackType == 99) {
         QString qs = q.toString();
         qs.replace(QStringLiteral("{latitude}"), QString::number(report.position.latitude));
         qs.replace(QStringLiteral("{longitude}"), QString::number(report.position.longitude));

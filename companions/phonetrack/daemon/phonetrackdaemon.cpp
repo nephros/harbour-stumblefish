@@ -48,7 +48,7 @@ Companion::Companion(QObject *parent)
 
     , m_stumbleWatcher(this)
     , m_settings(Trackfish::OrganizationName, Trackfish::ApplicationName)
-//    , m_phoneTrackConfig(new Stumblefish::PhoneTrackConfig())
+    , m_phoneTrackConfig(new Stumblefish::PhoneTrackConfig())
 {
     QDBusConnection bus = QDBusConnection::sessionBus();
 
@@ -289,7 +289,6 @@ void Companion::setPhoneTrackType(uint type)
 }
 
 
-/*
 void Companion::applyLiveTrackConfig()
 {
 }
@@ -298,4 +297,3 @@ bool Companion::canApplyLiveTrackConfig()
 {
     return m_phoneTrackConfig->haveLiveTrackConfig();
 }
-*/

@@ -7,7 +7,7 @@
 #include <QSettings>
 #include <QDebug>
 
-//#include "config/phonetrackconfig.h"
+#include "config/phonetrackconfig.h"
 #include "trackuploader.h"
 
 class Companion : public StumblefishCompanionBase
@@ -28,8 +28,8 @@ public Q_SLOTS:
 
     bool phoneTrackConfigValid();
 
-//    bool canApplyLiveTrackConfig();
-//    Q_NOREPLY void applyLiveTrackConfig();
+    bool canApplyLiveTrackConfig();
+    Q_NOREPLY void applyLiveTrackConfig();
 
     QVariantMap status() const;
     QVariantMap settings() const;
@@ -54,7 +54,7 @@ private:
     QDBusServiceWatcher m_stumbleWatcher;
 
     QSettings m_settings;
-///    Stumblefish::PhoneTrackConfig* m_phoneTrackConfig;
+    Stumblefish::PhoneTrackConfig* m_phoneTrackConfig;
     TrackUploader m_uploader;
 };
 
