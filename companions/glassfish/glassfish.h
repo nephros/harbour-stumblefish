@@ -2,7 +2,7 @@
 #ifndef GLASSFISH_SERVICE_H
 #define GLASSFISH_SERVICE_H
 
-#include "companionbase.h"
+#include "base/companionbase.h"
 #include <QObject>
 
 class Companion : public StumblefishCompanionBase
