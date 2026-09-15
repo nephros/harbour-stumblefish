@@ -8,7 +8,7 @@
 class Companion : public StumblefishCompanionBase
 {
     Q_OBJECT
-    Q_CLASSINFO("D-Bus Interface", "org.stumblefish.CrowsNest")
+    Q_CLASSINFO("D-Bus Interface", "org.stumblefish.Lookout")
 
 public:
     explicit Companion(QObject *parent = 0);

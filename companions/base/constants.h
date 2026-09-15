@@ -37,13 +37,13 @@ const QString UserAgent = QStringLiteral("harbour-stumblefish/%1 (%2)")
 namespace Glassfish {
 
 const char ServiceName[] = "org.stumblefish.Companions";
-const char ObjectPath[] = "/org/stumblefish/CrowsNest";
-const char InterfaceName[] = "org.stumblefish.CrowsNest";
+const char ObjectPath[] = "/org/stumblefish/Lookout";
+const char InterfaceName[] = "org.stumblefish.Lookout";
 const char OrganizationName[] = "org.stumblefish";
 const char ApplicationName[] = "harbour-glassfish";
 const QString UserAgent = QStringLiteral("harbour-stumblefish/%1 (%2)")
                              .arg(QStringLiteral(GLASSFISH_VERSION))
-                             .arg(QStringLiteral("CrowsNest Companion"));
+                             .arg(QStringLiteral("Glassfish Companion"));
 } //namespace
 #endif //FIND_KLABAUTERS
 
