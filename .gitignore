@@ -30,6 +30,7 @@
 /companions/client/app/moc*.cpp
 /companions/client/plugin/Makefile
 /companions/client/plugin/*.so
+/companions/client/plugin/*.o
 /tests/Makefile
 /tests/tst_uploaduseragent
 /tests/*.o
