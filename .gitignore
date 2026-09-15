@@ -21,7 +21,7 @@
 /companions/glassfish/harbour-glassfishd
 /companions/jollapass/harbour-jollapassd
 /companions/phonetrack/daemon/harbour-trackfishd
-/companions/client/src/harbour-stumblefish-companion
+/companions/client/harbour-stumblefish-companion
 /companions/phonetrack/qml/Makefile
 /companions/client/qml/Makefile
 /companions/client/src/*.o
