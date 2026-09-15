@@ -46,8 +46,8 @@ INSTALLS += target qml desktop
 
 target.path = /usr/bin
 
-qml.files += $$files(*.qml)
-qml.path += /usr/share/harbour-stumblefish/qml/pages/components/
+qml.files += qml/$${TARGET}.qml
+qml.path   = /usr/share/harbour-stumblefish/qml
 
 desktop.files = $${TARGET}.desktop
 desktop.path = /usr/share/applications
