@@ -122,7 +122,10 @@ void Companion::handleDBusMethod()
 void Companion::onStumblefishVanished(const QString& service)
 {
     Q_UNUSED(service)
-    qWarning() << "Stumblefish exited, quitting!";
+    if (service != Stumblefish::ServiceName)
+        qWarning() << "Stumblefish exited, quitting" << service;
+    else
+        qWarning() << "Stumblefish exited, quitting!";
     qApp->quit();
 }
 
@@ -194,6 +197,8 @@ void Companion::onSettingsChanged(const QVariantMap& settings)
 {
     qDebug() << Q_FUNC_INFO;
     qDebug() << "Stumblefish settings::" << settings;
+    if(settings.value(QString::fromLatin1(Stumblefish::BackgroundConfigKey)).toBool() == false)
+        onStumblefishVanished(QString()); // quit
 }
 
 void Companion::onStatusChanged(const QVariantMap& status)

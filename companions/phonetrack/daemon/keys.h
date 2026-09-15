@@ -7,3 +7,7 @@ const char PhoneTrackSessionKey[] = "phonetrack/session";
 const char PhoneTrackNameKey[] = "phonetrack/name";
 }
 
+namespace Stumblefish {
+const char BackgroundConfigKey[] = "allowBackgroundDaemon";
+}
+
