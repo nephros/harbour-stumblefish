@@ -26,6 +26,9 @@ glassfish {
 
 phonetrack {
   DEFINES += TRACK_MY_PHONE
+  INCLUDEPATH += ../..
+  SOURCES += ../../phonetrack/config/phonetrackconfig.cpp
+  HEADERS += ../../phonetrack/config/phonetrackconfig.h
 }
 
 SOURCES += \

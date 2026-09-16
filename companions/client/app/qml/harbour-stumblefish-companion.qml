@@ -16,11 +16,14 @@ ApplicationWindow {
     cover: Component {
         CoverPage {}
     }
-    readonly property bool phoneTrackingAvailable: false
-    readonly property bool glassFishAvailable: false
-    readonly property bool jollaPassAvailable: false
+    property bool phoneTrackingAvailable: false
+    property bool glassFishAvailable: false
+    property bool jollaPassAvailable: false
+    function companionAvailable(name) {
+        return (stumblefishcompanion.availableCompanions().indexOf(name) != -1)
+    }
     Component.onCompleted: {
-        var c = companion.availableCompanions()
+        var c = stumblefishcompanion.availableCompanions()
         phoneTrackingAvailable = (c.indexOf("PhoneTrack") != -1)
         glassFishAvailable = (c.indexOf("GlassFish") != -1)
         jollaPassAvailable = (c.indexOf("JollaPass") != -1)

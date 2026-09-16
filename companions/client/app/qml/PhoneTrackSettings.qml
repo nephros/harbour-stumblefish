@@ -13,10 +13,10 @@ Column {
     TextSwitch { id: phoneTrackEnable
         text: "Enable phone tracking"
         //description: checked
-        //             ? "Keeps the collector daemon running after Stumblefish closes"
-        //             : "Stops the collector daemon when Stumblefish closes"
-        checked: !!stumblefish.settings.phoneTrackEnabled
-        onClicked: stumblefish.setPhoneTrackEnabled(checked)
+        //             ? "Keeps the collector daemon running after stumblefishcompanion closes"
+        //             : "Stops the collector daemon when stumblefishcompanion closes"
+        checked: !!stumblefishcompanion.settings.phoneTrackEnabled
+        onClicked: stumblefishcompanion.setPhoneTrackEnabled(checked)
     }
 
     ListModel { id: phoneTrackConfigModel
@@ -35,14 +35,14 @@ Column {
             description: checked
                          ? "Locations will be submitted as they are discovered"
                          : "Location uploads will happen together with Stumble uploads"
-            checked: !!stumblefish.settings.phoneTrackLiveMode
-            onClicked: stumblefish.setPhoneTrackLive(checked)
+            checked: !!stumblefishcompanion.settings.phoneTrackLiveMode
+            onClicked: stumblefishcompanion.setPhoneTrackLive(checked)
         }
 
         ComboBox { id: phoneTrackBox
             width: parent.width
             label: "Service"
-            currentIndex: stumblefish.settings.phoneTrackType
+            currentIndex: stumblefishcompanion.settings.phoneTrackType
 
             menu: ContextMenu {
                 Repeater {
@@ -52,7 +52,7 @@ Column {
                         enabled: model.supported
                         opacity: enabled ? 1.0 : Theme.opacityLow
                         text: model.name
-                        onClicked: if(model.supported) { stumblefish.setPhoneTrackType(model.id) } else { return }
+                        onClicked: if(model.supported) { stumblefishcompanion.setPhoneTrackType(model.id) } else { return }
                     }
                 }
             }
@@ -60,8 +60,8 @@ Column {
 
         TextField { id: phoneTrackUrlTemplate
             label: "Submission URL"
-            text: !!stumblefish.settings.phoneTrackUrlTemplate
-                   ? stumblefish.settings.phoneTrackUrlTemplate
+            text: !!stumblefishcompanion.settings.phoneTrackUrlTemplate
+                   ? stumblefishcompanion.settings.phoneTrackUrlTemplate
                    : "" // fixme: default template
             placeholderText: phoneTrackConfigModel.get(phoneTrackBox.currentIndex).urlTemplate
             description: phoneTrackBox.currentIndex <= 1
@@ -74,27 +74,27 @@ Column {
                 if (phoneTrackBox.currentIndex <= 1) {
                     text.replace(/apps\/phonetrack.*$/, "")
                 }
-                stumblefish.setPhoneTrackUrlTemplate(text);
+                stumblefishcompanion.setPhoneTrackUrlTemplate(text);
                 phoneTrackSession.focus = true
             }
         }
         PasswordField { id: phoneTrackSession
             enabled:  phoneTrackConfigModel.get(phoneTrackBox.currentIndex).hasSession
-            text: stumblefish.settings.phoneTrackSessionID
+            text: stumblefishcompanion.settings.phoneTrackSessionID
             label: "Session ID"
             inputMethodHints: Qt.ImhNoPredictiveText | Qt.ImhNoAutoUppercase
             EnterKey.iconSource: "image://theme/icon-m-enter-next"
             EnterKey.onClicked: {
-                stumblefish.setPhoneTrackSession(text);
+                stumblefishcompanion.setPhoneTrackSession(text);
                 phoneTrackName.focus = true
             }
         }
         TextField { id: phoneTrackName
             enabled:  phoneTrackConfigModel.get(phoneTrackBox.currentIndex).hasDevice
-            text: stumblefish.settings.phoneTrackDeviceID
+            text: stumblefishcompanion.settings.phoneTrackDeviceID
             placeholderText: enabled ? label : "not required"
             label: "Device Name (optional)"
-            EnterKey.onClicked: { stumblefish.setPhoneTrackName(text); focus = false }
+            EnterKey.onClicked: { stumblefishcompanion.setPhoneTrackName(text); focus = false }
         }
         Label {
             visible: importButt.visible
@@ -106,10 +106,10 @@ Column {
             wrapMode: Text.Wrap
         }
         ButtonLayout { id: importButt
-            visible: (phoneTrackBox.currentIndex <= 1) && stumblefish.status.canApplyLiveTrackConfig
+            visible: (phoneTrackBox.currentIndex <= 1) && stumblefishcompanion.status.canApplyLiveTrackConfig
             Button {
                 text: qsTr("Apply from LiveTrack")
-                onClicked: Remorse.popupAction(page, qsTr("Importing config"), function() { stumblefish.applyLiveTrackConfig() })
+                onClicked: Remorse.popupAction(page, qsTr("Importing config"), function() { stumblefishcompanion.applyLiveTrackConfig() })
             }
         }
     }

@@ -3,11 +3,14 @@
 Description=Stumblefish PhoneTrack Companion
 #After=pre-user-session.target
 BindsTo=harbour-stumblefishd.service
+PartOf=harbour-stumblefishd.service
 After=harbour-stumblefishd.service
 
 [Service]
 ExecStart=/usr/bin/harbour-trackfishd
 Restart=on-failure
+RestartSec=12s
+
 Nice=15
 
 ProtectSystem=strict
@@ -16,3 +19,4 @@ ProtectHome=yes
 [Install]
 #WantedBy=user-session.target
 WantedBy=harbour-stumblefishd.service
+#UpheldBy=harbour-stumblefishd.service
