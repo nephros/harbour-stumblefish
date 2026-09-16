@@ -2,6 +2,7 @@
 #include "stumblefishcompanionclient.h"
 
 #include "common/constants.h"
+#include "base/constants.h"
 
 #include <QDBusConnection>
 //#include <QDBusArgument>
@@ -12,6 +13,7 @@
 //#include <QDBusPendingReply>
 //#include <QDBusVariant>
 //#include <QtGlobal>
+#include <QDebug>
 
 
 
@@ -68,4 +70,28 @@ void StumblefishCompanionClient::registerCompanion(const QString& name)
 {
     if(!m_companions.contains(name))
         m_companions.append(name);
+}
+
+// FIXME: Magic strings unnecessary
+QStringList StumblefishCompanionClient::availableCompanions()
+{
+#ifdef TRACK_MY_PHONE
+    if(QDBusInterface("org.stumblefish.Companions", "/org/stumblefish/Tracker", "org.stumblefish.Tracker").isValid()) {
+        registerCompanion(QString::fromLatin1(Trackfish::ApplicationName));
+    } else
+        m_companions.removeAt(m_companions.indexOf(QString::fromLatin1(Trackfish::ApplicationName)));
+#endif
+#ifdef FIND_KLABAUTERS
+    if(QDBusInterface("org.stumblefish.Companions", "/org/stumblefish/JollaPass", "org.stumblefish.JollaPass").isValid()) {
+        registerCompanion(QString::fromLatin1(Jollapass::ApplicationName));
+    } else
+        m_companions.removeAt(m_companions.indexOf(QString::fromLatin1(Jollapass::ApplicationName)));
+#endif
+#ifdef FIND_JOLLA_BUDDIES
+    if(QDBusInterface("org.stumblefish.Companions", "/org/stumblefish/Lookout", "org.stumblefish.Lookout").isValid()) {
+        registerCompanion(QString::fromLatin1(Glassfish::ApplicationName));
+    } else
+        m_companions.removeAt(m_companions.indexOf(QString::fromLatin1(Glassfish::ApplicationName)));
+#endif
+    return m_companions;
 }

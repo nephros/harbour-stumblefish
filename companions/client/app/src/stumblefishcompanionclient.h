@@ -24,7 +24,7 @@ public:
     QVariantMap status() const;
     QVariantMap settings() const;
 
-    Q_INVOKABLE QStringList availableCompanions() { return m_companions; };
+    Q_INVOKABLE QStringList availableCompanions();
 
     void registerCompanion(const QString& name);
 

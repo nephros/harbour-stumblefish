@@ -35,19 +35,11 @@ int main(int argc, char *argv[])
     view->rootContext()->setContextProperty(QStringLiteral("appVersion"), application->applicationVersion());
 
 #ifdef TRACK_MY_PHONE
-    companion.registerCompanion(QString::fromLatin1(Trackfish::ApplicationName));
     Stumblefish::PhoneTrackConfig ptconfig;
     view->rootContext()->setContextProperty(QStringLiteral("PhoneTrackConfig"), &ptconfig);
 #endif
-#ifdef FIND_JOLLA_BUDDIES
-    companion.registerCompanion(QString::fromLatin1(Jollapass::ApplicationName));
-#endif
-#ifdef FIND_KLABAUTERS
-    companion.registerCompanion(QString::fromLatin1(Glassfish::ApplicationName));
-#endif
-
     view->engine()->addImportPath(SailfishApp::pathTo(QStringLiteral("lib")).toLocalFile());
-    qInfo() << "Registered companions:" << companion.availableCompanions();
+    qInfo() << "Found companions:" << companion.availableCompanions().join(",");
     view->setSource((QStringLiteral("/usr/share/harbour-stumblefish/qml/harbour-stumblefish-companion.qml")));
     //view->setSource(SailfishApp::pathTo(QStringLiteral("qml/harbour-stumblefish-companion.qml")));
     view->show();
