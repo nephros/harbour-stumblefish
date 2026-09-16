@@ -97,11 +97,12 @@ Requires: %{name}-companion >= %{version}
 %endif
 
 %if 0%{?need_companion}
-%package companion
+%package -n harbour-stumblecompanion
 Summary: Companion App for Stumblefish
 Requires: %{name} >= %{version}
+Obsoletes: %{name}-companion <= %{version}
 
-%description companion
+%description -n harbour-stumblecompanion
 Companion App for Stumblefish
 %endif
 
@@ -204,7 +205,7 @@ systemctl-user daemon-reload || true
 %endif
 
 %if 0%{?need_companion}
-%files companion
+%files -n harbour-stumblecompanion
 %{_bindir}/%{name}-companion
 %{_datadir}/applications/%{name}-companion.desktop
 %{_datadir}/%{name}/lib/*/*.so
