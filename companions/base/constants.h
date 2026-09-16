@@ -26,7 +26,7 @@ const char ServiceName[] = "org.stumblefish.Companions";
 const char ObjectPath[] = "/org/stumblefish/JollaPass";
 const char InterfaceName[] = "org.stumblefish.JollaPass";
 const char OrganizationName[] = "org.stumblefish";
-const char ApplicationName[] = "harbour-glassfish";
+const char ApplicationName[] = "harbour-jollapass";
 const QString UserAgent = QStringLiteral("harbour-stumblefish/%1 (%2)")
                              .arg(QStringLiteral(JOLLAPASS_VERSION))
                              .arg(QStringLiteral("JollaPass Companion"));
