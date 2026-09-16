@@ -22,11 +22,11 @@ int main(int argc, char *argv[])
     application->setApplicationName(QString::fromLatin1(Stumblefish::ApplicationName));
     application->setApplicationVersion(QStringLiteral(APP_VERSION));
 
-//    StumblefishClient client;
+    StumblefishClient client;
     StumblefishCompanionClient companion;
 
     QQuickView *view = SailfishApp::createView();
-//    view->rootContext()->setContextProperty(QStringLiteral("stumblefish"), &client);
+    view->rootContext()->setContextProperty(QStringLiteral("stumblefish"), &client);
     view->rootContext()->setContextProperty(QStringLiteral("stumblefishcompanion"), &companion);
     view->rootContext()->setContextProperty(QStringLiteral("appVersion"), application->applicationVersion());
 
@@ -40,7 +40,10 @@ int main(int argc, char *argv[])
     companion.registerCompanion(QStringLiteral("GlassFish"));
 #endif
 
-    view->setSource(SailfishApp::pathTo(QStringLiteral("qml/harbour-stumblefish-companion.qml")));
+    view->engine()->addImportPath(SailfishApp::pathTo(QStringLiteral("lib")).toLocalFile());
+    qDebug() << "imoort:" << SailfishApp::pathTo(QStringLiteral("lib")).toString();
+    view->setSource((QStringLiteral("/usr/share/harbour-stumblefish/qml/harbour-stumblefish-companion.qml")));
+    //view->setSource(SailfishApp::pathTo(QStringLiteral("qml/harbour-stumblefish-companion.qml")));
     view->show();
 
     return application->exec();

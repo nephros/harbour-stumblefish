@@ -10,12 +10,9 @@ CONFIG += c++11 link_pkgconfig
 QT += dbus qml quick
 PKGCONFIG += sailfishapp
 
-include(../../companions.pri)
-# from ../../companions.pri: not used here:
-HEADERS -= $${COMPANIONS_BASE_DIR}/companionbase.h
-SOURCES -= $${COMPANIONS_BASE_DIR}/companionbase.cpp
+STUMBLEFISH_ROOT_DIR = ../../../
 
-INCLUDEPATH += . $${STUMBLEFISH_ROOT_DIR}/src
+INCLUDEPATH += . $${STUMBLEFISH_ROOT_DIR} $${STUMBLEFISH_ROOT_DIR}/src $${STUMBLEFISH_ROOT_DIR}/common
 
 DEFINES += APP_VERSION=\\\"$$VERSION\\\"
 
@@ -33,11 +30,13 @@ phonetrack {
 
 SOURCES += \
     src/main.cpp \
-    src/stumblefishcompanionclient.cpp
+    src/stumblefishcompanionclient.cpp \
+    $${STUMBLEFISH_ROOT_DIR}src/stumblefishclient.cpp
 
 HEADERS += \
     src/stumblefishcompanionclient.h \
-    $${STUMBLEFISH_ROOT_DIR}/common/constants.h
+    $${STUMBLEFISH_ROOT_DIR}/common/constants.h \
+    $${STUMBLEFISH_ROOT_DIR}src/stumblefishclient.h
 
 lupdate_only {
     SOURCES += $$files(qml/*.qml)

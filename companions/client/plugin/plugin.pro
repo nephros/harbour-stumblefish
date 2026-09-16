@@ -15,6 +15,6 @@ message("Building the client QML plugin")
 SOURCES += plugin.cpp
 
 qmldir.files += qmldir
-qmldir.path = /usr/share/harbour-stumblefish/lib
-target.path = /usr/share/harbour-stumblefish/lib
+qmldir.path = /usr/share/harbour-stumblefish/lib/$${QML_IMPORT_NAME}
+target.path = /usr/share/harbour-stumblefish/lib/$${QML_IMPORT_NAME}
 INSTALLS += qmldir target
