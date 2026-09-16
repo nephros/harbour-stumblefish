@@ -1,5 +1,5 @@
 # SPDX-License-Identifier: MIT
 [D-BUS Service]
 Name=org.stumblefish.JollaPass
-Exec=/usr/bin/harbour-jollapassd
-SystemdService=harbour-jollapassd.service
+Exec=/usr/bin/harbour-passfishd
+SystemdService=harbour-passfishd.service

@@ -87,12 +87,13 @@ GlassFish Companion for Stumblefish
 
 
 %if %{with jollapass}
-%package -n harbour-jollapass
+%package -n harbour-passfish
 Summary: JollaPass Companion for Stumblefish
 Requires: %{name} >= %{version}
 Requires: %{name}-companion >= %{version}
+Obsoletes: harbour-jollapass <= %{version}
 
-%description -n harbour-jollapass
+%description -n harbour-passfish
  JollaPass Companion for Stumblefish
 %endif
 
@@ -197,10 +198,10 @@ systemctl-user daemon-reload || true
 %endif
 
 %if %{with jollapass}
-%files -n harbour-jollapass
-%{_bindir}/harbour-jollapassd
+%files -n harbour-passfish
+%{_bindir}/harbour-passfishd
 %{_datadir}/dbus-1/services/org.stumblefish.JollaPass.service
-%{_userunitdir}/harbour-jollapassd.service
+%{_userunitdir}/harbour-passfishd.service
 #%%{_datadir}/%%{name}/lib/jollapass/
 %endif
 

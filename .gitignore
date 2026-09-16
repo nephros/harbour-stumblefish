@@ -19,7 +19,7 @@
 /companions/*/moc_*.cpp
 /companions/Makefile
 /companions/glassfish/harbour-glassfishd
-/companions/jollapass/harbour-jollapassd
+/companions/jollapass/harbour-passfishd
 /companions/phonetrack/daemon/harbour-trackfishd
 /companions/client/harbour-stumblefish-companion
 /companions/phonetrack/qml/Makefile

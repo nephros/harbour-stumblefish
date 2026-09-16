@@ -6,7 +6,7 @@ PartOf=harbour-stumblefishd.service
 After=harbour-stumblefishd.service
 
 [Service]
-ExecStart=/usr/bin/harbour-jollapassd
+ExecStart=/usr/bin/harbour-passfishd
 Restart=on-failure
 
 Nice=15

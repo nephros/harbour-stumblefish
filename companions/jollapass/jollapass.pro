@@ -1,6 +1,6 @@
 # SPDX-License-Identifier: MIT
 TEMPLATE = app
-TARGET = harbour-jollapassd
+TARGET = harbour-passfishd
 
 CONFIG += console c++11 link_pkgconfig
 
@@ -21,7 +21,7 @@ INSTALLS += target service dbusservice
 
 target.path = /usr/bin
 
-service.files = harbour-jollapassd.service
+service.files = harbour-passfishd.service
 service.path = /usr/lib/systemd/user
 
 dbusservice.files = org.stumblefish.JollaPass.service
