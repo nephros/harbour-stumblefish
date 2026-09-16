@@ -278,14 +278,6 @@ Page {
                 font.pixelSize: Theme.fontSizeSmall
                 wrapMode: Text.Wrap
             }
-/* **** PhoneTrack section **** */
-            Loader {
-                active: phoneTrackingAvailable
-                x: Theme.horizontalPageMargin
-                width: parent.width - 2 * Theme.horizontalPageMargin
-                source: Qt.resolvedUrl("plugins/PhoneTrackSettings.qml")
-            }
-/* **** PhoneTrack section  ends **** */
 
             SectionHeader {
                 text: "Storage"

@@ -180,14 +180,6 @@ Page {
                     }
                 }
             }
-/* **** PhoneTrack section **** */
-            Loader {
-                active: phoneTrackingAvailable
-                x: Theme.horizontalPageMargin
-                width: parent.width - 2 * Theme.horizontalPageMargin
-                source: Qt.resolvedUrl("plugins/PhoneTrackStats.qml")
-            }
-/* **** PhoneTrack section  ends **** */
 
             SectionHeader {
                 text: "Reports"
