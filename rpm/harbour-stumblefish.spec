@@ -71,30 +71,30 @@ Requires: %{name} >= %{version}
 Requires: harbour-stumblecompanion >= %{version}
 
 %description -n harbour-trackfish
-PhoneTrack Companion for Stumblefish
+Submits location information to remote endpoints such as NextCloud PhoneTrack.
 %endif
 
 
 %if %{with glassfish}
 %package -n harbour-glassfish
-Summary: GlassFish Companion for Stumblefish
+Summary: Smartglass detection Companion for Stumblefish
 Requires: %{name} >= %{version}
 Requires: harbour-stumblecompanion >= %{version}
 
 %description -n harbour-glassfish
-GlassFish Companion for Stumblefish
+Smartglass detection Companion for Stumblefish
 %endif
 
 
 %if %{with jollapass}
 %package -n harbour-passfish
-Summary: JollaPass Companion for Stumblefish
+Summary: Jolla User detection Companion for Stumblefish
 Requires: %{name} >= %{version}
 Requires: harbour-stumblecompanion >= %{version}
 Obsoletes: harbour-jollapass <= %{version}
 
 %description -n harbour-passfish
- JollaPass Companion for Stumblefish
+Jolla User detection Companion for Stumblefish
 %endif
 
 %if 0%{?need_companion}
