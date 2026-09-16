@@ -68,7 +68,7 @@ Links:
 %package -n harbour-trackfish
 Summary: PhoneTrack Companion for Stumblefish
 Requires: %{name} >= %{version}
-Requires: %{name}-companion >= %{version}
+Requires: harbour-stumblecompanion >= %{version}
 
 %description -n harbour-trackfish
 PhoneTrack Companion for Stumblefish
@@ -79,7 +79,7 @@ PhoneTrack Companion for Stumblefish
 %package -n harbour-glassfish
 Summary: GlassFish Companion for Stumblefish
 Requires: %{name} >= %{version}
-Requires: %{name}-companion >= %{version}
+Requires: harbour-stumblecompanion >= %{version}
 
 %description -n harbour-glassfish
 GlassFish Companion for Stumblefish
@@ -90,7 +90,7 @@ GlassFish Companion for Stumblefish
 %package -n harbour-passfish
 Summary: JollaPass Companion for Stumblefish
 Requires: %{name} >= %{version}
-Requires: %{name}-companion >= %{version}
+Requires: harbour-stumblecompanion >= %{version}
 Obsoletes: harbour-jollapass <= %{version}
 
 %description -n harbour-passfish
