@@ -6,7 +6,7 @@
 %global need_companion 1
 %endif
 
-%if %{with glassfish} || %{with jollapass}
+%if %{with glassfish}
 %global need_companion 1
 %endif
 
