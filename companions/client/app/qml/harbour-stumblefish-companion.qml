@@ -20,10 +20,10 @@ ApplicationWindow {
     property bool glassFishAvailable: false
     property bool jollaPassAvailable: false
     function companionAvailable(name) {
-        return (stumblefishcompanion.availableCompanions().indexOf(name) != -1)
+        return (stumblecompanion.availableCompanions().indexOf(name) != -1)
     }
     Component.onCompleted: {
-        var c = stumblefishcompanion.availableCompanions()
+        var c = stumblecompanion.availableCompanions()
         phoneTrackingAvailable = (c.indexOf("PhoneTrack") != -1)
         glassFishAvailable = (c.indexOf("GlassFish") != -1)
         jollaPassAvailable = (c.indexOf("JollaPass") != -1)
@@ -32,7 +32,7 @@ ApplicationWindow {
     Companion {
         id: companion
         Component.onCompleted: {
-            console.info ("Registered components:", stumblefishcompanion.availableCompanions())
+            console.info ("Registered components:", stumblecompanion.availableCompanions())
         }
     }
     */

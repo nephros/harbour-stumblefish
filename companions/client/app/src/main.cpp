@@ -23,7 +23,7 @@ int main(int argc, char *argv[])
     QGuiApplication *application = SailfishApp::application(argc, argv);
     application->setOrganizationName(QString::fromLatin1(Stumblefish::OrganizationName));
     application->setOrganizationDomain(QStringLiteral("stumblefish.org"));
-    application->setApplicationName(QString::fromLatin1(Stumblefish::ApplicationName));
+    application->setApplicationName(QString::fromLatin1(Stumblefish::CompanionAppName));
     application->setApplicationVersion(QStringLiteral(APP_VERSION));
 
     StumblefishClient client;
@@ -31,22 +31,19 @@ int main(int argc, char *argv[])
 
     QQuickView *view = SailfishApp::createView();
     view->rootContext()->setContextProperty(QStringLiteral("stumblefish"), &client);
-    view->rootContext()->setContextProperty(QStringLiteral("stumblefishcompanion"), &companion);
+    view->rootContext()->setContextProperty(QStringLiteral("stumblecompanion"), &companion);
     view->rootContext()->setContextProperty(QStringLiteral("appVersion"), application->applicationVersion());
 
 #ifdef TRACK_MY_PHONE
-    companion.registerCompanion(QStringLiteral("PhoneTrack"));
+    companion.registerCompanion(QString::fromLatin1(Trackfish::ApplicationName));
     Stumblefish::PhoneTrackConfig ptconfig;
     view->rootContext()->setContextProperty(QStringLiteral("PhoneTrackConfig"), &ptconfig);
-    qDebug() << "Have companion:" << Trackfish::ApplicationName << TRACKFISH_VERSION;
 #endif
 #ifdef FIND_JOLLA_BUDDIES
-    companion.registerCompanion(QStringLiteral("JollaPass"));
-    qDebug() << "Have companion:" << Jollapass::ApplicationName << JOLLAPASS_VERSION;
+    companion.registerCompanion(QString::fromLatin1(Jollapass::ApplicationName));
 #endif
 #ifdef FIND_KLABAUTERS
-    companion.registerCompanion(QStringLiteral("GlassFish"));
-    qDebug() << "Have companion:" << Glassfish::ApplicationName << GLASSFISH_VERSION;
+    companion.registerCompanion(QString::fromLatin1(Glassfish::ApplicationName));
 #endif
 
     view->engine()->addImportPath(SailfishApp::pathTo(QStringLiteral("lib")).toLocalFile());

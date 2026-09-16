@@ -8,6 +8,6 @@ Name=Companion
 
 [X-Sailjail]
 OrganizationName=org.stumblefish
-ApplicationName=Stumblefish
+ApplicationName=StumbleCompanion
 DataDirectory=harbour-stumblefish
 Permissions=Location;Internet;Bluetooth;Stumblefish
