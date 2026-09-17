@@ -11,6 +11,7 @@
 //#include <QDBusPendingCall>
 //#include <QDBusPendingCallWatcher>
 //#include <QDBusPendingReply>
+#include <QDBusReply>
 //#include <QDBusVariant>
 //#include <QtGlobal>
 #include <QDebug>
@@ -72,26 +73,60 @@ void StumblefishCompanionClient::registerCompanion(const QString& name)
         m_companions.append(name);
 }
 
-// FIXME: Magic strings unnecessary
 QStringList StumblefishCompanionClient::availableCompanions()
 {
-#ifdef TRACK_MY_PHONE
-    if(QDBusInterface("org.stumblefish.Companions", "/org/stumblefish/Tracker", "org.stumblefish.Tracker").isValid()) {
-        registerCompanion(QString::fromLatin1(Trackfish::ApplicationName));
-    } else
-        m_companions.removeAt(m_companions.indexOf(QString::fromLatin1(Trackfish::ApplicationName)));
-#endif
-#ifdef FIND_KLABAUTERS
-    if(QDBusInterface("org.stumblefish.Companions", "/org/stumblefish/JollaPass", "org.stumblefish.JollaPass").isValid()) {
-        registerCompanion(QString::fromLatin1(Jollapass::ApplicationName));
-    } else
-        m_companions.removeAt(m_companions.indexOf(QString::fromLatin1(Jollapass::ApplicationName)));
-#endif
-#ifdef FIND_JOLLA_BUDDIES
-    if(QDBusInterface("org.stumblefish.Companions", "/org/stumblefish/Lookout", "org.stumblefish.Lookout").isValid()) {
-        registerCompanion(QString::fromLatin1(Glassfish::ApplicationName));
-    } else
-        m_companions.removeAt(m_companions.indexOf(QString::fromLatin1(Glassfish::ApplicationName)));
-#endif
+    QStringList names;
+    names
+        << QString::fromLatin1(Trackfish::ApplicationName)
+        << QString::fromLatin1(Jollapass::ApplicationName)
+        << QString::fromLatin1(Glassfish::ApplicationName);
+
+    for (const QString& companion : names) {
+        QDBusInterface *iface = ifaceFor(companion);
+        if(iface && iface->isValid()) {
+            registerCompanion(companion);
+            iface->deleteLater();
+        } else
+            m_companions.removeAt(m_companions.indexOf(companion));
+    }
+
     return m_companions;
+}
+
+QVariantMap StumblefishCompanionClient::companionSettings(const QString& companion)
+{
+    QVariantMap map;
+    QDBusInterface *iface = ifaceFor(companion);
+    if(iface && iface->isValid()) {
+        QDBusReply<QVariantMap> reply = iface->call("settings");
+        if(reply.isValid())
+            map = reply.value();
+        iface->deleteLater();
+    }
+    return map;
+}
+
+void StumblefishCompanionClient::setCompanionSettings(const QString& companion, const QString& key, const QVariant& value)
+{
+    QDBusInterface *iface = ifaceFor(companion);
+    if(iface->isValid()) {
+        iface->call("setSetting", key, value);
+        iface->deleteLater();
+    }
+}
+
+// FIXME: Magic strings unnecessary
+QDBusInterface* StumblefishCompanionClient::ifaceFor(const QString& companion)
+{
+    QDBusInterface *iface = nullptr;
+    if(m_companions.contains(companion)) {
+        if(companion == (QString::fromLatin1(Trackfish::ApplicationName))) {
+            iface = new QDBusInterface("org.stumblefish.Companions", "/org/stumblefish/Tracker", "org.stumblefish.Tracker");
+        } else if(companion == (QString::fromLatin1(Glassfish::ApplicationName))) {
+            iface = new QDBusInterface("org.stumblefish.Companions", "/org/stumblefish/Lookout", "org.stumblefish.Lookout");
+        } else if(companion == (QString::fromLatin1(Jollapass::ApplicationName))) {
+            iface = new QDBusInterface("org.stumblefish.Companions", "/org/stumblefish/JollaPass", "org.stumblefish.JollaPass");
+        }
+    }
+    return iface;
 }
