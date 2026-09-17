@@ -13,7 +13,6 @@ namespace Stumblefish {
 const char CompanionAppName[] = "StumbleCompanion";
 }
 
-#ifdef TRACK_MY_PHONE
 namespace Trackfish {
 
 const char ServiceName[] = "org.stumblefish.Companions";
@@ -25,9 +24,7 @@ const QString UserAgent = QStringLiteral("%1 (%2 Companion)")
                              .arg(UserAgentBase)
                              .arg(QString::fromLatin1(ApplicationName));
 } //namespace
-#endif //TRACK_MY_PHONE
 
-#ifdef FIND_JOLLA_BUDDIES
 namespace Jollapass {
 
 const char ServiceName[] = "org.stumblefish.Companions";
@@ -39,9 +36,7 @@ const QString UserAgent = QStringLiteral("%1 (%2 Companion)")
                              .arg(UserAgentBase)
                              .arg(QString::fromLatin1(ApplicationName));
 } //namespace
-#endif //FIND_JOLLA_BUDDIES
 
-#ifdef FIND_KLABAUTERS
 namespace Glassfish {
 
 const char ServiceName[] = "org.stumblefish.Companions";
@@ -53,7 +48,6 @@ const QString UserAgent = QStringLiteral("%1 (%2 Companion)")
                              .arg(UserAgentBase)
                              .arg(QString::fromLatin1(ApplicationName));
 } //namespace
-#endif //FIND_KLABAUTERS
 
 
 #endif
