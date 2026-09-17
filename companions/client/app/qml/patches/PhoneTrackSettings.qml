@@ -7,11 +7,13 @@ Column {
     width: parent.width
     spacing: Theme.paddingMedium
 
+    enabled: phoneTrackgAvailable
+
     SectionHeader {
-        text: "Phone tracking"
+        text: qsTr("Phone Tracking")
     }
     TextSwitch { id: phoneTrackEnable
-        text: "Enable phone tracking"
+        text: qsTr("Enable phone tracking")
         //description: checked
         //             ? "Keeps the collector daemon running after stumblecompanion closes"
         //             : "Stops the collector daemon when stumblecompanion closes"
@@ -31,17 +33,17 @@ Column {
         enabled: phoneTrackEnable.checked
 
         TextSwitch { id: phoneTrackLiveMode
-            text: "Enable live tracking"
+            text: qsTr("Enable live tracking")
             description: checked
-                         ? "Locations will be submitted as they are discovered"
-                         : "Location uploads will happen together with Stumble uploads"
+                         ? qsTr("Locations will be submitted as they are discovered")
+                         : qsTr("Location uploads will happen together with Stumble uploads")
             checked: !!stumblecompanion.settings.phoneTrackLiveMode
             onClicked: stumblecompanion.setPhoneTrackLive(checked)
         }
 
         ComboBox { id: phoneTrackBox
             width: parent.width
-            label: "Service"
+            label: qsTr("Service")
             currentIndex: stumblecompanion.settings.phoneTrackType
 
             menu: ContextMenu {
@@ -59,7 +61,7 @@ Column {
         }
 
         TextField { id: phoneTrackUrlTemplate
-            label: "Submission URL"
+            label: qsTr("Submission URL")
             text: !!stumblecompanion.settings.phoneTrackUrlTemplate
                    ? stumblecompanion.settings.phoneTrackUrlTemplate
                    : "" // fixme: default template
@@ -93,7 +95,7 @@ Column {
             enabled:  phoneTrackConfigModel.get(phoneTrackBox.currentIndex).hasDevice
             text: stumblecompanion.settings.phoneTrackDeviceID
             placeholderText: enabled ? label : "not required"
-            label: "Device Name (optional)"
+            label: qsTr("Device Name (optional)")
             EnterKey.onClicked: { stumblecompanion.setPhoneTrackName(text); focus = false }
         }
         Label {

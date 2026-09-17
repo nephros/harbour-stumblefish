@@ -175,7 +175,7 @@ int main(int argc, char *argv[])
                                             companions.contains(QString::fromLatin1(Jollapass::ApplicationName)));
 
 
-    // find the initialPage component, set its objectName property so we find it later:
+    // find the pageStack and connect signals:
     if(view->rootObject()->property("pageStack").isValid()) {
         QObject* ps = view->rootObject()->property("pageStack").value<QObject*>();
         PSBusyHandler* handler = new PSBusyHandler(ps);
@@ -183,6 +183,8 @@ int main(int argc, char *argv[])
 //        QObject::connect(ps, SIGNAL(depthChanged()), handler, SLOT(onDepthChanged()));
         QObject::connect(ps, SIGNAL(currentPageChanged()), handler, SLOT(onCurrentPageChanged()));
     }
+
+    // find the initialPage component, set its objectName property so we find it later:
     QQmlComponent* initialPageComponent = nullptr;
     if(view->rootObject()->property("initialPage").isValid()) {
         qInfo() << "Root has initialPage!";
@@ -194,19 +196,6 @@ int main(int argc, char *argv[])
             }
         }
     }
-/*
-        QObject::connect(initialPageComponent,
-                         &QQmlComponent::statusChanged,
-                         [initialPageComponent](QQmlComponent::Status status) {
-                            if (status == QQmlComponent::Ready)
-                                qDebug() << "MainPage created.";
-                         }
-        );
-    } else
-        qCritical() << "Could not find initialPage!";
-
-*/
-
     // FIXME: Get snippets from companions:
     //companion.modifyContents(view->rootObject());
     qInfo() << "Patching stats page...";
