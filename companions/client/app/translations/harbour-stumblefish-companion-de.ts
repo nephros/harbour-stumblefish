@@ -58,62 +58,62 @@
 <context>
     <name>PhoneTrackSettings</name>
     <message>
-        <location filename="../qml/patches/PhoneTrackSettings.qml" line="13"/>
+        <location filename="../qml/patches/PhoneTrackSettings.qml" line="15"/>
         <source>Phone Tracking</source>
         <translation>Telefonverfolgung</translation>
     </message>
     <message>
-        <location filename="../qml/patches/PhoneTrackSettings.qml" line="16"/>
+        <location filename="../qml/patches/PhoneTrackSettings.qml" line="18"/>
         <source>Enable phone tracking</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/patches/PhoneTrackSettings.qml" line="36"/>
+        <location filename="../qml/patches/PhoneTrackSettings.qml" line="38"/>
         <source>Enable live tracking</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/patches/PhoneTrackSettings.qml" line="38"/>
+        <location filename="../qml/patches/PhoneTrackSettings.qml" line="40"/>
         <source>Locations will be submitted as they are discovered</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/patches/PhoneTrackSettings.qml" line="39"/>
+        <location filename="../qml/patches/PhoneTrackSettings.qml" line="41"/>
         <source>Location uploads will happen together with Stumble uploads</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/patches/PhoneTrackSettings.qml" line="46"/>
+        <location filename="../qml/patches/PhoneTrackSettings.qml" line="48"/>
         <source>Service</source>
         <translation>Dienst</translation>
     </message>
     <message>
-        <location filename="../qml/patches/PhoneTrackSettings.qml" line="64"/>
+        <location filename="../qml/patches/PhoneTrackSettings.qml" line="66"/>
         <source>Submission URL</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/patches/PhoneTrackSettings.qml" line="70"/>
+        <location filename="../qml/patches/PhoneTrackSettings.qml" line="72"/>
         <source>the app path will be added automatically</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/patches/PhoneTrackSettings.qml" line="98"/>
+        <location filename="../qml/patches/PhoneTrackSettings.qml" line="100"/>
         <source>Device Name (optional)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/patches/PhoneTrackSettings.qml" line="105"/>
+        <location filename="../qml/patches/PhoneTrackSettings.qml" line="107"/>
         <source>Found configuation of the LiveTrack app. Tap the button to import.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/patches/PhoneTrackSettings.qml" line="113"/>
+        <location filename="../qml/patches/PhoneTrackSettings.qml" line="115"/>
         <source>Apply from LiveTrack</source>
         <translation>Aus LiveTrack holen</translation>
     </message>
     <message>
-        <location filename="../qml/patches/PhoneTrackSettings.qml" line="114"/>
+        <location filename="../qml/patches/PhoneTrackSettings.qml" line="116"/>
         <source>Importing config</source>
         <translation>Hole Konfiguration</translation>
     </message>

@@ -7,7 +7,9 @@ Column {
     width: parent.width
     spacing: Theme.paddingMedium
 
-    enabled: phoneTrackgAvailable
+//    enabled: phoneTrackAvailable
+    property var settings
+    Component.onCompleted: stumblecompanion.companionSettings("PhoneTrack")
 
     SectionHeader {
         text: qsTr("Phone Tracking")
@@ -17,8 +19,8 @@ Column {
         //description: checked
         //             ? "Keeps the collector daemon running after stumblecompanion closes"
         //             : "Stops the collector daemon when stumblecompanion closes"
-        checked: !!stumblecompanion.settings.phoneTrackEnabled
-        onClicked: stumblecompanion.setPhoneTrackEnabled(checked)
+        checked: !!settings.phoneTrackEnabled
+        onClicked: stumblecompanion.setCompanionSetting("PhoneTrack", "phoneTrackEnabled", checked)
     }
 
     ListModel { id: phoneTrackConfigModel

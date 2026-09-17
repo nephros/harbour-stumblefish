@@ -167,7 +167,7 @@ int main(int argc, char *argv[])
     QStringList companions = companion.availableCompanions();
 
     qInfo() << "Found companions:" << companions.join(",");
-    view->rootContext()->setContextProperty(QStringLiteral("phoneTrackgAvailable"),
+    view->rootContext()->setContextProperty(QStringLiteral("phoneTrackAvailable"),
                                             companions.contains(QString::fromLatin1(Trackfish::ApplicationName)));
     view->rootContext()->setContextProperty(QStringLiteral("glassFishAvailable"),
                                             companions.contains(QString::fromLatin1(Glassfish::ApplicationName)));
