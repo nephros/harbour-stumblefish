@@ -11,6 +11,7 @@ QT += dbus qml quick
 QT -= gui
 
 PKGCONFIG += sailfishapp
+PKGCONFIG += sailfishsilica
 
 STUMBLEFISH_ROOT_DIR = ../../../
 

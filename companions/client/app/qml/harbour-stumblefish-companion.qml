@@ -12,7 +12,7 @@ ApplicationWindow {
     allowedOrientations: defaultAllowedOrientations
 
     initialPage: Component {
-        MainPage { objectName: "mainPage" }
+        MainPage { }
     }
 
     cover: Component {

@@ -2,11 +2,13 @@
 #include <QGuiApplication>
 #include <QQmlContext>
 #include <QQmlEngine>
+#include <QQmlComponent>
 #include <QQuickView>
 #include <QQuickItem>
 #include <QtQml>
 #include <sailfishapp.h>
-//#include <libsailfishsilica/silicaitem.h>
+#include <libsailfishsilica/silicaitem.h>
+#include <libsailfishsilica/silicacontrol.h>
 
 #include "common/constants.h"
 #include "companions/base/constants.h"
@@ -97,23 +99,19 @@ static void insertColumnElements(QQmlEngine *engine, QQuickItem* root, const QLi
 {
 
     for (QByteArray source: sources) {
-        qDebug() << "Creating Component";
         QQmlComponent *component = new QQmlComponent(engine, root);
         component->setData(source, QUrl());
         QQuickItem* item = qobject_cast<QQuickItem*>(component->create());
         if (component->isError()) {
-            qWarning() << "Failed to create instance of stats:" << component->errors();
+            qWarning() << "Failed to create object:" << component->errors();
             return;
         }
-
-        qDebug() << "Children before:" <<  root->childItems().count();
+        //insert into column
         item->setProperty("width", root->property("width"));
         item->setParentItem(root);  //insert into column
     }
 
-    qDebug() << "Children after:" <<  root->childItems().count();
     root->update();
-    qDebug() << Q_FUNC_INFO << "done";
 }
 
 static bool patchContents(QQuickView* view)
@@ -130,7 +128,6 @@ static bool patchContents(QQuickView* view)
     }
 
     if(found != nullptr) {
-        qDebug() << "Element to manipulate WAS found:" << found;
         QList<QByteArray> sources;
         sources << headerqml;
         sources << trackstatsqml;
@@ -143,6 +140,57 @@ static bool patchContents(QQuickView* view)
     }
     return true;
 }
+
+class PSBusyHandler : public QObject
+{
+    Q_OBJECT
+public:
+    explicit PSBusyHandler(QObject* parent = 0 ) { ps = parent; };
+    ~PSBusyHandler() = default;
+public Q_SLOTS:
+    void onCurrentPageChanged() const {
+        if(!ps) {
+            qDebug() << "Pagestack is null!";
+            return;
+        }
+        auto page = ps->property("currentPage").value<QQuickItem*>();
+        qDebug() << "Pagestack current page changed" << page;
+        if(page->property("defaultTileUrl").isValid()) {
+            patchSettingsPage(page);
+        }
+    }
+/*
+    void onDepthChanged() const {
+        qDebug() << "Pagestack depth changed";
+    };
+    void onBusyChanged() const {
+        qDebug() << "Pagestack busy changed";
+    };
+*/
+private:
+    QObject* ps;
+    bool patchSettingsPage(QQuickItem* page) const
+    {
+        qInfo() << "Patching settings page...";
+        QQuickItem* found = nullptr;
+        for(const auto& child : page->findChildren<QQuickItem*>())
+        {
+            // FIXME: will break when this is i18n-ed.
+            if (child->property("text").toString() == QString::fromLatin1(SettingsPageStatsIdentifier)) {
+                found = qobject_cast<QQuickItem*>(child->parent());
+                break;
+            }
+        }
+        if(found != nullptr) {
+            QList<QByteArray> sources;
+            sources << headerqml;
+            insertColumnElements(QQmlEngine::contextForObject(ps)->engine(), found, sources);
+        }
+        return true;
+    }
+};
+
+#include "main.moc"
 
 int main(int argc, char *argv[])
 {
@@ -168,12 +216,45 @@ int main(int argc, char *argv[])
     view->engine()->addImportPath(SailfishApp::pathTo(QStringLiteral("lib")).toLocalFile());
     view->setSource((QStringLiteral("/usr/share/harbour-stumblefish/qml/harbour-stumblefish-companion.qml")));
 
+    // ping DBus to see what's around
     qInfo() << "Found companions:" << companion.availableCompanions().join(",");
+
+    // find the initialPage component, set its objectName property so we find it later:
+    if(view->rootObject()->property("pageStack").isValid()) {
+        QObject* ps = view->rootObject()->property("pageStack").value<QObject*>();
+        PSBusyHandler* handler = new PSBusyHandler(ps);
+//        QObject::connect(ps, SIGNAL(busyChanged()), handler, SLOT(onBusyChanged()));
+//        QObject::connect(ps, SIGNAL(depthChanged()), handler, SLOT(onDepthChanged()));
+        QObject::connect(ps, SIGNAL(currentPageChanged()), handler, SLOT(onCurrentPageChanged()));
+    }
+    QQmlComponent* initialPageComponent = nullptr;
+    if(view->rootObject()->property("initialPage").isValid()) {
+        qInfo() << "Root has initialPage!";
+        initialPageComponent = view->rootObject()->property("initialPage").value<QQmlComponent*>();
+        if (initialPageComponent->property("status") == QQmlComponent::Ready) {
+            auto *ctx = initialPageComponent->creationContext();
+            for (const auto& child : ctx->children()) {
+                qInfo() << "initialPage child:" << child;
+            }
+        }
+    }
+/*
+        QObject::connect(initialPageComponent,
+                         &QQmlComponent::statusChanged,
+                         [initialPageComponent](QQmlComponent::Status status) {
+                            if (status == QQmlComponent::Ready)
+                                qDebug() << "MainPage created.";
+                         }
+        );
+    } else
+        qCritical() << "Could not find initialPage!";
+
+*/
+
     // FIXME: Get snippets from companions:
     //companion.modifyContents(view->rootObject());
     qInfo() << "Patching stats page...";
     patchContents(view);
-    qInfo() << "Patching settings page...";
 
     view->show();
 

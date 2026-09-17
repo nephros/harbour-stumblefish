@@ -37,3 +37,4 @@
 /tests/moc_*.cpp
 /tests/*.moc
 /tests/target_wrapper.sh
+companions/client/app/main.moc
