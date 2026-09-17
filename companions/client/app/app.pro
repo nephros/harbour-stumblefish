@@ -45,10 +45,12 @@ HEADERS += \
     $${STUMBLEFISH_ROOT_DIR}src/stumblefishclient.h
 
 lupdate_only {
-    SOURCES += $$files(qml/*.qml)
+    SOURCES += $$files(qml/*/*.qml)
 }
 
 RESOURCES += qmlpatches.qrc
+
+TRANSLATIONS += $$files(translations/*.ts)
 
 target.path = /usr/bin
 
