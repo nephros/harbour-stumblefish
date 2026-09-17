@@ -1,0 +1,9 @@
+<!DOCTYPE RCC><RCC version="1.0">
+<qresource prefix="/">
+<file alias="/patches/CompanionHeader.qml">qml/patches/CompanionHeader.qml</file>
+<file alias="/patches/GlassStats.qml">qml/patches/GlassStats.qml</file>
+<file alias="/patches/PassStats.qml">qml/patches/PassStats.qml</file>
+<file alias="/patches/PhoneTrackSettings.qml">qml/patches/PhoneTrackSettings.qml</file>
+<file alias="/patches/TrackStats.qml">qml/patches/TrackStats.qml</file>
+</qresource>
+</RCC>

@@ -22,87 +22,25 @@
 #error None of the companion defines were actually defined!
 #endif
 
-/*
-const QByteArray loadersrc = QByteArrayLiteral("import QtQuick 2.0\n\n\
-                       Loader {\n\
-                            active: true\n\
-                            x: Theme.horizontalPageMargin\n\
-                            width: parent.width - 2 * Theme.horizontalPageMargin\n\
-                            source: Qt.resolvedUrl('plugins/PhoneTrackStats.qml')\n\
-                        }\n");
-*/
-const QByteArray headerqml = QByteArrayLiteral("import QtQuick 2.0\n\
-    import Sailfish.Silica 1.0\n\n\
-    SectionHeader {\n\
-        text: qsTr('Stumblefish Companions')\n\
-        font.pixelSize: Theme.fontSizeLarge\n\
-    }\n\
-    ");
-const QByteArray trackstatsqml = QByteArrayLiteral("import QtQuick 2.0\n\
-    import Sailfish.Silica 1.0\n\n\
-    Column {\n\
-        spacing: Theme.paddingSmall\n\
-        SectionHeader {\n\
-            text: qsTr('Phone Tracking')\n\
-        }\n\
-        DetailItem {\n\
-            label: qsTr('Status')\n\
-            }\n\
-        DetailItem {\n\
-            label: qsTr('Uploaded/Skipped')\n\
-        }\n\
-    }\n\
-    ");
-const QByteArray glassstatsqml = QByteArrayLiteral("import QtQuick 2.0\n\
-    import Sailfish.Silica 1.0\n\n\
-    Column {\n\
-        spacing: Theme.paddingSmall\n\
-        SectionHeader {\n\
-            text: qsTr('Glasses Detection')\n\
-        }\n\
-        DetailItem {\n\
-            label: qsTr('Seen')\n\
-            }\n\
-        DetailItem {\n\
-            label: qsTr('Notified')\n\
-        }\n\
-    }\n\
-    ");
-
-const QByteArray passstatsqml = QByteArrayLiteral("import QtQuick 2.0\n\
-    import Sailfish.Silica 1.0\n\n\
-    Column {\n\
-        spacing: Theme.paddingSmall\n\
-        SectionHeader {\n\
-            text: qsTr('Jolla Buddies')\n\
-        }\n\
-        DetailItem {\n\
-            label: qsTr('Seen')\n\
-            }\n\
-        DetailItem {\n\
-            label: qsTr('WiFi')\n\
-        }\n\
-        DetailItem {\n\
-            label: qsTr('BT')\n\
-        }\n\
-        DetailItem {\n\
-            label: qsTr('JollaPass Beacon')\n\
-        }\n\
-    }\n\
-    ");
-
-
 const char MainPageStatsIdentifier[] = "Reports";
 const char SettingsPageStatsIdentifier[] = "Storage";
 
-static void insertColumnElements(QQuickItem* root, const QList<QByteArray> &sources)
+const char headersrc[]          = "qrc:/patches/CompanionHeader.qml";
+const char glassstatssrc[]      = "qrc:/patches/GlassStats.qml";
+const char passstatssrc[]       = "qrc:/patches/PassStats.qml";
+const char trackstatssrc[]      = "qrc:/patches/TrackStats.qml";
+
+//const char glasssettingssrc[]   = "qrc:/patches/PhoneTrackSettings.qml";
+//const char passsettingssrc[]    = "qrc:/patches/PhoneTrackSettings.qml";
+const char tracksettingssrc[]   = "qrc:/patches/PhoneTrackSettings.qml";
+
+static void insertColumnElements(QQuickItem* root, const QList<QString> &sources)
 {
 
     QQmlEngine* engine = QQmlEngine::contextForObject(root)->engine();
 
-    for (QByteArray source: sources) {
-        QQmlComponent *component = new QQmlComponent(engine, root);
-        component->setData(source, QUrl());
+    for (const QString& source: sources) {
+        QQmlComponent *component = new QQmlComponent(engine, source, root);
         QQuickItem* item = qobject_cast<QQuickItem*>(component->create());
         if (component->isError()) {
             qWarning() << "Failed to create object:" << component->errors();
@@ -130,11 +68,11 @@ static bool patchContents(QQuickView* view)
     }
 
     if(found != nullptr) {
-        QList<QByteArray> sources;
-        sources << headerqml;
-        sources << trackstatsqml;
-        sources << glassstatsqml;
-        sources << passstatsqml;
+        QList<QString> sources;
+        sources << headersrc;
+        sources << trackstatssrc;
+        sources << glassstatssrc;
+        sources << passstatssrc;
         insertColumnElements(found, sources);
     } else {
         qWarning() << "Element to manipulate not found!";
@@ -184,8 +122,9 @@ private:
             }
         }
         if(found != nullptr) {
-            QList<QByteArray> sources;
-            sources << headerqml;
+            QList<QString> sources;
+            sources << headersrc;
+            sources << tracksettingssrc;
             insertColumnElements(found, sources);
         }
         return true;
@@ -220,7 +159,16 @@ int main(int argc, char *argv[])
 //    view->setSource(SailfishApp::pathTo(QStringLiteral("qml/harbour-stumblefish.qml")));
 
     // ping DBus to see what's around
-    qInfo() << "Found companions:" << companion.availableCompanions().join(",");
+    QStringList companions = companion.availableCompanions();
+
+    qInfo() << "Found companions:" << companions.join(",");
+    view->rootContext()->setContextProperty(QStringLiteral("phoneTrackgAvailable"),
+                                            companions.contains(QString::fromLatin1(Trackfish::ApplicationName)));
+    view->rootContext()->setContextProperty(QStringLiteral("glassFishAvailable"),
+                                            companions.contains(QString::fromLatin1(Glassfish::ApplicationName)));
+    view->rootContext()->setContextProperty(QStringLiteral("passFishAvailable"),
+                                            companions.contains(QString::fromLatin1(Jollapass::ApplicationName)));
+
 
     // find the initialPage component, set its objectName property so we find it later:
     if(view->rootObject()->property("pageStack").isValid()) {

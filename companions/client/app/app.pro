@@ -48,6 +48,8 @@ lupdate_only {
     SOURCES += $$files(qml/*.qml)
 }
 
+RESOURCES += qmlpatches.qrc
+
 target.path = /usr/bin
 
 SAILFISHAPP_ICONS = 108x108 128x128 172x172 86x86

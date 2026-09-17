@@ -37,4 +37,6 @@
 /tests/moc_*.cpp
 /tests/*.moc
 /tests/target_wrapper.sh
-companions/client/app/main.moc
+/companions/client/app/main.moc
+/companions/client/app/qmake_*.qrc
+/companions/client/app/qrc_*.cpp
