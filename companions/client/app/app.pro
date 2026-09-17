@@ -48,12 +48,7 @@ lupdate_only {
     SOURCES += $$files(qml/*.qml)
 }
 
-INSTALLS += qml
-
 target.path = /usr/bin
-
-qml.files += qml/$${TARGET}.qml
-qml.path   = /usr/share/harbour-stumblefish/qml
 
 SAILFISHAPP_ICONS = 108x108 128x128 172x172 86x86
 

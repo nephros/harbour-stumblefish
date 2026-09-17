@@ -214,7 +214,8 @@ int main(int argc, char *argv[])
 #endif
 
     view->engine()->addImportPath(SailfishApp::pathTo(QStringLiteral("lib")).toLocalFile());
-    view->setSource((QStringLiteral("/usr/share/harbour-stumblefish/qml/harbour-stumblefish-companion.qml")));
+    view->setSource((QStringLiteral("/usr/share/harbour-stumblefish/qml/harbour-stumblefish.qml")));
+//    view->setSource(SailfishApp::pathTo(QStringLiteral("qml/harbour-stumblefish.qml")));
 
     // ping DBus to see what's around
     qInfo() << "Found companions:" << companion.availableCompanions().join(",");

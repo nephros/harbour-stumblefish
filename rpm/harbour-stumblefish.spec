@@ -176,7 +176,6 @@ systemctl-user daemon-reload || true
 %exclude %{_datadir}/%{name}/lib/phonetrack/
 %endif
 %if 0%{?need_companion}
-%exclude %{_datadir}/%{name}/qml/harbour-stumblefish-companion.qml
 %exclude %{_datadir}/%{name}/lib/*/*.so
 %exclude %{_datadir}/%{name}/lib/*/qmldir
 %endif
@@ -211,7 +210,6 @@ systemctl-user daemon-reload || true
 %{_datadir}/applications/%{name}-companion.desktop
 %{_datadir}/%{name}/lib/*/*.so
 %{_datadir}/%{name}/lib/*/qmldir
-%{_datadir}/%{name}/qml/harbour-stumblefish-companion.qml
 %{_datadir}/icons/hicolor/86x86/apps/%{name}-companion.png
 %{_datadir}/icons/hicolor/108x108/apps/%{name}-companion.png
 %{_datadir}/icons/hicolor/128x128/apps/%{name}-companion.png
