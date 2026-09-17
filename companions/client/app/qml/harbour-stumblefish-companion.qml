@@ -7,15 +7,18 @@ import "pages"
 
 
 ApplicationWindow {
+    id: "app"
+
     allowedOrientations: defaultAllowedOrientations
 
     initialPage: Component {
-        MainPage {}
+        MainPage { objectName: "mainPage" }
     }
 
     cover: Component {
         CoverPage {}
     }
+
     property bool phoneTrackingAvailable: false
     property bool glassFishAvailable: false
     property bool jollaPassAvailable: false

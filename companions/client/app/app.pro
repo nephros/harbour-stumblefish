@@ -8,6 +8,8 @@ CONFIG += sailfishapp_no_deploy_qml
 
 CONFIG += c++11 link_pkgconfig
 QT += dbus qml quick
+QT -= gui
+
 PKGCONFIG += sailfishapp
 
 STUMBLEFISH_ROOT_DIR = ../../../
@@ -45,7 +47,7 @@ lupdate_only {
     SOURCES += $$files(qml/*.qml)
 }
 
-INSTALLS += target qml
+INSTALLS += qml
 
 target.path = /usr/bin
 
