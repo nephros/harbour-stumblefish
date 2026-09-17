@@ -6,7 +6,7 @@
     <message>
         <location filename="../qml/patches/CompanionHeader.qml" line="5"/>
         <source>Stumblefish Companions</source>
-        <translation type="unfinished"></translation>
+        <translation>Stumblefish-Begleiter</translation>
     </message>
 </context>
 <context>
@@ -14,17 +14,17 @@
     <message>
         <location filename="../qml/patches/GlassStats.qml" line="6"/>
         <source>Glasses Detection</source>
-        <translation type="unfinished"></translation>
+        <translation>Brillendetektor</translation>
     </message>
     <message>
         <location filename="../qml/patches/GlassStats.qml" line="9"/>
         <source>Seen</source>
-        <translation type="unfinished"></translation>
+        <translation>Gesehen</translation>
     </message>
     <message>
         <location filename="../qml/patches/GlassStats.qml" line="12"/>
         <source>Notified</source>
-        <translation type="unfinished"></translation>
+        <translation>Gewarnt</translation>
     </message>
 </context>
 <context>
@@ -32,27 +32,27 @@
     <message>
         <location filename="../qml/patches/PassStats.qml" line="6"/>
         <source>Jolla Buddies</source>
-        <translation type="unfinished"></translation>
+        <translation>Jolla-Kollegen</translation>
     </message>
     <message>
         <location filename="../qml/patches/PassStats.qml" line="9"/>
         <source>Seen</source>
-        <translation type="unfinished"></translation>
+        <translation>Gesehen</translation>
     </message>
     <message>
         <location filename="../qml/patches/PassStats.qml" line="12"/>
         <source>WiFi</source>
-        <translation type="unfinished"></translation>
+        <translation>WiFi</translation>
     </message>
     <message>
         <location filename="../qml/patches/PassStats.qml" line="15"/>
         <source>BT</source>
-        <translation type="unfinished"></translation>
+        <translation>BT</translation>
     </message>
     <message>
         <location filename="../qml/patches/PassStats.qml" line="18"/>
         <source>JollaPass Beacon</source>
-        <translation type="unfinished"></translation>
+        <translation>JollaPass-Beacon</translation>
     </message>
 </context>
 <context>
@@ -83,17 +83,17 @@
     <message>
         <location filename="../qml/patches/TrackStats.qml" line="6"/>
         <source>Phone Tracking</source>
-        <translation type="unfinished"></translation>
+        <translation>Telefonverfolgung</translation>
     </message>
     <message>
         <location filename="../qml/patches/TrackStats.qml" line="9"/>
         <source>Status</source>
-        <translation type="unfinished"></translation>
+        <translation>Status</translation>
     </message>
     <message>
         <location filename="../qml/patches/TrackStats.qml" line="12"/>
         <source>Uploaded/Skipped</source>
-        <translation type="unfinished"></translation>
+        <translation>Raufgeladen/Ausgelassen</translation>
     </message>
 </context>
 </TS>
