@@ -95,8 +95,10 @@ const QByteArray passstatsqml = QByteArrayLiteral("import QtQuick 2.0\n\
 const char MainPageStatsIdentifier[] = "Reports";
 const char SettingsPageStatsIdentifier[] = "Storage";
 
-static void insertColumnElements(QQmlEngine *engine, QQuickItem* root, const QList<QByteArray> &sources)
+static void insertColumnElements(QQuickItem* root, const QList<QByteArray> &sources)
 {
+
+    QQmlEngine* engine = QQmlEngine::contextForObject(root)->engine();
 
     for (QByteArray source: sources) {
         QQmlComponent *component = new QQmlComponent(engine, root);
@@ -133,7 +135,7 @@ static bool patchContents(QQuickView* view)
         sources << trackstatsqml;
         sources << glassstatsqml;
         sources << passstatsqml;
-        insertColumnElements(view->engine(), found, sources);
+        insertColumnElements(found, sources);
     } else {
         qWarning() << "Element to manipulate not found!";
         return false;
@@ -184,7 +186,7 @@ private:
         if(found != nullptr) {
             QList<QByteArray> sources;
             sources << headerqml;
-            insertColumnElements(QQmlEngine::contextForObject(ps)->engine(), found, sources);
+            insertColumnElements(found, sources);
         }
         return true;
     }
