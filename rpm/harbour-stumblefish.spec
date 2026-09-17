@@ -40,6 +40,10 @@ BuildRequires:  pkgconfig(systemsettings)
 BuildRequires:  desktop-file-utils
 Requires:       sailfishsilica-qt5 >= 0.10.9
 
+%if 0%{?need_companion}
+BuildRequires: qt5-qttools-linguist
+%endif
+
 %description
 Stumblefish collects opt-in Wi-Fi, cell tower, and Bluetooth beacon
 observations with a position fix, stores the reports locally, and can submit
@@ -214,4 +218,6 @@ systemctl-user daemon-reload || true
 %{_datadir}/icons/hicolor/108x108/apps/%{name}-companion.png
 %{_datadir}/icons/hicolor/128x128/apps/%{name}-companion.png
 %{_datadir}/icons/hicolor/172x172/apps/%{name}-companion.png
+#FIXME:
+%exclude %{_datadir}/%{name}-companion/translations/*.qm
 %endif

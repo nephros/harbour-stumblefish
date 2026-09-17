@@ -4,6 +4,7 @@ TARGET = harbour-stumblefish-companion
 message("Building the companion app.")
 
 CONFIG += sailfishapp
+CONFIG += sailfishapp_i18n
 CONFIG += sailfishapp_no_deploy_qml
 
 CONFIG += c++11 link_pkgconfig
@@ -48,9 +49,17 @@ lupdate_only {
     SOURCES += $$files(qml/*/*.qml)
 }
 
-RESOURCES += qmlpatches.qrc
+RESOURCES += \
+        qmlpatches.qrc \
+        translations.qrc \
 
 TRANSLATIONS += $$files(translations/*.ts)
+
+QMAKE_EXTRA_TARGETS += ts
+ts.commands = lupdate $$_PRO_FILE_
+
+QMAKE_EXTRA_TARGETS += qm
+qm.commands = lupdate $$_PRO_FILE_
 
 target.path = /usr/bin
 

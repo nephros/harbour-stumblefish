@@ -6,6 +6,7 @@
 #include <QQuickView>
 #include <QQuickItem>
 #include <QtQml>
+#include <QTranslator>
 #include <sailfishapp.h>
 #include <libsailfishsilica/silicaitem.h>
 #include <libsailfishsilica/silicacontrol.h>
@@ -140,6 +141,10 @@ int main(int argc, char *argv[])
     application->setOrganizationDomain(QStringLiteral("stumblefish.org"));
     application->setApplicationName(QString::fromLatin1(Stumblefish::CompanionAppName));
     application->setApplicationVersion(QStringLiteral(APP_VERSION));
+
+    QTranslator translator;
+    if(translator.load(":/translations/harbour-stumblefish-companion.qm"))
+        application->installTranslator(&translator);
 
     StumblefishClient client;
     StumblefishCompanionClient companion;

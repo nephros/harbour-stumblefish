@@ -40,3 +40,4 @@
 /companions/client/app/main.moc
 /companions/client/app/qmake_*.qrc
 /companions/client/app/qrc_*.cpp
+/companions/client/app/translations/*qm
