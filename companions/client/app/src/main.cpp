@@ -100,10 +100,15 @@ public Q_SLOTS:
             patchSettingsPage(page);
         }
     }
-/*
     void onDepthChanged() const {
-        qDebug() << "Pagestack depth changed";
+        qDebug() << "Pagestack depth changed:" << ps->property("depth").toInt();
+        qDebug() << "Pagestack depth changed:" << ps->property("currentPage");
+        if (ps->property("depth") == 0) {
+            auto page = ps->property("currentPage").value<QQuickItem*>();
+//            patchMainPage(page);
+        }
     };
+/*
     void onBusyChanged() const {
         qDebug() << "Pagestack busy changed";
     };
@@ -180,7 +185,7 @@ int main(int argc, char *argv[])
         QObject* ps = view->rootObject()->property("pageStack").value<QObject*>();
         PSBusyHandler* handler = new PSBusyHandler(ps);
 //        QObject::connect(ps, SIGNAL(busyChanged()), handler, SLOT(onBusyChanged()));
-//        QObject::connect(ps, SIGNAL(depthChanged()), handler, SLOT(onDepthChanged()));
+        QObject::connect(ps, SIGNAL(depthChanged()), handler, SLOT(onDepthChanged()));
         QObject::connect(ps, SIGNAL(currentPageChanged()), handler, SLOT(onCurrentPageChanged()));
     }
 

@@ -9,7 +9,7 @@ Column {
 
 //    enabled: phoneTrackAvailable
     property var settings
-    Component.onCompleted: stumblecompanion.companionSettings("PhoneTrack")
+    Component.onCompleted: settings = stumblecompanion.companionSettings("PhoneTrack")
 
     SectionHeader {
         text: qsTr("Phone Tracking")
