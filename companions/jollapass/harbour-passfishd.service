@@ -8,6 +8,8 @@ After=harbour-stumblefishd.service
 PartOf=harbour-stumblecompanions.target
 
 [Service]
+Type=dbus
+BusName=org.stumblefish.Companion.JollaPass
 ExecStart=/usr/bin/harbour-passfishd
 Restart=on-failure
 
