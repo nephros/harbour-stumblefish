@@ -164,6 +164,45 @@ fi
 %postun
 systemctl-user daemon-reload || true
 
+%if %{with phonetrack}
+%pre -n harbour-trackfish
+if [ "$1" -gt 1 ]; then
+    systemctl-user stop  harbour-trackfishd|| true
+fi
+
+%preun -n harbour-trackfish
+if [ "$1" -eq 0 ]; then
+    systemctl-user disable harbour-trackfishd || true
+    systemctl-user stop harbour-trackfishd || true
+fi
+%endif
+
+%if %{with glasshfish}
+%pre -n harbour-glassfish
+if [ "$1" -gt 1 ]; then
+    systemctl-user stop  harbour-glassfishd|| true
+fi
+
+%preun -n harbour-glassfish
+if [ "$1" -eq 0 ]; then
+    systemctl-user disable harbour-glassfishd || true
+    systemctl-user stop harbour-glassfishd || true
+fi
+%endif
+
+%if %{with jollapass}
+%pre -n harbour-passfish
+if [ "$1" -gt 1 ]; then
+    systemctl-user stop  harbour-passfishd|| true
+fi
+
+%preun -n harbour-passfish
+if [ "$1" -eq 0 ]; then
+    systemctl-user disable harbour-passfishd || true
+    systemctl-user stop harbour-passfishd || true
+fi
+%endif
+
 %files
 %{_bindir}/%{name}
 %{_bindir}/%{name}d
