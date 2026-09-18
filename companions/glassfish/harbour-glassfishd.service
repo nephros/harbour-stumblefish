@@ -10,7 +10,7 @@ PartOf=harbour-stumblecompanions.target
 [Service]
 Type=dbus
 BusName=org.stumblefish.Companion.Lookout
-ExecStart=/usr/bin/harbour-glassfishd
+ExecStart=/usr/libexec/harbour-glassfishd
 Restart=on-failure
 
 Nice=15

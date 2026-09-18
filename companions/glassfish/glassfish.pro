@@ -19,7 +19,7 @@ include(../companions.pri)
 
 INSTALLS += target service dbusservice
 
-target.path = /usr/bin
+target.path = /usr/libexec
 
 service.files = harbour-glassfishd.service
 service.path = /usr/lib/systemd/user

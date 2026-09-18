@@ -10,7 +10,7 @@ PartOf=harbour-stumblecompanions.target
 [Service]
 Type=dbus
 BusName=org.stumblefish.Companion.JollaPass
-ExecStart=/usr/bin/harbour-passfishd
+ExecStart=/usr/libexec/harbour-passfishd
 Restart=on-failure
 
 Nice=15
