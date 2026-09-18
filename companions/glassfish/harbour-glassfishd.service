@@ -5,6 +5,8 @@ BindsTo=harbour-stumblefishd.service
 PartOf=harbour-stumblefishd.service
 After=harbour-stumblefishd.service
 
+PartOf=harbour-stumblecompanions.target
+
 [Service]
 ExecStart=/usr/bin/harbour-glassfishd
 Restart=on-failure
@@ -16,3 +18,4 @@ ProtectHome=yes
 
 [Install]
 WantedBy=harbour-stumblefishd.service
+WantedBy=harbour-stumblecompanions.target

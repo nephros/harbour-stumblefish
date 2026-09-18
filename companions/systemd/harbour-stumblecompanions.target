@@ -1,0 +1,8 @@
+[Unit]
+Description=Stumblefish Companions
+After=user-session.target
+After=harbour-stumblefishd.target
+DefaultDependencies=no
+StopWhenUnneeded=true
+
+[Install]

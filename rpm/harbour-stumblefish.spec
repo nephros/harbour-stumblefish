@@ -250,6 +250,7 @@ fi
 %if 0%{?need_companion}
 %files -n harbour-stumblecompanion
 %{_bindir}/%{name}-companion
+%{_userunitdir}/harbour-stumblecompanions.target
 %{_datadir}/applications/%{name}-companion.desktop
 %{_datadir}/%{name}/lib/*/*.so
 %{_datadir}/%{name}/lib/*/qmldir
