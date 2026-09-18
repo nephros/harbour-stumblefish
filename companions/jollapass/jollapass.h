@@ -13,8 +13,10 @@ class Companion : public StumblefishCompanionBase
 
 public:
     explicit Companion(QObject *parent = 0);
-//    ~Companion();
 
+public Q_SLOTS:
+        QVariantMap settings() const override { return QVariantMap(); };
+        QVariantMap status() const override { return QVariantMap(); };
 private Q_SLOTS:
     void handleDBusMethod() override; // Implement pure virtual method
 };

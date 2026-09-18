@@ -31,8 +31,8 @@ public Q_SLOTS:
     bool canApplyLiveTrackConfig();
     Q_NOREPLY void applyLiveTrackConfig();
 
-    QVariantMap status() const;
-    QVariantMap settings() const;
+    QVariantMap status() const override;
+    QVariantMap settings() const override;
 
 Q_SIGNALS:
 private Q_SLOTS:

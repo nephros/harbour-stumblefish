@@ -15,5 +15,3 @@ INCLUDEPATH += \
 
 HEADERS += \
     $${COMPANIONS_BASE_DIR}/companionbase.h
-SOURCES += \
-    $${COMPANIONS_BASE_DIR}/companionbase.cpp
