@@ -155,7 +155,7 @@ QVariantMap Companion::status() const
     return map;
 }
 
-bool Companion::phoneTrackConfigValid()
+bool Companion::configValid()
 {
     return !m_settings.value(QString::fromLatin1(PhoneTrackTypeKey)).toString().isEmpty()
         && !m_settings.value(QString::fromLatin1(PhoneTrackUrlKey)).toString().isEmpty()
@@ -260,32 +260,32 @@ void Companion::getReport(int reportId)
 }
 */
 
-bool Companion::phoneTrackEnabled()
+bool Companion::enabled()
 {
     return m_settings.value(QString::fromLatin1(PhoneTrackEnableKey)).toBool();
 }
 
-void Companion::setPhoneTrackEnabled(bool enable)
+void Companion::setEnabled(bool enable)
 {
     m_settings.setValue(QString::fromLatin1(PhoneTrackEnableKey), QVariant::fromValue(enable));
 }
 
-bool Companion::phoneTrackLiveEnabled()
+bool Companion::liveEnabled()
 {
     return m_settings.value(QString::fromLatin1(PhoneTrackLiveKey)).toBool();
 }
 
-void Companion::setPhoneTrackLiveEnabled(bool enable)
+void Companion::setLiveEnabled(bool enable)
 {
     m_settings.setValue(QString::fromLatin1(PhoneTrackLiveKey), QVariant::fromValue(enable));
 }
 
-uint Companion::phoneTrackType()
+uint Companion::type()
 {
     return m_settings.value(QString::fromLatin1(PhoneTrackTypeKey)).value<uint>();
 }
 
-void Companion::setPhoneTrackType(uint type)
+void Companion::setType(uint type)
 {
     m_settings.setValue(QString::fromLatin1(PhoneTrackTypeKey), QVariant::fromValue(type));
 }
