@@ -41,6 +41,7 @@ StumblefishCompanionClient::StumblefishCompanionClient(QObject *parent)
                 QStringLiteral("settingsChanged"),
                 this,
                 SLOT(handleSettingsSignal(QVariantMap)));
+    qDebug() << "StumblefishCompanionClient created.";
 }
 
 //StumblefishCompanionClient::~StumblefishCompanionClient()
@@ -69,8 +70,10 @@ void StumblefishCompanionClient::handleSettingsSignal(const QVariantMap &setting
 
 void StumblefishCompanionClient::registerCompanion(const QString& name)
 {
-    if(!m_companions.contains(name))
+    if(!m_companions.contains(name)) {
         m_companions.append(name);
+        qDebug() << "StumblefishCompanionClient: registered" << name;
+    }
 }
 
 QStringList StumblefishCompanionClient::availableCompanions()
@@ -86,10 +89,13 @@ QStringList StumblefishCompanionClient::availableCompanions()
         if(iface && iface->isValid()) {
             registerCompanion(companion);
             iface->deleteLater();
-        } else
+        } else {
+            qDebug() << "StumblefishCompanionClient: unlisting Companion:" << companion;
             m_companions.removeAt(m_companions.indexOf(companion));
+        }
     }
 
+    qDebug() << "StumblefishCompanionClient: listing Companions:" << m_companions.join(",");
     return m_companions;
 }
 
@@ -115,18 +121,29 @@ void StumblefishCompanionClient::setCompanionSettings(const QString& companion, 
     }
 }
 
-// FIXME: Magic strings unnecessary
 QDBusInterface* StumblefishCompanionClient::ifaceFor(const QString& companion)
 {
     QDBusInterface *iface = nullptr;
     if(m_companions.contains(companion)) {
         if(companion == (QString::fromLatin1(Trackfish::ApplicationName))) {
-            iface = new QDBusInterface("org.stumblefish.Companions", "/org/stumblefish/Tracker", "org.stumblefish.Tracker");
+            iface = new QDBusInterface(QString::fromLatin1(Trackfish::ServiceName),
+                                       QString::fromLatin1(Trackfish::ObjectPath),
+                                       QString::fromLatin1(Trackfish::InterfaceName));
         } else if(companion == (QString::fromLatin1(Glassfish::ApplicationName))) {
-            iface = new QDBusInterface("org.stumblefish.Companions", "/org/stumblefish/Lookout", "org.stumblefish.Lookout");
+            iface = new QDBusInterface(QString::fromLatin1(Glassfish::ServiceName),
+                                       QString::fromLatin1(Glassfish::ObjectPath),
+                                       QString::fromLatin1(Glassfish::InterfaceName));
         } else if(companion == (QString::fromLatin1(Jollapass::ApplicationName))) {
-            iface = new QDBusInterface("org.stumblefish.Companions", "/org/stumblefish/JollaPass", "org.stumblefish.JollaPass");
+            iface = new QDBusInterface(QString::fromLatin1(Jollapass::ServiceName),
+                                       QString::fromLatin1(Jollapass::ObjectPath),
+                                       QString::fromLatin1(Jollapass::InterfaceName));
+        } else {
+            qWarning() << "No interface for:" << companion;
         }
     }
+    if(!iface)
+        qWarning() << "NULL interface for:" << companion;
+    if(!iface->isValid())
+        qWarning() << "Invalid interface for:" << companion;
     return iface;
 }
