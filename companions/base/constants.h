@@ -15,7 +15,7 @@ const char CompanionAppName[] = "StumbleCompanion";
 
 namespace Trackfish {
 
-const char ServiceName[] = "org.stumblefish.Companions";
+const char ServiceName[] = "org.stumblefish.Companion.Tracker";
 const char ObjectPath[] = "/org/stumblefish/Tracker";
 const char InterfaceName[] = "org.stumblefish.Tracker";
 const char OrganizationName[] = "org.stumblefish";
@@ -27,7 +27,7 @@ const QString UserAgent = QStringLiteral("%1 (%2 Companion)")
 
 namespace Jollapass {
 
-const char ServiceName[] = "org.stumblefish.Companions";
+const char ServiceName[] = "org.stumblefish.Companion.JollaPass";
 const char ObjectPath[] = "/org/stumblefish/JollaPass";
 const char InterfaceName[] = "org.stumblefish.JollaPass";
 const char OrganizationName[] = "org.stumblefish";
@@ -39,7 +39,7 @@ const QString UserAgent = QStringLiteral("%1 (%2 Companion)")
 
 namespace Glassfish {
 
-const char ServiceName[] = "org.stumblefish.Companions";
+const char ServiceName[] = "org.stumblefish.Companion.Glassfish";
 const char ObjectPath[] = "/org/stumblefish/Lookout";
 const char InterfaceName[] = "org.stumblefish.Lookout";
 const char OrganizationName[] = "org.stumblefish";
