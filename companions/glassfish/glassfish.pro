@@ -21,7 +21,7 @@ INSTALLS += target service dbusservice
 
 target.path = /usr/bin
 
-service.files = $${TARGET}.service
+service.files = harbour-glassfishd.service
 service.path = /usr/lib/systemd/user
 
 dbusservice.files = org.stumblefish.Lookout.service

@@ -2,8 +2,6 @@
 Description=Stumblefish Companions
 After=user-session.target
 After=harbour-stumblefishd.target
-Wants=harbour-stumblecompaniond.service
-After=harbour-stumblecompaniond.service
 DefaultDependencies=no
 StopWhenUnneeded=true
 

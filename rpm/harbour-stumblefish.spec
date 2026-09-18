@@ -203,20 +203,6 @@ if [ "$1" -eq 0 ]; then
 fi
 %endif
 
-%if 0%{?need_companion}
-%pre -n harbour-stumblecompanion
-if [ "$1" -gt 1 ]; then
-    systemctl-user stop harbour-stumblecompaniond|| true
-fi
-
-%preun -n harbour-stumblecompanion
-if [ "$1" -eq 0 ]; then
-    systemctl-user disable harbour-stumblecompaniond || true
-    systemctl-user stop harbour-stumblecompaniond || true
-fi
-%endif
-
-
 %files
 %{_bindir}/%{name}
 %{_bindir}/%{name}d
@@ -240,7 +226,7 @@ fi
 %if %{with phonetrack}
 %files -n harbour-trackfish
 %{_bindir}/harbour-trackfishd
-%exclude %{_datadir}/dbus-1/services/org.stumblefish.Tracker.service
+%{_datadir}/dbus-1/services/org.stumblefish.Tracker.service
 %{_userunitdir}/harbour-trackfishd.service
 %{_datadir}/%{name}/lib/phonetrack/
 %endif
@@ -248,7 +234,7 @@ fi
 %if %{with glassfish}
 %files -n harbour-glassfish
 %{_bindir}/harbour-glassfishd
-%exclude %{_datadir}/dbus-1/services/org.stumblefish.Lookout.service
+%{_datadir}/dbus-1/services/org.stumblefish.Lookout.service
 %{_userunitdir}/harbour-glassfishd.service
 #%%{_datadir}/%%{name}/lib/glassfish/
 %endif
@@ -256,7 +242,7 @@ fi
 %if %{with jollapass}
 %files -n harbour-passfish
 %{_bindir}/harbour-passfishd
-%exclude %{_datadir}/dbus-1/services/org.stumblefish.JollaPass.service
+%{_datadir}/dbus-1/services/org.stumblefish.JollaPass.service
 %{_userunitdir}/harbour-passfishd.service
 #%%{_datadir}/%%{name}/lib/jollapass/
 %endif
@@ -272,12 +258,6 @@ fi
 %{_datadir}/icons/hicolor/108x108/apps/%{name}-companion.png
 %{_datadir}/icons/hicolor/128x128/apps/%{name}-companion.png
 %{_datadir}/icons/hicolor/172x172/apps/%{name}-companion.png
-
-%{_bindir}/harbour-stumblecompaniond
-%{_userunitdir}/harbour-stumblecompaniond.service
-%{_datadir}/dbus-1/services/org.stumblefish.Companions.service
-%{_datadir}/dbus-1/interfaces/org.stumblefish.Companions.xml
-
 #FIXME:
 %exclude %{_datadir}/%{name}-companion/translations/*.qm
 %endif

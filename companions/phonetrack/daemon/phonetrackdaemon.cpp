@@ -47,22 +47,6 @@ Companion::Companion(QObject *parent)
     , m_settings(Trackfish::OrganizationName, Trackfish::ApplicationName)
     , m_phoneTrackConfig(new Stumblefish::PhoneTrackConfig())
 {
-    /*
-    if (!bus.registerService(QString::fromLatin1(Trackfish::ServiceName))) {
-        qWarning() << "Failed to register D-Bus service" << bus.lastError().message();
-    } else
-        qInfo() << "Registerred D-Bus service" << QString::fromLatin1(Trackfish::ServiceName);
-    */
-
-    QDBusConnection service = QDBusConnection::connectToBus(QDBusConnection::SessionBus, QString::fromLatin1(Trackfish::ServiceName));
-    if(service.isConnected())
-        qInfo() << "Connected to D-Bus service" << QString::fromLatin1(Trackfish::ServiceName);
-    if (!service.registerObject(QString::fromLatin1(Trackfish::ObjectPath), this,
-                            QDBusConnection::ExportAllSlots | QDBusConnection::ExportAllSignals)) {
-        qWarning() << "Failed to register D-Bus object" << service.lastError().message();
-    } else
-        qInfo() << "Registerred D-Bus object" << QString::fromLatin1(Trackfish::ObjectPath);
-
     QDBusConnection bus = QDBusConnection::sessionBus();
 
     /* watch for unregistration and quit if detected: */
@@ -72,6 +56,17 @@ Companion::Companion(QObject *parent)
     QObject::connect(&m_stumbleWatcher, SIGNAL(serviceUnregistered(const QString&)),
                             this, SLOT(onStumblefishVanished(const QString&)));
 
+
+    if (!bus.registerService(QString::fromLatin1(Trackfish::ServiceName))) {
+        qWarning() << "Failed to register D-Bus service" << bus.lastError().message();
+    } else
+        qInfo() << "Registerred D-Bus service" << QString::fromLatin1(Trackfish::ServiceName);
+
+    if (!bus.registerObject(QString::fromLatin1(Trackfish::ObjectPath), this,
+                            QDBusConnection::ExportAllSlots | QDBusConnection::ExportAllSignals)) {
+        qWarning() << "Failed to register D-Bus object" << bus.lastError().message();
+    } else
+        qInfo() << "Registerred D-Bus path" << QString::fromLatin1(Trackfish::ObjectPath);
 
     if(!bus.connect(QString::fromLatin1(Stumblefish::ServiceName),
                     QString::fromLatin1(Stumblefish::ObjectPath),

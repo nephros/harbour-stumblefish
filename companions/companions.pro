@@ -2,7 +2,6 @@ TEMPLATE = subdirs
 
 SUBDIRS += client
 SUBDIRS += systemd
-SUBDIRS += dbus
 
 QMAKE_CXXFLAGS += -Werror -Wall
 CONFIG += warn_on

@@ -41,7 +41,3 @@
 /companions/client/app/qmake_*.qrc
 /companions/client/app/qrc_*.cpp
 /companions/client/app/translations/*qm
-/companions/dbus/harbour-stumblecompaniond
-/companions/dbus/*.o
-/companions/dbus/main.moc
-/companions/dbus/qrc_*.cpp

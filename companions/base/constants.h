@@ -11,8 +11,6 @@ static QString UserAgentBase = QStringLiteral("%1/%2")
 
 namespace Stumblefish {
 const char CompanionAppName[] = "StumbleCompanion";
-const char CompanionServiceName[] = "org.stumblefish.Companions";
-const char CompanionObjectPath[] = "/org/stumblefish/Companions";
 }
 
 namespace Trackfish {
