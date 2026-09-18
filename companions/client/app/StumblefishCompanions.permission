@@ -1,0 +1,7 @@
+# SPDX-License-Identifier: MIT
+# x-sailjail-description = Stumblefish companions
+# x-sailjail-long-description = Communicate with the Stumblefish companion services
+
+dbus-user.talk org.stumblefish.Companion.*
+dbus-user.call org.stumblefish.Companion=org.stumblefish.Companion.*@/org/stumblefish/*
+dbus-user.broadcast org.stumblefish.Companion=org.stumblefish.Companion.*@/org/stumblefish/*

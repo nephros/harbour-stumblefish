@@ -63,6 +63,8 @@ qm.commands = lupdate $$_PRO_FILE_
 
 target.path = /usr/bin
 
+permission.files = StumblefishCompanions.permission
+permission.path = /etc/sailjail/permissions
 SAILFISHAPP_ICONS = 108x108 128x128 172x172 86x86
 
 DISTFILES += \
