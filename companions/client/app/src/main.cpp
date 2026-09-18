@@ -169,6 +169,7 @@ int main(int argc, char *argv[])
 //    view->setSource(SailfishApp::pathTo(QStringLiteral("qml/harbour-stumblefish.qml")));
 
     // ping DBus to see what's around
+    /*
     QStringList companions = companion.availableCompanions();
 
     qInfo() << "Found companions:" << companions.join(",");
@@ -179,6 +180,7 @@ int main(int argc, char *argv[])
     view->rootContext()->setContextProperty(QStringLiteral("passFishAvailable"),
                                             companions.contains(QString::fromLatin1(Jollapass::ApplicationName)));
 
+    */
 
     // find the pageStack and connect signals:
     if(view->rootObject()->property("pageStack").isValid()) {

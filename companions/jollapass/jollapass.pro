@@ -21,7 +21,7 @@ INSTALLS += target service dbusservice
 
 target.path = /usr/bin
 
-service.files = harbour-passfishd.service
+service.files = $${TARGET}.service
 service.path = /usr/lib/systemd/user
 
 dbusservice.files = org.stumblefish.JollaPass.service

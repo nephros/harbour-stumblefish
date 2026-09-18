@@ -24,11 +24,9 @@ public:
     QVariantMap status() const;
     QVariantMap settings() const;
 
-    Q_INVOKABLE QStringList availableCompanions();
     Q_INVOKABLE QVariantMap companionSettings(const QString& companion);
     Q_INVOKABLE void setCompanionSettings(const QString& companion, const QString& key, const QVariant& value);
 
-    void registerCompanion(const QString& name);
 
 Q_SIGNALS:
     void statusChanged();
@@ -44,7 +42,6 @@ private:
     QDBusInterface *m_interface;
     QVariantMap m_status;
     QVariantMap m_settings;
-    QStringList m_companions;
 };
 
 #endif
