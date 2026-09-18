@@ -219,8 +219,8 @@ fi
 %exclude %{_datadir}/%{name}/lib/phonetrack/
 %endif
 %if 0%{?need_companion}
-%exclude %{_datadir}/%{name}/lib/*/*.so
-%exclude %{_datadir}/%{name}/lib/*/qmldir
+#%%exclude %%{_datadir}/%%{name}/lib/*/*.so
+#%%exclude %%{_datadir}/%%{name}/lib/*/qmldir
 %endif
 
 %if %{with phonetrack}
@@ -252,8 +252,8 @@ fi
 %{_bindir}/%{name}-companion
 %{_userunitdir}/harbour-stumblecompanions.target
 %{_datadir}/applications/%{name}-companion.desktop
-%{_datadir}/%{name}/lib/*/*.so
-%{_datadir}/%{name}/lib/*/qmldir
+#%%{_datadir}/%%{name}/lib/*/*.so
+#%%{_datadir}/%%{name}/lib/*/qmldir
 %{_datadir}/icons/hicolor/86x86/apps/%{name}-companion.png
 %{_datadir}/icons/hicolor/108x108/apps/%{name}-companion.png
 %{_datadir}/icons/hicolor/128x128/apps/%{name}-companion.png
