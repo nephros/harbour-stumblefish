@@ -60,13 +60,13 @@ Companion::Companion(QObject *parent)
     if (!bus.registerService(QString::fromLatin1(Trackfish::ServiceName))) {
         qWarning() << "Failed to register D-Bus service" << bus.lastError().message();
     } else
-        qInfo() << "Registerred D-Bus service" << QString::fromLatin1(Trackfish::ServiceName);
+        qInfo() << "Registered D-Bus service" << QString::fromLatin1(Trackfish::ServiceName);
 
     if (!bus.registerObject(QString::fromLatin1(Trackfish::ObjectPath), this,
                             QDBusConnection::ExportAllSlots | QDBusConnection::ExportAllSignals)) {
         qWarning() << "Failed to register D-Bus object" << bus.lastError().message();
     } else
-        qInfo() << "Registerred D-Bus path" << QString::fromLatin1(Trackfish::ObjectPath);
+        qInfo() << "Registered D-Bus path" << QString::fromLatin1(Trackfish::ObjectPath);
 
     if(!bus.connect(QString::fromLatin1(Stumblefish::ServiceName),
                     QString::fromLatin1(Stumblefish::ObjectPath),

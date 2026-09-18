@@ -39,7 +39,7 @@ const QString UserAgent = QStringLiteral("%1 (%2 Companion)")
 
 namespace Glassfish {
 
-const char ServiceName[] = "org.stumblefish.Companion.Glassfish";
+const char ServiceName[] = "org.stumblefish.Companion.Lookout";
 const char ObjectPath[] = "/org/stumblefish/Lookout";
 const char InterfaceName[] = "org.stumblefish.Lookout";
 const char OrganizationName[] = "org.stumblefish";

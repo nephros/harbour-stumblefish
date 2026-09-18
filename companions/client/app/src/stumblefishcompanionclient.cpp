@@ -124,26 +124,24 @@ void StumblefishCompanionClient::setCompanionSettings(const QString& companion, 
 QDBusInterface* StumblefishCompanionClient::ifaceFor(const QString& companion)
 {
     QDBusInterface *iface = nullptr;
-    if(m_companions.contains(companion)) {
-        if(companion == (QString::fromLatin1(Trackfish::ApplicationName))) {
-            iface = new QDBusInterface(QString::fromLatin1(Trackfish::ServiceName),
-                                       QString::fromLatin1(Trackfish::ObjectPath),
-                                       QString::fromLatin1(Trackfish::InterfaceName));
-        } else if(companion == (QString::fromLatin1(Glassfish::ApplicationName))) {
-            iface = new QDBusInterface(QString::fromLatin1(Glassfish::ServiceName),
-                                       QString::fromLatin1(Glassfish::ObjectPath),
-                                       QString::fromLatin1(Glassfish::InterfaceName));
-        } else if(companion == (QString::fromLatin1(Jollapass::ApplicationName))) {
-            iface = new QDBusInterface(QString::fromLatin1(Jollapass::ServiceName),
-                                       QString::fromLatin1(Jollapass::ObjectPath),
-                                       QString::fromLatin1(Jollapass::InterfaceName));
-        } else {
-            qWarning() << "No interface for:" << companion;
-        }
-    }
+    if(companion == (QString::fromLatin1(Trackfish::ApplicationName))) {
+        iface = new QDBusInterface(QString::fromLatin1(Trackfish::ServiceName),
+                                   QString::fromLatin1(Trackfish::ObjectPath),
+                                   QString::fromLatin1(Trackfish::InterfaceName));
+    } else if(companion == (QString::fromLatin1(Glassfish::ApplicationName))) {
+        iface = new QDBusInterface(QString::fromLatin1(Glassfish::ServiceName),
+                                   QString::fromLatin1(Glassfish::ObjectPath),
+                                   QString::fromLatin1(Glassfish::InterfaceName));
+    } else if(companion == (QString::fromLatin1(Jollapass::ApplicationName))) {
+        iface = new QDBusInterface(QString::fromLatin1(Jollapass::ServiceName),
+                                   QString::fromLatin1(Jollapass::ObjectPath),
+                                   QString::fromLatin1(Jollapass::InterfaceName));
+    } else
+        qWarning() << "Unknown companion:" << companion;
+
     if(!iface)
         qWarning() << "NULL interface for:" << companion;
-    if(!iface->isValid())
+    else if(!iface->isValid())
         qWarning() << "Invalid interface for:" << companion;
     return iface;
 }
