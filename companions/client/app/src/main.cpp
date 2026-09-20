@@ -13,6 +13,7 @@
 
 #include "common/constants.h"
 #include "companions/base/constants.h"
+#include "src/mapnetworkaccessmanagerfactory.h"
 #include "src/stumblefishclient.h"
 #include "stumblefishcompanionclient.h"
 #ifdef TRACK_MY_PHONE
@@ -155,6 +156,13 @@ int main(int argc, char *argv[])
     StumblefishCompanionClient companion;
 
     QQuickView *view = SailfishApp::createView();
+
+    // critical, else we get rejected by OSM:
+    view->engine()->setNetworkAccessManagerFactory(
+                new StumblefishNetworkAccessManagerFactory(
+                    QStringLiteral("harbour-stumblecompanion/%1 (+https://github.com/nephros/harbour-stumblefish)")
+                    .arg(application->applicationVersion())));
+
     view->rootContext()->setContextProperty(QStringLiteral("stumblefish"), &client);
     view->rootContext()->setContextProperty(QStringLiteral("stumblecompanion"), &companion);
     view->rootContext()->setContextProperty(QStringLiteral("appVersion"), application->applicationVersion());

@@ -38,12 +38,14 @@ phonetrack {
 SOURCES += \
     src/main.cpp \
     src/stumblefishcompanionclient.cpp \
-    $${STUMBLEFISH_ROOT_DIR}src/stumblefishclient.cpp
+    $${STUMBLEFISH_ROOT_DIR}src/stumblefishclient.cpp \
+    $${STUMBLEFISH_ROOT_DIR}src/mapnetworkaccessmanagerfactory.cpp
 
 HEADERS += \
     src/stumblefishcompanionclient.h \
     $${STUMBLEFISH_ROOT_DIR}/common/constants.h \
-    $${STUMBLEFISH_ROOT_DIR}src/stumblefishclient.h
+    $${STUMBLEFISH_ROOT_DIR}src/stumblefishclient.h \
+    $${STUMBLEFISH_ROOT_DIR}src/mapnetworkaccessmanagerfactory.h
 
 lupdate_only {
     SOURCES += $$files(qml/*/*.qml)
