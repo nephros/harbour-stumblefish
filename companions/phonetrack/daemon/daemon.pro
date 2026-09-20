@@ -39,5 +39,5 @@ target.path = /usr/libexec
 service.files = harbour-trackfishd.service
 service.path = /usr/lib/systemd/user
 
-dbusservice.files = org.stumblefish.Tracker.service
+dbusservice.files = org.stumblefish.Companion.Tracker.service
 dbusservice.path = /usr/share/dbus-1/services

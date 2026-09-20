@@ -24,6 +24,6 @@ target.path = /usr/libexec
 service.files = harbour-passfishd.service
 service.path = /usr/lib/systemd/user
 
-dbusservice.files = org.stumblefish.JollaPass.service
+dbusservice.files = org.stumblefish.Companion.JollaPass.service
 dbusservice.path = /usr/share/dbus-1/services
 

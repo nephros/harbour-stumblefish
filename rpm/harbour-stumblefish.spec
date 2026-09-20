@@ -245,7 +245,7 @@ fi
 %if %{with phonetrack}
 %files -n harbour-trackfish
 %{_libexecdir}/harbour-trackfishd
-%exclude %{_datadir}/dbus-1/services/org.stumblefish.Tracker.service
+%{_datadir}/dbus-1/services/org.stumblefish.Companion.Tracker.service
 %{_userunitdir}/harbour-trackfishd.service
 %{_datadir}/%{name}/lib/phonetrack/
 %endif
@@ -253,7 +253,7 @@ fi
 %if %{with glassfish}
 %files -n harbour-glassfish
 %{_libexecdir}/harbour-glassfishd
-%exclude %{_datadir}/dbus-1/services/org.stumblefish.Lookout.service
+%{_datadir}/dbus-1/services/org.stumblefish.Companion.Lookout.service
 %{_userunitdir}/harbour-glassfishd.service
 #%%{_datadir}/%%{name}/lib/glassfish/
 %endif
@@ -261,7 +261,7 @@ fi
 %if %{with jollapass}
 %files -n harbour-passfish
 %{_libexecdir}/harbour-passfishd
-%exclude %{_datadir}/dbus-1/services/org.stumblefish.JollaPass.service
+%{_datadir}/dbus-1/services/org.stumblefish.Companion.JollaPass.service
 %{_userunitdir}/harbour-passfishd.service
 #%%{_datadir}/%%{name}/lib/jollapass/
 %endif

@@ -27,6 +27,6 @@ target.path = /usr/libexec
 service.files = harbour-glassfishd.service
 service.path = /usr/lib/systemd/user
 
-dbusservice.files = org.stumblefish.Lookout.service
+dbusservice.files = org.stumblefish.Companion.Lookout.service
 dbusservice.path = /usr/share/dbus-1/services
 
