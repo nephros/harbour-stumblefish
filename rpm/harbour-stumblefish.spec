@@ -87,6 +87,24 @@ Requires: harbour-stumblecompanion >= %{version}
 
 %description -n harbour-glassfish
 Smartglass detection Companion for Stumblefish
+
+GlassFish collects opt-in Wi-Fi, cell tower, and Bluetooth beacon
+observations with a position fix, stores the reports locally, and can submit
+them to a configurable Geosubmit endpoint. BeaconDB is the default endpoint.
+%if 0%{?_chum}
+Title: Glassfish
+Type: desktop-application
+DeveloperName: Andrew Branson, nephros
+Categories:
+ - Utility
+Custom:
+  Repo: https://github.com/nephros/harbour-stumblefish
+PackageIcon: https://github.com/abranson/harbour-stumblefish/raw/master/src/icons/172x172/apps/harbour-stumblefish.png
+Links:
+  Homepage: https://github.com/abranson/harbour-stumblefish
+  Bugtracker: https://github.com/nephros/harbour-stumblefish/issues
+%endif
+
 %endif
 
 
@@ -215,6 +233,7 @@ fi
 %{_datadir}/icons/hicolor/172x172/apps/%{name}.png
 %{_sysconfdir}/sailjail/permissions/Stumblefish.permission
 %{_userunitdir}/%{name}d.service
+
 %if %{with phonetrack}
 %exclude %{_datadir}/%{name}/lib/phonetrack/
 %endif
