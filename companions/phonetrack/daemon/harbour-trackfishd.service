@@ -8,8 +8,6 @@ After=harbour-stumblefishd.service
 PartOf=harbour-stumblecompanions.target
 
 [Service]
-Type=dbus
-BusName=org.stumblefish.Companion.Tracker
 ExecStart=/usr/libexec/harbour-trackfishd
 Restart=on-failure
 RestartSec=12s
