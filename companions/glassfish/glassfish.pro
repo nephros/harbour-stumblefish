@@ -11,7 +11,10 @@ DEFINES += FIND_KLABAUTERS
 
 SOURCES += main.cpp \
            glassfish.cpp
-HEADERS += glassfish.h
+HEADERS += glassfish.h \
+           ids.h
+
+RESOURCES += fingerprints.qrc
 
 TARGET.depends += harbour-stumblefishd
 

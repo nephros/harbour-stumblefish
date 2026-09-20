@@ -19,6 +19,8 @@
 /companions/*/moc_*.cpp
 /companions/Makefile
 /companions/glassfish/harbour-glassfishd
+/companions/glassfish/qmake_*.qrc
+/companions/glassfish/qrc_*.cpp
 /companions/jollapass/harbour-passfishd
 /companions/phonetrack/daemon/harbour-trackfishd
 /companions/client/harbour-stumblefish-companion
