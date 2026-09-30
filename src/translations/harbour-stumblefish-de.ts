@@ -6,7 +6,7 @@
     <message>
         <location filename="../qml/pages/AboutPage.qml" line="16"/>
         <source>About</source>
-        <translation type="unfinished"></translation>
+        <translation>Über</translation>
     </message>
     <message>
         <location filename="../qml/pages/AboutPage.qml" line="32"/>
@@ -16,7 +16,7 @@
     <message>
         <location filename="../qml/pages/AboutPage.qml" line="41"/>
         <source>by Andrew Branson</source>
-        <translation type="unfinished"></translation>
+        <translation>von Andrew Branson</translation>
     </message>
     <message>
         <location filename="../qml/pages/AboutPage.qml" line="50"/>
@@ -36,7 +36,7 @@
     <message>
         <location filename="../qml/pages/AboutPage.qml" line="104"/>
         <source>The Motorcycle Fish says:</source>
-        <translation type="unfinished"></translation>
+        <translation>Der Motorradfisch sagt:</translation>
     </message>
     <message>
         <location filename="../qml/pages/AboutPage.qml" line="115"/>
@@ -49,7 +49,7 @@
     <message>
         <location filename="../qml/cover/CoverPage.qml" line="58"/>
         <source>%1 pending</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 ausstehend</translation>
     </message>
 </context>
 <context>
@@ -62,7 +62,7 @@
     <message>
         <location filename="../qml/pages/MainPage.qml" line="44"/>
         <source>Upload pending</source>
-        <translation type="unfinished"></translation>
+        <translation>Ausstehende hochladen</translation>
     </message>
     <message>
         <location filename="../qml/pages/MainPage.qml" line="48"/>
@@ -82,7 +82,7 @@
     <message>
         <location filename="../qml/pages/MainPage.qml" line="72"/>
         <source>Location</source>
-        <translation type="unfinished"></translation>
+        <translation>Standort</translation>
     </message>
     <message>
         <location filename="../qml/pages/MainPage.qml" line="77"/>
@@ -93,12 +93,12 @@
     <message>
         <location filename="../qml/pages/MainPage.qml" line="79"/>
         <source>available</source>
-        <translation type="unfinished"></translation>
+        <translation>verfügbar</translation>
     </message>
     <message>
         <location filename="../qml/pages/MainPage.qml" line="80"/>
         <source>unavailable</source>
-        <translation type="unfinished"></translation>
+        <translation>nicht verfügbar</translation>
     </message>
     <message>
         <location filename="../qml/pages/MainPage.qml" line="84"/>
@@ -128,7 +128,7 @@
     <message>
         <location filename="../qml/pages/MainPage.qml" line="189"/>
         <source>Pending</source>
-        <translation type="unfinished"></translation>
+        <translation>Ausstehend</translation>
     </message>
     <message>
         <location filename="../qml/pages/MainPage.qml" line="193"/>
@@ -166,12 +166,12 @@
     <message>
         <location filename="../qml/pages/MapPage.qml" line="632"/>
         <source>Pending Report</source>
-        <translation type="unfinished"></translation>
+        <translation>Report ausstehend</translation>
     </message>
     <message>
         <location filename="../qml/pages/MapPage.qml" line="646"/>
         <source>Seen today</source>
-        <translation type="unfinished"></translation>
+        <translation>Heute gesehen</translation>
     </message>
 </context>
 <context>
@@ -179,7 +179,7 @@
     <message>
         <location filename="../qml/pages/ReportDetailPage.qml" line="186"/>
         <source>Report %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Report %1</translation>
     </message>
     <message>
         <location filename="../qml/pages/ReportDetailPage.qml" line="190"/>
@@ -189,22 +189,22 @@
     <message>
         <location filename="../qml/pages/ReportDetailPage.qml" line="194"/>
         <source>Time</source>
-        <translation type="unfinished"></translation>
+        <translation>Zeitpunkt</translation>
     </message>
     <message>
         <location filename="../qml/pages/ReportDetailPage.qml" line="198"/>
         <source>Position</source>
-        <translation type="unfinished">Position</translation>
+        <translation>Position</translation>
     </message>
     <message>
         <location filename="../qml/pages/ReportDetailPage.qml" line="202"/>
         <source>Accuracy</source>
-        <translation type="unfinished"></translation>
+        <translation>Genauigkeit</translation>
     </message>
     <message>
         <location filename="../qml/pages/ReportDetailPage.qml" line="206"/>
         <source>Mode</source>
-        <translation type="unfinished"></translation>
+        <translation>Modus</translation>
     </message>
     <message>
         <location filename="../qml/pages/ReportDetailPage.qml" line="210"/>
@@ -227,7 +227,7 @@
     <message>
         <location filename="../qml/pages/ReportsPage.qml" line="41"/>
         <source>Clear pending</source>
-        <translation type="unfinished"></translation>
+        <translation>Ausstehende löschen</translation>
     </message>
     <message>
         <location filename="../qml/pages/ReportsPage.qml" line="86"/>
@@ -237,7 +237,7 @@
     <message>
         <location filename="../qml/pages/ReportsPage.qml" line="106"/>
         <source>No reports to upload</source>
-        <translation type="unfinished"></translation>
+        <translation>Keine Reports hochzuladen</translation>
     </message>
 </context>
 <context>
@@ -245,7 +245,7 @@
     <message>
         <location filename="../qml/pages/SettingsPage.qml" line="124"/>
         <source>About</source>
-        <translation type="unfinished"></translation>
+        <translation>Über</translation>
     </message>
     <message>
         <location filename="../qml/pages/SettingsPage.qml" line="135"/>
@@ -290,7 +290,7 @@
     <message>
         <location filename="../qml/pages/SettingsPage.qml" line="162"/>
         <source>Active mode when closed</source>
-        <translation type="unfinished"></translation>
+        <translation>Aktivmodus wenn geschlossen</translation>
     </message>
     <message>
         <location filename="../qml/pages/SettingsPage.qml" line="164"/>
@@ -335,17 +335,17 @@
     <message>
         <location filename="../qml/pages/SettingsPage.qml" line="195"/>
         <source>Every 8 hours</source>
-        <translation >Alle 8 Stunden</translation>
+        <translation>Alle 8 Stunden</translation>
     </message>
     <message>
         <location filename="../qml/pages/SettingsPage.qml" line="201"/>
         <source>Upload when not on Wi-Fi</source>
-        <translation type="unfinished"></translation>
+        <translation>Hochladen auch wenn nicht per Wi-Fi verbunden</translation>
     </message>
     <message>
         <location filename="../qml/pages/SettingsPage.qml" line="202"/>
         <source>Applies to automatic uploads</source>
-        <translation type="unfinished"></translation>
+        <translation>Betrifft das automatische Hochladen</translation>
     </message>
     <message>
         <location filename="../qml/pages/SettingsPage.qml" line="230"/>
@@ -355,17 +355,17 @@
     <message>
         <location filename="../qml/pages/SettingsPage.qml" line="236"/>
         <source>Tile URL template</source>
-        <translation type="unfinished"></translation>
+        <translation>Kachel (Tile) URL Maske</translation>
     </message>
     <message>
         <location filename="../qml/pages/SettingsPage.qml" line="257"/>
         <source>Use OSM tiles</source>
-        <translation type="unfinished"></translation>
+        <translation>OSM-Kachel verwenden</translation>
     </message>
     <message>
         <location filename="../qml/pages/SettingsPage.qml" line="266"/>
         <source>Disable map tiles</source>
-        <translation type="unfinished"></translation>
+        <translation>Kacheln nicht verwenden</translation>
     </message>
     <message>
         <location filename="../qml/pages/SettingsPage.qml" line="276"/>
@@ -375,7 +375,7 @@
     <message>
         <location filename="../qml/pages/SettingsPage.qml" line="283"/>
         <source>Storage</source>
-        <translation >Speicher</translation>
+        <translation>Speicher</translation>
     </message>
     <message>
         <location filename="../qml/pages/SettingsPage.qml" line="288"/>
