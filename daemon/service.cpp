@@ -34,6 +34,11 @@ const char NotificationOpenAction[] = "default";
 const char NotificationTurnOffAction[] = "turn-off";
 const char StatusNotificationCategory[] = "org.stumblefish.status";
 const char StatusNotificationOrigin[] = "org.stumblefish.status";
+const char MceDBusServiceName[] = "com.nokia.mce";
+const char MceDBusSignalPathName[] = "/com/nokia/mce/signal";
+const char MceDBusSignalIfaceName[] = "com.nokia.mce.signal";
+const char MceDBusMethodPathName[] = "/com/nokia/mce/request";
+const char MceDBusMethodIfaceName[] = "com.nokia.mce.request";
 
 bool isStatusNotification(Notification *notification)
 {
@@ -153,6 +158,23 @@ Service::Service(QObject *parent)
     if (!bus.registerObject(QString::fromLatin1(Stumblefish::ObjectPath), this,
                             QDBusConnection::ExportAllSlots | QDBusConnection::ExportAllSignals)) {
         qWarning() << "Failed to register D-Bus object" << bus.lastError().message();
+    }
+
+    QDBusConnection sysbus = QDBusConnection::systemBus();
+    if (!sysbus.connect(QString::fromLatin1(MceDBusServiceName),
+                        QString::fromLatin1(MceDBusSignalPathName),
+                        QString::fromLatin1(MceDBusSignalIfaceName),
+                        QString::fromLatin1("psm_state_ind"), QString::fromLatin1("b"),
+                       this, SLOT(handleMcePowerSaveModeState(bool)))) {
+        qWarning() << "Failed to set up MCE signal handler" << sysbus.lastError().message();
+    }
+    const QDBusMessage checkpsm = QDBusMessage::createMethodCall(
+                                      QString::fromLatin1(MceDBusServiceName),
+                                      QString::fromLatin1(MceDBusMethodPathName),
+                                      QString::fromLatin1(MceDBusMethodIfaceName),
+                                      QString::fromLatin1("get_psm_state"));
+    if (!sysbus.callWithCallback(checkpsm, this, SLOT(handleMcePowerSaveModeState(bool)), nullptr)) {
+        qWarning() << "Failed to call MCE" << sysbus.lastError().message();
     }
 
     closeStoredStatusNotifications();
@@ -516,7 +538,8 @@ bool Service::activeBackgroundPausedForBattery() const
     return m_appClients.isEmpty()
             && m_settings.mode() == QStringLiteral("active")
             && m_settings.pauseActiveBackgroundOnLowBattery()
-            && m_battery.lowAndUnplugged(LowBatteryThresholdPercentage);
+            && ( m_battery.lowAndUnplugged(LowBatteryThresholdPercentage)
+                || m_mcePowerSaveModeActive);
 }
 
 bool Service::positionShouldBeActive() const
@@ -985,6 +1008,12 @@ void Service::quitForAppLifecycle()
     }
 
     QCoreApplication::quit();
+}
+
+void Service::handleMcePowerSaveModeState(bool enabled)
+{
+    if (enabled != m_mcePowerSaveModeActive)
+            m_mcePowerSaveModeActive = enabled;
 }
 
 void Service::addAppClient(const QString &serviceName)

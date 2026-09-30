@@ -72,6 +72,7 @@ private Q_SLOTS:
     void statusNotificationClicked();
     void statusNotificationClosed(uint reason);
     void closePassiveStatusNotification();
+    void handleMcePowerSaveModeState(bool enabled);
 
 private:
     bool anySourceEnabled() const;
@@ -121,6 +122,7 @@ private:
     bool m_statusNotificationVisible;
     bool m_statusNotificationDismissed;
     bool m_quitWhenIdle;
+    bool m_mcePowerSaveModeActive;
 };
 
 #endif
